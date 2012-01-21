@@ -23,7 +23,7 @@ var DummyHelper = require('./lib/dummy-helper');
 
 // Session store
 var RedisStore = require('connect-redis')(express);
-var sessionStore = new RedisStore;
+var sessionStore = new RedisStore(siteConf.redisOptions);
 
 var app = module.exports = express.createServer();
 app.listen(siteConf.port, null);

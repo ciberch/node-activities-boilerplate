@@ -1,0 +1,16 @@
+--- 
+applications: 
+  .: 
+    name: asms
+    url: ${name}.${target-base}
+    framework: 
+      name: node
+      info: 
+        mem: 128M
+        description: Node.js Application
+        exec: 
+    mem: 128M
+    instances: 1
+    services: 
+      redis-asms:
+        type: :redis
