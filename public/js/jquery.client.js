@@ -17,7 +17,7 @@
 	var socketIoClient = io.connect(null, {
 		'port': '#socketIoPort#'
 		, 'rememberTransport': true
-		, 'transports': ['websocket', 'xhr-multipart', 'xhr-polling', 'htmlfile', 'flashsocket']
+		, 'transports': ['xhr-polling']
 	});
 	socketIoClient.on('connect', function () {
 		$$('#connected').addClass('on').find('strong').text('Online');
