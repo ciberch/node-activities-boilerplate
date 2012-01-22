@@ -1,8 +1,9 @@
 var cf = require('cloudfoundry');
 var settings = {
 	'sessionSecret': 'sessionSecret'
+    , 'host' : '127.0.0.1'
 	, 'port': 8080
-	, 'uri': 'http://localhost:8080' // Without trailing /
+	, 'uri': 'http://moni-air.local:8080' // Without trailing /
     , 'redisOptions': new Object
 	// You can add multiple recipients for notifo notifications
 	, 'notifoAuth': null /*[
@@ -34,6 +35,7 @@ var settings = {
 
 if (cf.cloud) {
 	settings.uri = 'http://asms.cloudfoundry.com';
+    settings.host = cf.host;
 	settings.port = cf.port  || 80; // CloudFoundry uses process.env.VMC_APP_PORT
 
 	settings.airbrakeApiKey = process.env.airbrake_api_key; // Error logging, Get free API key from https://airbrakeapp.com/account/new/Free

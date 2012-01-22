@@ -39,13 +39,13 @@ var assetsSettings = {
 		, 'dataType': 'javascript'
 		, 'files': [
 			'http://code.jquery.com/jquery-latest.js'
-			, siteConf.uri+'/socket.io/socket.io.js' // special case since the socket.io module serves its own js
+			, 'http://' + siteConf.host+ ':' + siteConf.port + '/socket.io/socket.io.js' // special case since the socket.io module serves its own js
 			, 'jquery.client.js'
 		]
 		, 'debug': true
 		, 'postManipulate': {
 			'^': [
-                //assetHandler.uglifyJsOptimize, // this was throwing errors so commeting it out
+                assetHandler.uglifyJsOptimize,
 				function insertSocketIoPort(file, path, index, isLast, callback) {
 					callback(file.replace(/.#socketIoPort#./, siteConf.port));
 				}
@@ -135,7 +135,10 @@ app.configure('development', function(){
 });
 // Suppress errors, allow all search engines
 app.configure('production', function(){
-	app.use(express.errorHandler());
+	app.use(express.errorHandler({
+		'dumpExceptions': true
+		, 'showStack': true
+	}));
 	app.all('/robots.txt', function(req,res) {
 		res.send('User-agent: *', {'Content-Type': 'text/plain'});
 	});
