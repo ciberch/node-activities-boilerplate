@@ -26,7 +26,7 @@ var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore(siteConf.redisOptions);
 
 var app = module.exports = express.createServer();
-app.listen(siteConf.port, null);
+app.listen(siteConf.internal_port, null);
 
 // Setup socket.io server
 var socketIo = new require('./lib/socket-io-server.js')(app, sessionStore);
@@ -39,7 +39,7 @@ var assetsSettings = {
 		, 'dataType': 'javascript'
 		, 'files': [
 			'http://code.jquery.com/jquery-latest.js'
-			, 'http://' + siteConf.host+ ':' + siteConf.port + '/socket.io/socket.io.js' // special case since the socket.io module serves its own js
+			, 'http://' + siteConf.internal_host+ ':' + siteConf.internal_port + '/socket.io/socket.io.js' // special case since the socket.io module serves its own js
 			, 'jquery.client.js'
 		]
 		, 'debug': true
