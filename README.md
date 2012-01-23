@@ -27,19 +27,7 @@ First of all, it is very easy to understand, allowing you to start using it righ
 * mate siteConfig.js # update config for your use case
 * nodemon server.js
 
-## Install on no.de
-* First on node machine
-	* ssh node@yourname.no.de
-	* pkgin update; pkgin install redis
-	* svccfg import /opt/local/share/smf/manifest/redis.xml
-	* svcadm enable redis
-
-* Then on local machine
-	* git clone [https://github.com/mape/node-express-boilerplate](https://github.com/mape/node-express-boilerplate) myproject
-	* cd myproject
-	* cp siteConfig.sample.js siteConfig.js
-	* edit siteConfig.js settings
-	* scp siteConfig.js node@yourname.no.de:~
-	* git remote add joyent node@yourname.no.de:repo
-	* git push joyent master
-	* open http://yourname.no.de
+## Install on CloudFoundry
+* Install vmc if you have not already done so
+* Edit manifest.yml to have a unique name for your app
+* vmc push
