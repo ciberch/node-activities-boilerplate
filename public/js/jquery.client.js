@@ -34,8 +34,8 @@
         if (doc.actor.image) {
 		    $li.append($('<img class="avatar">').attr('src', doc.actor.image.url));
         } 
-		if (service) {
-			$li.append($('<img class="service">').attr('src', service));
+		if (doc.provider && doc.provider.icon) {
+			$li.append($('<img class="service">').attr('src', doc.provider.icon.url));
 		}
 		$$('#bubble ul').prepend($li);
 		$$('#bubble').scrollTop(98).stop().animate({
@@ -43,7 +43,7 @@
 		}, 500);
 		setTimeout(function() {
 			$li.remove();
-		}, 5000);
+		}, 20000);
 
 		setTimeout(function() {
 			socketIoClient.send('I am still online');
