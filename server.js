@@ -21,6 +21,27 @@ var assetHandler = require('connect-assetmanager-handlers');
 var notifoMiddleware = require('connect-notifo');
 var DummyHelper = require('./lib/dummy-helper');
 
+//var asmsSchema = require('activity-streams-json-schema');
+
+var mongoose = require('mongoose');
+mongoose.connect(siteConf.mongoUrl);
+var asmsDB = require('activity-streams-mongoose')(mongoose);
+
+// A quick test
+var target = new asmsDB.ActivityObject({displayName: "Cloud Foundry" , url: "http://www.cloudfoundry.com"});
+target.save(function (err) {
+    if (err === null) {
+        var startAct = new asmsDB.Activity({actor: {displayName: siteConf.user_email}, verb: 'start', object:{displayName: 'ASMS Realtime', url: siteConf.uri}, title: "Started the app", target: target._id});
+        startAct.save(function (err) {
+            if (err === null) {
+                asmsDB.getActivityStream(5, function (err, docs) {
+                   docs.forEach(function(doc){console.log(doc);});
+                });
+            }
+        });
+    }
+});
+
 // Session store
 var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore(siteConf.redisOptions);
@@ -96,6 +117,7 @@ app.configure(function() {
 	app.use(express.bodyParser());
 	app.use(express.cookieParser());
 	app.use(assetsMiddleware);
+
 	app.use(express.session({
 		'store': sessionStore
 		, 'secret': siteConf.sessionSecret
@@ -120,6 +142,8 @@ app.configure(function() {
 		}));
 	}
 });
+
+
 
 // ENV based configuration
 
@@ -193,3 +217,5 @@ app.all('*', function(req, res){
 });
 
 console.log('Running in '+(process.env.NODE_ENV || 'development')+' mode @ '+siteConf.uri);
+
+

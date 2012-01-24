@@ -16,6 +16,8 @@
     "connect-notifo" : ">=0.0.1",
     "airbrake" : ">=0.2.0",
     "everyauth" : ">=0.2.18",
-    "cloudfoundry" : ">=0.1.0"
+    "cloudfoundry" : ">=0.1.0",
+    "mongoose": "",
+    "activity-streams-mongoose": "0.0.2"
   }
 }

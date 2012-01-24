@@ -11,6 +11,8 @@ applications:
         exec: 
     mem: 128M
     instances: 1
-    services: 
+    services:
+      mongo-asms:
+        type: mongodb
       redis-asms:
         type: :redis
