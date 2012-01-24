@@ -1,6 +1,6 @@
 var cf = require('cloudfoundry');
 var settings = {
-    'user' : 'cibech@moni-air.local',
+    'user' : 'yourname@localhost',
 	'sessionSecret': 'sessionSecret'
     , 'internal_host' : '127.0.0.1'
     , 'internal_port' : 8080

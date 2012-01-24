@@ -23,7 +23,7 @@ First of all, it is very easy to understand, allowing you to start using it righ
 * git clone https://github.com/mape/node-express-boilerplate myproject
 * cd myproject
 * npm install
-* cp siteConfig.sample.js siteConfig.js
+* Edit siteConfig.js if needed
 * mate siteConfig.js # update config for your use case
 * nodemon server.js
 

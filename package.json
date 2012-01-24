@@ -1,7 +1,7 @@
 {
-  "name" : "node-express-boilerplate-cf",
-  "description" : "A boilerplate used to quickly get projects going.",
-  "version" : "0.0.2",
+  "name" : "node-activities-boilerplate",
+  "description" : "A boilerplate Activity Stream Client for any Cloud Foundry instance. Based on the work from Mathias Pettersson <mape@mape.me> on node-express-boilerplate",
+  "version" : "0.0.1",
   "author" : "Monica Wilkinson <ciberch@gmail.com>",
   "engines" : ["node"],
   "repository" : { "type":"git", "url":"http://github.com/ciberch/node-express-boilerplate" },
