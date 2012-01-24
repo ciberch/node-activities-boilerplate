@@ -25,29 +25,33 @@ var DummyHelper = require('./lib/dummy-helper');
 
 var mongoose = require('mongoose');
 mongoose.connect(siteConf.mongoUrl);
-var asmsDB = require('activity-streams-mongoose')(mongoose);
-
-// A quick test
-var target = new asmsDB.ActivityObject({displayName: "Cloud Foundry" , url: "http://www.cloudfoundry.com"});
-target.save(function (err) {
-    if (err === null) {
-        var startAct = new asmsDB.Activity({actor: {displayName: siteConf.user_email}, verb: 'start', object:{displayName: 'ASMS Realtime', url: siteConf.uri}, title: "Started the app", target: target._id});
-        startAct.save(function (err) {
-            if (err === null) {
-                asmsDB.getActivityStream(5, function (err, docs) {
-                   docs.forEach(function(doc){console.log(doc);});
-                });
-            }
-        });
-    }
-});
 
 // Session store
 var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore(siteConf.redisOptions);
 
+var asmsDB = require('activity-streams-mongoose')(mongoose, {full: false, redis: siteConf.redisOptions, defaultActor: '/img/default.png'});
+// A quick test
+var target = new asmsDB.ActivityObject({displayName: "Cloud Foundry" , url: "http://www.cloudfoundry.com"});
+target.save(function (err) {
+    if (err === null) {
+        var startAct = new asmsDB.Activity(
+            {
+            actor: {displayName: siteConf.user_email},
+            verb: 'start',
+            object: {displayName: 'Node-Express-Boilerplate App', url: siteConf.uri},
+            title: "started the app",
+            target: target._id
+            });
+
+        asmsDB.publish('firehose', startAct);
+    }
+});
+
 var app = module.exports = express.createServer();
 app.listen(siteConf.internal_port, null);
+app.asmsDB = asmsDB;
+app.siteConf = siteConf;
 
 // Setup socket.io server
 var socketIo = new require('./lib/socket-io-server.js')(app, sessionStore);

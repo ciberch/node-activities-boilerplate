@@ -25,8 +25,15 @@
 
 	var image = $.trim($('#image').val());
 	var service = $.trim($('#service').val());
-	socketIoClient.on('message', function(msg) {
-		var $li = $('<li>').text(msg).append($('<img class="avatar">').attr('src', image));
+	socketIoClient.on('message', function(json) {
+
+        var doc = JSON.parse(json);
+        var msg = doc.actor.displayName + ' ' + doc.title + ' ' + doc.object.displayName;
+
+		var $li = $('<li>').text(msg);
+        if (doc.actor.image) {
+		    $li.append($('<img class="avatar">').attr('src', doc.actor.image.url));
+        } 
 		if (service) {
 			$li.append($('<img class="service">').attr('src', service));
 		}
@@ -39,8 +46,8 @@
 		}, 5000);
 
 		setTimeout(function() {
-			socketIoClient.send('pong');
-		}, 1000);
+			socketIoClient.send('I am still online');
+		}, 5000);
 	});
 
 	socketIoClient.on('disconnect', function() {

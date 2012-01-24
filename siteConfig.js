@@ -6,7 +6,7 @@ var settings = {
     , 'internal_port' : 8080
 	, 'port': 8080
 	, 'uri': 'http://moni-air.local:8080' // Without trailing /
-    , 'redisOptions': new Object
+    , 'redisOptions': {host: '127.0.0.1', port: 6379}
     , 'mongoUrl': 'mongodb://localhost/mongodb-asms'
 	// You can add multiple recipients for notifo notifications
 	, 'notifoAuth': null /*[
@@ -49,6 +49,8 @@ if (cf.cloud) {
         settings.redisOptions.port = redisConfig.port;
         settings.redisOptions.host = redisConfig.hostname;
         settings.redisOptions.pass = redisConfig.password;
+        console.log("Redis options are");
+        console.dir(settings.redisOptions);
     }
 
     if (cf.mongodb['mongo-asms']) {
