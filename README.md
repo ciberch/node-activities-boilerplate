@@ -49,5 +49,11 @@ vmc env-add $APP_NAME twitter_consumer_key=<twitter_key>
 vmc env-add $APP_NAME twitter_consumer_secret=<twitter_secret>
 ```
 
-## Get Github Client Keys at
+### Build your Facebook App at
+https://developers.facebook.com/apps
+
+### Build your Twitter App at
+https://dev.twitter.com/apps/new
+
+### Build Github App at
 - https://github.com/settings/applications/new
