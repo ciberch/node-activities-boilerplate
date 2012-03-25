@@ -57,3 +57,11 @@ https://dev.twitter.com/apps/new
 
 ### Build Github App at
 - https://github.com/settings/applications/new
+- 
+
+Finally you can do
+
+``` bash
+
+vmc start
+```
