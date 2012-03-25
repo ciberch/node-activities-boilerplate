@@ -35,17 +35,20 @@ sudo gem install vmc --pre
 
 * Edit manifest.yml to have a unique name for your app
  
-* vmc push --nostart
+  vmc push --nostart
 
 ## Get keys for all social netowrks and services
 ### Build your Facebook App at
-https://developers.facebook.com/apps
+- https://developers.facebook.com/apps
+- Add your app url to the Facebook App Domain list
 
 ### Build your Twitter App at
-https://dev.twitter.com/apps/new
+- https://dev.twitter.com/apps/new
+- Use callback url http://<your-app-name>.cloudfoundry.com/auth/twitter/callback
 
 ### Build Github App at
 - https://github.com/settings/applications/new
+- Use callback http://<your-app-name>.cloudfoundry.com/auth/github/callback
 
 Run this command wit your keys
 
@@ -61,5 +64,6 @@ vmc env-add $APP_NAME twitter_consumer_key=<twitter_key>
 vmc env-add $APP_NAME twitter_consumer_secret=<twitter_secret>
 ```
 
+## Finally
 
-vmc start
+  vmc start
