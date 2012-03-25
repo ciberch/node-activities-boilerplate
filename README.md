@@ -44,24 +44,24 @@ sudo gem install vmc --pre
 
 ### Build your Twitter App at
 - https://dev.twitter.com/apps/new
-- Use callback url http://<your-app-name>.cloudfoundry.com/auth/twitter/callback
+- Use callback url http://your-app-name.cloudfoundry.com/auth/twitter/callback
 
 ### Build Github App at
 - https://github.com/settings/applications/new
-- Use callback http://<your-app-name>.cloudfoundry.com/auth/github/callback
+- Use callback http://your-app-name.cloudfoundry.com/auth/github/callback
 
 Run this command wit your keys
 
 ``` bash
 export APP_NAME=<your_name>
 vmc env-add $APP_NAME airbrake_api_key=your_key
-vmc env-add $APP_NAME github_client_id=<github_id>
-vmc env-add $APP_NAME github_client_secret=<github_secret>
-vmc env-add $APP_NAME facebook_app_id=<fb_id>
-vmc env-add $APP_NAME facebook_app_secret=<fb_secret>
+vmc env-add $APP_NAME github_client_id=github_id
+vmc env-add $APP_NAME github_client_secret=github_secret
+vmc env-add $APP_NAME facebook_app_id=fb_id
+vmc env-add $APP_NAME facebook_app_secret=fb_secret
 vmc env-add $APP_NAME NODE_ENV=production
-vmc env-add $APP_NAME twitter_consumer_key=<twitter_key>
-vmc env-add $APP_NAME twitter_consumer_secret=<twitter_secret>
+vmc env-add $APP_NAME twitter_consumer_key=twitter_key
+vmc env-add $APP_NAME twitter_consumer_secret=twitter_secret
 ```
 
 ## Finally
