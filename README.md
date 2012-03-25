@@ -29,5 +29,37 @@ First of all, it is very easy to understand, allowing you to start using it righ
 
 ## Install on CloudFoundry
 * Install vmc if you have not already done so
+``` bash
+sudo gem install vmc --pre
+```
+
 * Edit manifest.yml to have a unique name for your app
-* vmc push
+ 
+* vmc push --nostart
+
+## Get keys for all social netowrks and services
+### Build your Facebook App at
+https://developers.facebook.com/apps
+
+### Build your Twitter App at
+https://dev.twitter.com/apps/new
+
+### Build Github App at
+- https://github.com/settings/applications/new
+
+Run this command wit your keys
+
+``` bash
+export APP_NAME=<your_name>
+vmc env-add $APP_NAME airbrake_api_key=your_key
+vmc env-add $APP_NAME github_client_id=<github_id>
+vmc env-add $APP_NAME github_client_secret=<github_secret>
+vmc env-add $APP_NAME facebook_app_id=<fb_id>
+vmc env-add $APP_NAME facebook_app_secret=<fb_secret>
+vmc env-add $APP_NAME NODE_ENV=production
+vmc env-add $APP_NAME twitter_consumer_key=<twitter_key>
+vmc env-add $APP_NAME twitter_consumer_secret=<twitter_secret>
+```
+
+
+vmc start
