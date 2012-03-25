@@ -36,6 +36,7 @@ sudo gem install vmc --pre
 * Edit manifest.yml to have a unique name for your app
  
 * vmc push --nostart
+
 ``` bash
 export APP_NAME=<your_name>
 vmc env-add $APP_NAME airbrake_api_key=your_key
