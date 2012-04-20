@@ -8,6 +8,9 @@ body {
 	font: 12px 'helvetica neue', helvetica, arial, sans-serif;
 	text-rendering: optimizeLegibility;
 }
+#ping {
+    font-size:20px;
+}
 img {
 	-ms-interpolation-mode:bicubic;
 }

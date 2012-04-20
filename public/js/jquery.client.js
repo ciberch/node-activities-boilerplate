@@ -44,13 +44,17 @@
 		setTimeout(function() {
 			$li.remove();
 		}, 20000);
-
-		setTimeout(function() {
-			socketIoClient.send('I am still online');
-		}, 5000);
 	});
+
+    $(document).ready(function(){
+        $("#ping").click(function() {
+            socketIoClient.send("Ping");
+        });
+    });
 
 	socketIoClient.on('disconnect', function() {
 		$$('#connected').removeClass('on').find('strong').text('Offline');
 	});
 })(jQuery);
+
+
