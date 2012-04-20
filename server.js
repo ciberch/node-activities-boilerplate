@@ -21,8 +21,6 @@ var assetHandler = require('connect-assetmanager-handlers');
 var notifoMiddleware = require('connect-notifo');
 var DummyHelper = require('./lib/dummy-helper');
 
-//var asmsSchema = require('activity-streams-json-schema');
-
 var mongoose = require('mongoose');
 mongoose.connect(siteConf.mongoUrl);
 
