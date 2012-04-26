@@ -10,6 +10,7 @@
     "connect-assetmanager" : ">=0.0.21",
     "connect-assetmanager-handlers" : ">=0.0.17",
     "ejs" : ">=0.4.3",
+    "jade": "",
     "express" : ">=2.4.3",
     "socket.io" : ">=0.7.8",
     "connect-redis" : ">=1.0.7",

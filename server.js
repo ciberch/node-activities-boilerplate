@@ -37,7 +37,7 @@ target.save(function (err) {
             {
             actor: {displayName: siteConf.user_email},
             verb: 'start',
-            object: {displayName: 'Node-Express-Boilerplate App', url: siteConf.uri},
+            object: {displayName: 'Activity Streams App', url: siteConf.uri},
             title: "started the app",
             target: target._id
             });
@@ -110,7 +110,7 @@ var assetsMiddleware = assetManager(assetsSettings);
 
 // Settings
 app.configure(function() {
-	app.set('view engine', 'ejs');
+	app.set('view engine', 'jade');
 	app.set('views', __dirname+'/views');
 });
 
@@ -200,12 +200,20 @@ function NotFound(msg){
 
 // Routing
 app.all('/', function(req, res) {
+    var providerFavicon = '';
 	// Set example session uid for use with socket.io.
 	if (!req.session.uid) {
 		req.session.uid = (0 | Math.random()*1000000);
-	}
+	} else if (req.session.auth){
+       if (req.session.auth.github)
+        providerFavicon = '//github.com/favicon.ico';
+       else if (req.session.auth.twitter)
+        providerFavicon = '//twitter.com/favicon.ico';
+       else if (req.session.auth.facebook)
+        providerFavicon = '//facebook.com/favicon.ico';
+    }
 	res.locals({
-		'key': 'value'
+		'providerFavicon': providerFavicon
 	});
 	res.render('index');
 });

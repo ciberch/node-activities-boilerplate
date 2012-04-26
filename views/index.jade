@@ -1,0 +1,25 @@
+input#image(type="hidden", value="#{((session.auth && session.user.image) ? session.user.image : '/img/default.png')}")
+input#service(type="hidden", value="#{locals.providerFavicon}")
+#bubble
+  ul
+#connected
+  strong Online
+  .overlay
+.logins
+  ul.padding
+    - if(!session.auth)
+      li.facebook
+        a(href="/auth/facebook")
+          img(src="//facebook.com/favicon.ico", alt="")
+          span Facebook
+      li.twitter
+        a(href="/auth/twitter)
+          img(src="//twitter.com/favicon.ico", alt="")
+          span Twitter
+      li.github
+        a(href="/auth/github")
+          img(src="//github.com/favicon.ico", alt="")
+          span Github
+    - else
+        li.logout
+          a(href="/logout")Logout

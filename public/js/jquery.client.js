@@ -27,8 +27,8 @@
 	var service = $.trim($('#service').val());
 	socketIoClient.on('message', function(json) {
 
-        var doc = JSON.parse(json);
-        var msg = doc.actor.displayName + ' ' + doc.title + ' ' + doc.object.displayName;
+		var doc = JSON.parse(json);
+		var msg = doc.actor.displayName + ' ' + doc.title + ' ' + doc.object.displayName;
 
 		var $li = $('<li>').text(msg);
         if (doc.actor.image) {
@@ -44,13 +44,17 @@
 		setTimeout(function() {
 			$li.remove();
 		}, 20000);
-
-		setTimeout(function() {
-			socketIoClient.send('I am still online');
-		}, 5000);
 	});
+
+    $(document).ready(function(){
+        $("#ping").click(function() {
+            socketIoClient.send("Ping");
+        });
+    });
 
 	socketIoClient.on('disconnect', function() {
 		$$('#connected').removeClass('on').find('strong').text('Offline');
 	});
 })(jQuery);
+
+
