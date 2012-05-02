@@ -5,12 +5,9 @@
 				span.icon-bar
 				span.icon-bar
 				span.icon-bar
-			a.brand(:href = "#") Activity Streams
+			a#connected.brand(:href = "#") Activity Streams
 			.nav-collapse
 				ul.nav
-					li
-						#connected
-							strong Online
 					- if(session.auth)
 						li.logout
 							a(href="/logout")

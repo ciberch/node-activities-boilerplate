@@ -25,20 +25,14 @@ strong {
 	font-weight: bold;
 }
 #connected {
-	width: 100px;
-	height: 50px;
-	background: red;
-	/*border-radius: 50px;*/
-	line-height: 50px;
-	text-align: center;
+	background: #ff2eae;
 	font-weight: bold;
 	color: #fff;
-	font-size: 23px;
 	text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 	box-shadow: 0 0 15px rgba(0,0,0,0.4);
 }
 #connected.on {
-	background: green;
+	background: #3daeb9;
 }
 
 #bubble {
