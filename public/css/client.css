@@ -34,10 +34,10 @@ strong {
 #connected.on {
 	background: #3daeb9;
 }
-#stream {
-	background-color: #000000;
-	color: white;
-}
+/*#stream {*/
+	/*background-color: #000000;*/
+	/*color: white;*/
+/*}*/
 
 #bubble {
 	max-height: 100%;

@@ -25,25 +25,29 @@
 
 	var image = $.trim($('#image').val());
 	var service = $.trim($('#service').val());
-  var $ul = $$('#stream ul');
+
+    var $ul = $$('#stream ul');
+
 	socketIoClient.on('message', function(json) {
 
+
 		var doc = JSON.parse(json);
+        console.log(doc);
 		var msg = doc.actor.displayName + ' ' + doc.title + ' ' + doc.object.displayName;
 
 		var $li = $('<li>');
         var $row = $('<div class="row"></div>');
         $li.append($row);
 
-        var $span = $('<div class="span1"></div>');
+        var $span = $('<div class="span2"></div>');
         $row.append($span);
-        var image = '/img/default.png';
-        if (doc.actor.image) {
+        var image = '/img/codercat-sm.jpg';
+        if (doc.actor.image && doc.actor.image.url) {
             image = doc.actor.image.url;
         }
         $span.append($('<img class="avatar">').attr('src', image));
 
-        var $span2 = $('<div class="span9"></div>');
+        var $span2 = $('<div class="span8"></div>');
         $row.append($span2);
 
         var x= '';
