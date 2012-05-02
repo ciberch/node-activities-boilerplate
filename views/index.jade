@@ -1,4 +1,4 @@
-.navbar.navbar-fixed-top
+.navbar
 	.navbar-inner
 		.container
 			a.btn.btn-navbar("data-target"=".nav-collapse", "data-toggle"="collapse")
@@ -40,12 +40,13 @@
 	.row
 		.span8.offset1
 			form.well
-				label Content
 				.row
-					.span1
-					textarea.span6#msg
+					.span8
+						label Content
+						textarea.span7#msg
 				.row
-					button.span2#send-message Publish
+					.span8
+						button#send-message Publish
 	.row
 		.span8
 			#bubble
