@@ -25,20 +25,34 @@
 
 	var image = $.trim($('#image').val());
 	var service = $.trim($('#service').val());
-  var $ul = $$('#bubble ul');
+  var $ul = $$('#stream ul');
 	socketIoClient.on('message', function(json) {
 
 		var doc = JSON.parse(json);
 		var msg = doc.actor.displayName + ' ' + doc.title + ' ' + doc.object.displayName;
 
-		var $li = $('<li>').text(msg + " --");
+		var $li = $('<li>');
+        var $row = $('<div class="row"></div>');
+        $li.append($row);
+
+        var $span = $('<div class="span1"></div>');
+        $row.append($span);
+        var image = '/img/default.png';
         if (doc.actor.image) {
-		    $li.append($('<img class="avatar">').attr('src', doc.actor.image.url));
-        } 
-		if (doc.provider && doc.provider.icon) {
-			$li.append($('<img class="service">').attr('src', doc.provider.icon.url));
-		}
-    $ul.prepend($li);
+            image = doc.actor.image.url;
+        }
+        $span.append($('<img class="avatar">').attr('src', image));
+
+        var $span2 = $('<div class="span9"></div>');
+        $row.append($span2);
+
+        var x= '';
+        if (doc.provider && doc.provider.icon) {
+            x = '<br/>Via: <img class="service" src="' + doc.provider.icon.url + '" />';
+        }
+        $span2.append('<div class="activity"><strong>' + doc.actor.displayName + '</strong> ' + doc.title +
+             ': <br/><blockquote>' + doc.object.displayName + '</blockquote>' + x + '</div>');
+        $ul.prepend($li);
 
 		if ($ul.children.count > 20) {
             $ul.children.last.remove();
@@ -48,8 +62,10 @@
     $(document).ready(function(){
         $("#send-message").click(function() {
             var msg = $("#msg").val();
-            console.log(msg);
-            socketIoClient.send(msg);
+            if (msg && msg.length > 0) {
+                $("#msg").val('');
+                socketIoClient.send(msg);
+            }
             return false;
         });
     });
