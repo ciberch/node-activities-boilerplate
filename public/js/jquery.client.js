@@ -25,30 +25,32 @@
 
 	var image = $.trim($('#image').val());
 	var service = $.trim($('#service').val());
+  var $ul = $$('#bubble ul');
 	socketIoClient.on('message', function(json) {
 
 		var doc = JSON.parse(json);
 		var msg = doc.actor.displayName + ' ' + doc.title + ' ' + doc.object.displayName;
 
-		var $li = $('<li>').text(msg);
+		var $li = $('<li>').text(msg + " --");
         if (doc.actor.image) {
 		    $li.append($('<img class="avatar">').attr('src', doc.actor.image.url));
         } 
 		if (doc.provider && doc.provider.icon) {
 			$li.append($('<img class="service">').attr('src', doc.provider.icon.url));
 		}
-		$$('#bubble ul').prepend($li);
-		$$('#bubble').scrollTop(98).stop().animate({
-			'scrollTop': '0'
-		}, 500);
-		setTimeout(function() {
-			$li.remove();
-		}, 20000);
+    $ul.prepend($li);
+
+		if ($ul.children.count > 20) {
+            $ul.children.last.remove();
+        }
 	});
 
     $(document).ready(function(){
-        $("#ping").click(function() {
-            socketIoClient.send("Ping");
+        $("#send-message").click(function() {
+            var msg = $("#msg").val();
+            console.log(msg);
+            socketIoClient.send(msg);
+            return false;
         });
     });
 

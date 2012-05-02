@@ -61,8 +61,7 @@ var assetsSettings = {
 		, 'path': './public/js/'
 		, 'dataType': 'javascript'
 		, 'files': [
-			'http://code.jquery.com/jquery-latest.js'
-			, 'http://' + siteConf.internal_host+ ':' + siteConf.internal_port + '/socket.io/socket.io.js' // special case since the socket.io module serves its own js
+			'http://' + siteConf.internal_host+ ':' + siteConf.internal_port + '/socket.io/socket.io.js' // special case since the socket.io module serves its own js
 			, 'jquery.client.js'
 		]
 		, 'debug': true
@@ -80,7 +79,7 @@ var assetsSettings = {
 		, 'path': './public/css/'
 		, 'dataType': 'css'
 		, 'files': [
-			'reset.css'
+			'bootstrap.css'
 			, 'client.css'
 		]
 		, 'debug': true
@@ -200,6 +199,7 @@ function NotFound(msg){
 // Routing
 app.all('/', function(req, res) {
     var providerFavicon = '';
+    var streams = [];
 	// Set example session uid for use with socket.io.
 	if (!req.session.uid) {
 		req.session.uid = (0 | Math.random()*1000000);
@@ -212,7 +212,8 @@ app.all('/', function(req, res) {
         providerFavicon = '//facebook.com/favicon.ico';
     }
 	res.locals({
-		'providerFavicon': providerFavicon
+		'providerFavicon': providerFavicon,
+        'streams' : streams
 	});
 	res.render('index');
 });

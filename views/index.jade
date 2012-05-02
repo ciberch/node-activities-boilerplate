@@ -1,27 +1,53 @@
+.row
+	.navbar
+		.navbar-inner
+			.container
+				.row
+					.span4
+						a.brand(href="#") Activity Streams
+					.span3
+						ul.nav
+							li
+								#connected
+									strong Online
+							- if(session.auth)
+								li.logout
+									a(href="/logout")
+										span Logout
+					.span5
+						- if(!session.auth)
+							ul.nav
+								li.dropdown
+									a(href="#", data-toggle="dropdown")
+										span Login
+										b.caret
+									ul.dropdown-menu
+										li.facebook
+											a(href="/auth/facebook")
+												img(src="//facebook.com/favicon.ico", alt="Facebook")
+												span Facebook
+										li.twitter
+											a(href="/auth/twitter)
+												img(src="//twitter.com/favicon.ico", alt="Twitter")
+												span Twitter
+										li.github
+											a(href="/auth/github")
+												img(src="//github.com/favicon.ico", alt="GitHub")
+												span Github
+
 input#image(type="hidden", value="#{((session.auth && session.user.image) ? session.user.image : '/img/default.png')}")
 input#service(type="hidden", value="#{locals.providerFavicon}")
-#bubble
-  ul
-#connected
-  strong Online
-  .overlay
-.logins
-  ul.padding
-    - if(!session.auth)
-      li.facebook
-        a(href="/auth/facebook")
-          img(src="//facebook.com/favicon.ico", alt="")
-          span Facebook
-      li.twitter
-        a(href="/auth/twitter)
-          img(src="//twitter.com/favicon.ico", alt="")
-          span Twitter
-      li.github
-        a(href="/auth/github")
-          img(src="//github.com/favicon.ico", alt="")
-          span Github
-    - else
-        li.logout
-          a(href="/logout")
-            span Logout
-button#ping Ping !
+.row
+	.span8.offset1
+		form.well
+			label Content
+			.row
+				.span1
+				textarea.span6#msg
+			.row
+				button.span2#send-message Publish
+.row
+	.span8
+		#bubble
+			ul.unstyled
+
