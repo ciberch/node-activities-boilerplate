@@ -1,0 +1,22 @@
+each act in locals.streams.firehose.items
+  - var image = '/img/codercat-sm.jpg';
+  - if (act.actor.image && act.actor.image.url) {
+  -   image = act.actor.image.url;
+  - }
+  li
+    .row
+      .span2
+        img.avatar(src= image)
+      .span8
+        .activity
+          strong=act.actor.displayName
+          &nbsp;
+          =act.title
+          br
+          blockquote=act.object.displayName
+          - if (act.provider && act.provider.icon) {
+            br
+            Via
+            img.service(src= act.provider.icon.url)
+          -}
+

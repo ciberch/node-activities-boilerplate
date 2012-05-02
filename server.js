@@ -199,7 +199,9 @@ function NotFound(msg){
 // Routing
 app.all('/', function(req, res) {
     var providerFavicon = '';
+    var activities = [];
     var streams = [];
+
 	// Set example session uid for use with socket.io.
 	if (!req.session.uid) {
 		req.session.uid = (0 | Math.random()*1000000);
@@ -211,11 +213,18 @@ app.all('/', function(req, res) {
        else if (req.session.auth.facebook)
         providerFavicon = '//facebook.com/favicon.ico';
     }
-	res.locals({
-		'providerFavicon': providerFavicon,
-        'streams' : streams
-	});
-	res.render('index');
+
+    asmsDB.getActivityStreamFirehose(5, function (err, docs) {
+        if (!err && docs) {
+            activities = docs;
+        }
+
+        res.render('index', {
+            'providerFavicon': providerFavicon,
+            'streams' : {firehose: {items: activities}}
+        });
+    });
+
 });
 
 // Initiate this after all other routing is done, otherwise wildcard will go crazy.

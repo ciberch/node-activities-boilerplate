@@ -47,5 +47,7 @@
 	.row
 		.span10.offset1#stream
 			ul.unstyled
-
+				-if (locals.streams && locals.streams.firehose && locals.streams.firehose.items) {
+					include activity
+				-}
 
