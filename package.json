@@ -1,7 +1,7 @@
 {
   "name" : "node-activities-boilerplate",
   "description" : "A boilerplate Activity Stream Client for any Cloud Foundry instance. Based on the work from Mathias Pettersson <mape@mape.me> on node-express-boilerplate",
-  "version" : "0.0.5",
+  "version" : "0.0.6",
   "author" : "Monica Wilkinson <ciberch@gmail.com>",
   "engines" : ["node"],
   "repository" : { "type":"git", "url":"http://github.com/ciberch/node-express-boilerplate" },
@@ -9,7 +9,6 @@
     "connect" : ">=1.6.0",
     "connect-assetmanager" : ">=0.0.21",
     "connect-assetmanager-handlers" : ">=0.0.17",
-    "ejs" : ">=0.4.3",
     "jade": "",
     "express" : ">=2.4.3",
     "socket.io" : ">=0.7.8",
@@ -18,7 +17,7 @@
     "airbrake" : ">=0.2.0",
     "everyauth" : ">=0.2.18",
     "cloudfoundry" : ">=0.1.0",
-    "activity-streams-mongoose": ">=0.0.7",
+    "activity-streams-mongoose": ">=0.0.9",
     "mongoose": "",
 	  "hiredis": "",
 	  "underscore": ""

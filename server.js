@@ -223,10 +223,10 @@ function getDistinctStreams(req, res, next){
     asmsDB.Activity.distinct('streams', {}, function(err, docs) {
         if (!err && docs) {
             _.each(docs, function(stream){
-                req.streams[stream] = [];
+                req.streams[stream] = {name: stream, items: []};
             });
 
-            console.log("Fetched all streams");
+            console.log("Fetched all streams *******");
             console.dir(req.streams);
             next();
         } else {
@@ -235,29 +235,30 @@ function getDistinctStreams(req, res, next){
     });
 }
 
-
 // Routing
 app.get('/', loadUser, getDistinctStreams, function(req, res) {
+    req.session.desiredStream = "firehose";
+
     asmsDB.getActivityStreamFirehose(20, function (err, docs) {
         var activities = [];
         if (!err && docs) {
             activities = docs;
         }
-        req.streams['firehose'] = {items: activities};
+        req.streams.firehose.items = activities;
         res.render('index', {'providerFavicon': req.providerFavicon, 'streams' : req.streams});
     });
 
 });
 
-app.get('/stream/:streamName', loadUser, getDistinctStreams, function(req, res) {
+app.get('/streams/:streamName', loadUser, getDistinctStreams, function(req, res) {
+    req.session.desiredStream = req.params.streamName;
+
     asmsDB.getActivityStream(req.params.streamName, 20, function (err, docs) {
         var activities = [];
         if (!err && docs) {
             activities = docs;
         }
-
-        req.streams[req.params.streamName] = {items: activities};
-
+        req.streams[req.params.streamName].items = activities;
         res.render('index', {'providerFavicon': req.providerFavicon, 'streams' : req.streams});
     });
 
