@@ -1,5 +1,6 @@
 // Fetch the site configuration
 var siteConf = require('./lib/getConfig');
+var _ = require('underscore')._;
 
 process.title = siteConf.uri.replace(/http:\/\/(www)?/, '');
 
@@ -21,8 +22,6 @@ var assetHandler = require('connect-assetmanager-handlers');
 var notifoMiddleware = require('connect-notifo');
 var DummyHelper = require('./lib/dummy-helper');
 
-//var asmsSchema = require('activity-streams-json-schema');
-
 var mongoose = require('mongoose');
 mongoose.connect(siteConf.mongoUrl);
 
@@ -31,15 +30,18 @@ var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore(siteConf.redisOptions);
 
 var asmsDB = require('activity-streams-mongoose')(mongoose, {full: false, redis: siteConf.redisOptions, defaultActor: '/img/default.png'});
+
+var thisApp = {displayName: 'Activity Streams App', url: siteConf.uri, image:{url: '/img/as-logo-sm.png'}};
+
 // A quick test
 var target = new asmsDB.ActivityObject({displayName: "Cloud Foundry" , url: "http://www.cloudfoundry.com"});
 target.save(function (err) {
     if (err === null) {
         var startAct = new asmsDB.Activity(
             {
-            actor: {displayName: siteConf.user_email},
+            actor: {displayName: siteConf.user_email, image:{url: "img/me.jpg"}},
             verb: 'start',
-            object: {displayName: 'Node-Express-Boilerplate App', url: siteConf.uri},
+            object: thisApp,
             title: "started the app",
             target: target._id
             });
@@ -52,6 +54,7 @@ var app = module.exports = express.createServer();
 app.listen(siteConf.internal_port, null);
 app.asmsDB = asmsDB;
 app.siteConf = siteConf;
+app.thisApp = thisApp;
 
 // Setup socket.io server
 var socketIo = new require('./lib/socket-io-server.js')(app, sessionStore);
@@ -63,9 +66,11 @@ var assetsSettings = {
 		, 'path': './public/js/'
 		, 'dataType': 'javascript'
 		, 'files': [
-			'http://code.jquery.com/jquery-latest.js'
-			, 'http://' + siteConf.internal_host+ ':' + siteConf.internal_port + '/socket.io/socket.io.js' // special case since the socket.io module serves its own js
-			, 'jquery.client.js'
+			'http://' + siteConf.internal_host+ ':' + siteConf.internal_port + '/socket.io/socket.io.js' // special case since the socket.io module serves its own js
+			, 'templates.js'
+            , 'bootstrap.js'
+            , 'jquery.cookie.js'
+            , 'jquery.client.js'
 		]
 		, 'debug': true
 		, 'postManipulate': {
@@ -82,7 +87,7 @@ var assetsSettings = {
 		, 'path': './public/css/'
 		, 'dataType': 'css'
 		, 'files': [
-			'reset.css'
+			'bootstrap.css'
 			, 'client.css'
 		]
 		, 'debug': true
@@ -99,7 +104,6 @@ var assetsSettings = {
 // Add auto reload for CSS/JS/templates when in development
 app.configure('development', function(){
 	assetsSettings.js.files.push('jquery.frontend-development.js');
-	assetsSettings.css.files.push('frontend-development.css');
 	[['js', 'updatedContent'], ['css', 'updatedCss']].forEach(function(group) {
 		assetsSettings[group[0]].postManipulate['^'].push(function triggerUpdate(file, path, index, isLast, callback) {
 			callback(file);
@@ -112,7 +116,7 @@ var assetsMiddleware = assetManager(assetsSettings);
 
 // Settings
 app.configure(function() {
-	app.set('view engine', 'ejs');
+	app.set('view engine', 'jade');
 	app.set('views', __dirname+'/views');
 });
 
@@ -200,16 +204,64 @@ function NotFound(msg){
 	Error.captureStackTrace(this, arguments.callee);
 }
 
-// Routing
-app.all('/', function(req, res) {
-	// Set example session uid for use with socket.io.
+function loadUser(req, res, next) {
 	if (!req.session.uid) {
 		req.session.uid = (0 | Math.random()*1000000);
-	}
-	res.locals({
-		'key': 'value'
-	});
-	res.render('index');
+	} else if (req.session.auth){
+       if (req.session.auth.github)
+        req.providerFavicon = '//github.com/favicon.ico';
+       else if (req.session.auth.twitter)
+        req.providerFavicon = '//twitter.com/favicon.ico';
+       else if (req.session.auth.facebook)
+        req.providerFavicon = '//facebook.com/favicon.ico';
+    }
+    next();
+}
+
+function getDistinctStreams(req, res, next){
+    req.streams = {}
+    asmsDB.Activity.distinct('streams', {}, function(err, docs) {
+        if (!err && docs) {
+            _.each(docs, function(stream){
+                req.streams[stream] = {name: stream, items: []};
+            });
+
+            console.log("Fetched all streams *******");
+            console.dir(req.streams);
+            next();
+        } else {
+            next(new Error('Failed to fetch streams'));
+        }
+    });
+}
+
+// Routing
+app.get('/', loadUser, getDistinctStreams, function(req, res) {
+    req.session.desiredStream = "firehose";
+
+    asmsDB.getActivityStreamFirehose(20, function (err, docs) {
+        var activities = [];
+        if (!err && docs) {
+            activities = docs;
+        }
+        req.streams.firehose.items = activities;
+        res.render('index', {'providerFavicon': req.providerFavicon, 'streams' : req.streams});
+    });
+
+});
+
+app.get('/streams/:streamName', loadUser, getDistinctStreams, function(req, res) {
+    req.session.desiredStream = req.params.streamName;
+
+    asmsDB.getActivityStream(req.params.streamName, 20, function (err, docs) {
+        var activities = [];
+        if (!err && docs) {
+            activities = docs;
+        }
+        req.streams[req.params.streamName].items = activities;
+        res.render('index', {'providerFavicon': req.providerFavicon, 'streams' : req.streams});
+    });
+
 });
 
 // Initiate this after all other routing is done, otherwise wildcard will go crazy.

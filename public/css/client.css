@@ -8,6 +8,9 @@ body {
 	font: 12px 'helvetica neue', helvetica, arial, sans-serif;
 	text-rendering: optimizeLegibility;
 }
+#ping {
+    font-size:20px;
+}
 img {
 	-ms-interpolation-mode:bicubic;
 }
@@ -22,38 +25,21 @@ strong {
 	font-weight: bold;
 }
 #connected {
-	position: absolute;
-	top: 35px;
-	left: 20px;
-	width: 100px;
-	height: 100px;
-	background: red;
-	border-radius: 50px;
-	line-height: 100px;
-	text-align: center;
+	background: #ff2eae;
 	font-weight: bold;
 	color: #fff;
-	font-size: 23px;
 	text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 	box-shadow: 0 0 15px rgba(0,0,0,0.4);
 }
 #connected.on {
-	background: green;
+	background: #3daeb9;
 }
-#connected .overlay {
-	border-radius: 50px;
-	gradient: rgba(255,255,255,0.4)_rgba(255,255,255,0.1);
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	box-shadow: 0 0 5px rgba(0,0,0,0.6) inset;
-}
+/*#stream {*/
+	/*background-color: #000000;*/
+	/*color: white;*/
+/*}*/
+
 #bubble {
-	position: absolute;
-	top: 20px;
-	left: 155px;
 	max-height: 100%;
 	overflow: hidden;
 	padding: 0 0 0 65px;
@@ -62,7 +48,6 @@ strong {
 	height: 2000px;
 }
 #bubble li {
-	position:relative;
 	padding:15px;
 	margin:1em 0 3em 100px;
 	color:#000;
@@ -76,15 +61,9 @@ strong {
 	-vendor-transition: opacity 4s linear;
 }
 #bubble .avatar {
-	position: absolute;
-	right: 100%;
-	top: 10px;
 	margin-right: 45px;
 }
 #bubble .service {
-	position: absolute;
-	right: 100%;
-	top: -0px;
 	margin-right: 80px;
 	background: #fff;
 	border-radius: 20px;
@@ -96,15 +75,12 @@ strong {
 }
 #bubble li:after {
 	content: "";
-	position: absolute;
-	bottom: -20px;
-	left: 50px;
 	border-width: 20px 0 0 20px;
 	border-style: solid;
 	border-color: #075698 transparent;
 	display: block;
 	width: 0;
-	top:16px; 
+	top:16px;
 	left:-40px;
 	bottom:auto;
 	border-width:15px 40px 0 0;
@@ -112,9 +88,6 @@ strong {
 }
 
 .logins {
-	position: fixed;
-	top: 35px;
-	right: 60px;
 	gradient: #2b2b2b_#010101;
 	border-radius: 5px;
 	border: 1px solid #000;
@@ -130,8 +103,6 @@ strong {
 }
 .logins img {
 	margin: 0 7px 0 0;
-	position: relative;
-	top: 3px;
 	width: 16px;
 	height: 16px;
 }
@@ -144,4 +115,17 @@ strong {
 	border: 1px solid #fff;
 	font-size: 13px;
 	background: #fff;
+}
+
+.timestamp {
+	font-size: 7pt;
+	font-style: italic;
+}
+
+.activity_object .avatar {
+	width: 50px;
+}
+
+.activity {
+	margin-bottom: 15px;
 }
