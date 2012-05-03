@@ -116,3 +116,16 @@ strong {
 	font-size: 13px;
 	background: #fff;
 }
+
+.timestamp {
+	font-size: 7pt;
+	font-style: italic;
+}
+
+.activity_object .avatar {
+	width: 50px;
+}
+
+.activity {
+	margin-bottom: 15px;
+}

@@ -35,7 +35,7 @@ target.save(function (err) {
     if (err === null) {
         var startAct = new asmsDB.Activity(
             {
-            actor: {displayName: siteConf.user_email},
+            actor: {displayName: siteConf.user_email, image:{url: "img/me.jpg"}},
             verb: 'start',
             object: {displayName: 'Activity Streams App', url: siteConf.uri},
             title: "started the app",
@@ -214,7 +214,7 @@ app.all('/', function(req, res) {
         providerFavicon = '//facebook.com/favicon.ico';
     }
 
-    asmsDB.getActivityStreamFirehose(5, function (err, docs) {
+    asmsDB.getActivityStreamFirehose(20, function (err, docs) {
         if (!err && docs) {
             activities = docs;
         }

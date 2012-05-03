@@ -29,35 +29,15 @@
     var $ul = $$('#stream ul');
 
 	socketIoClient.on('message', function(json) {
-
-
 		var doc = JSON.parse(json);
-        console.log(doc);
-		var msg = doc.actor.displayName + ' ' + doc.title + ' ' + doc.object.displayName;
-
-		var $li = $('<li>');
-        var $row = $('<div class="row"></div>');
-        $li.append($row);
-
-        var $span = $('<div class="span2"></div>');
-        $row.append($span);
-        var image = '/img/codercat-sm.jpg';
-        if (doc.actor.image && doc.actor.image.url) {
-            image = doc.actor.image.url;
+        if (doc) {
+            var data = {activities: [doc]};
+            var fx = jade.templates["activity"];
+            var act_html = fx(data);
+            var $li = $(act_html);
+            $ul.prepend($li);
+            console.log($li);
         }
-        $span.append($('<img class="avatar">').attr('src', image));
-
-        var $span2 = $('<div class="span8"></div>');
-        $row.append($span2);
-
-        var x= '';
-        if (doc.provider && doc.provider.icon) {
-            x = '<br/>Via: <img class="service" src="' + doc.provider.icon.url + '" />';
-        }
-        $span2.append('<div class="activity"><strong>' + doc.actor.displayName + '</strong> ' + doc.title +
-             ': <br/><blockquote>' + doc.object.displayName + '</blockquote>' + x + '</div>');
-        $ul.prepend($li);
-
 		if ($ul.children.count > 20) {
             $ul.children.last.remove();
         }

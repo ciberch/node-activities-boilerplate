@@ -1,6 +1,6 @@
 var cf = require('cloudfoundry');
 var settings = {
-    'user' : 'yourname@localhost',
+    'user_email' : 'mwilkinson@vmware.com',
 	'sessionSecret': 'sessionSecret'
     , 'internal_host' : '127.0.0.1'
     , 'internal_port' : 8080
