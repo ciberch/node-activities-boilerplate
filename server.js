@@ -1,5 +1,6 @@
 // Fetch the site configuration
 var siteConf = require('./lib/getConfig');
+var _ = require('underscore')._;
 
 process.title = siteConf.uri.replace(/http:\/\/(www)?/, '');
 
@@ -68,7 +69,7 @@ var assetsSettings = {
 			'http://' + siteConf.internal_host+ ':' + siteConf.internal_port + '/socket.io/socket.io.js' // special case since the socket.io module serves its own js
 			, 'templates.js'
             , 'bootstrap.js'
-            , 'jquery.cookies.js'
+            , 'jquery.cookie.js'
             , 'jquery.client.js'
 		]
 		, 'debug': true
@@ -203,33 +204,61 @@ function NotFound(msg){
 	Error.captureStackTrace(this, arguments.callee);
 }
 
-// Routing
-app.all('/', function(req, res) {
-    var providerFavicon = '';
-    var activities = [];
-    var streams = [];
-
-	// Set example session uid for use with socket.io.
+function loadUser(req, res, next) {
 	if (!req.session.uid) {
 		req.session.uid = (0 | Math.random()*1000000);
 	} else if (req.session.auth){
        if (req.session.auth.github)
-        providerFavicon = '//github.com/favicon.ico';
+        req.providerFavicon = '//github.com/favicon.ico';
        else if (req.session.auth.twitter)
-        providerFavicon = '//twitter.com/favicon.ico';
+        req.providerFavicon = '//twitter.com/favicon.ico';
        else if (req.session.auth.facebook)
-        providerFavicon = '//facebook.com/favicon.ico';
+        req.providerFavicon = '//facebook.com/favicon.ico';
     }
+    next();
+}
 
+function getDistinctStreams(req, res, next){
+    req.streams = {}
+    asmsDB.Activity.distinct('streams', {}, function(err, docs) {
+        if (!err && docs) {
+            _.each(docs, function(stream){
+                req.streams[stream] = [];
+            });
+
+            console.log("Fetched all streams");
+            console.dir(req.streams);
+            next();
+        } else {
+            next(new Error('Failed to fetch streams'));
+        }
+    });
+}
+
+
+// Routing
+app.get('/', loadUser, getDistinctStreams, function(req, res) {
     asmsDB.getActivityStreamFirehose(20, function (err, docs) {
+        var activities = [];
+        if (!err && docs) {
+            activities = docs;
+        }
+        req.streams['firehose'] = {items: activities};
+        res.render('index', {'providerFavicon': req.providerFavicon, 'streams' : req.streams});
+    });
+
+});
+
+app.get('/stream/:streamName', loadUser, getDistinctStreams, function(req, res) {
+    asmsDB.getActivityStream(req.params.streamName, 20, function (err, docs) {
+        var activities = [];
         if (!err && docs) {
             activities = docs;
         }
 
-        res.render('index', {
-            'providerFavicon': providerFavicon,
-            'streams' : {firehose: {items: activities}}
-        });
+        req.streams[req.params.streamName] = {items: activities};
+
+        res.render('index', {'providerFavicon': req.providerFavicon, 'streams' : req.streams});
     });
 
 });
