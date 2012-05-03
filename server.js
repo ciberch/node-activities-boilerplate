@@ -29,6 +29,9 @@ var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore(siteConf.redisOptions);
 
 var asmsDB = require('activity-streams-mongoose')(mongoose, {full: false, redis: siteConf.redisOptions, defaultActor: '/img/default.png'});
+
+var thisApp = {displayName: 'Activity Streams App', url: siteConf.uri, image:{url: '/img/as-logo-sm.png'}};
+
 // A quick test
 var target = new asmsDB.ActivityObject({displayName: "Cloud Foundry" , url: "http://www.cloudfoundry.com"});
 target.save(function (err) {
@@ -37,7 +40,7 @@ target.save(function (err) {
             {
             actor: {displayName: siteConf.user_email, image:{url: "img/me.jpg"}},
             verb: 'start',
-            object: {displayName: 'Activity Streams App', url: siteConf.uri},
+            object: thisApp,
             title: "started the app",
             target: target._id
             });
@@ -50,6 +53,7 @@ var app = module.exports = express.createServer();
 app.listen(siteConf.internal_port, null);
 app.asmsDB = asmsDB;
 app.siteConf = siteConf;
+app.thisApp = thisApp;
 
 // Setup socket.io server
 var socketIo = new require('./lib/socket-io-server.js')(app, sessionStore);
