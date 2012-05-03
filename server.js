@@ -62,7 +62,10 @@ var assetsSettings = {
 		, 'dataType': 'javascript'
 		, 'files': [
 			'http://' + siteConf.internal_host+ ':' + siteConf.internal_port + '/socket.io/socket.io.js' // special case since the socket.io module serves its own js
-			, 'jquery.client.js'
+			, 'templates.js'
+            , 'bootstrap.js'
+            , 'jquery.cookies.js'
+            , 'jquery.client.js'
 		]
 		, 'debug': true
 		, 'postManipulate': {

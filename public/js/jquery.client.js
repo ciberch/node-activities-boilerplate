@@ -31,12 +31,9 @@
 	socketIoClient.on('message', function(json) {
 		var doc = JSON.parse(json);
         if (doc) {
-            var data = {activities: [doc]};
-            var fx = jade.templates["activity"];
-            var act_html = fx(data);
-            var $li = $(act_html);
+            console.log(doc);
+            var $li = $(jade.templates["activity"]({activities: [doc]}));
             $ul.prepend($li);
-            console.log($li);
         }
 		if ($ul.children.count > 20) {
             $ul.children.last.remove();
