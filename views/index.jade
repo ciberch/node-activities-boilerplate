@@ -34,6 +34,20 @@
 										span Github
 
 .container
+	- var activities = [];
+	.row
+		.span10.offset1
+			-if (locals.streams) {
+				ul.nav.nav-tabs
+					each stream in locals.streams
+						-if (stream.items && stream.items.length>0)
+							li.active
+								- activities = stream.items
+								a(href="/streams/#{stream.name}")=stream.name
+						-else
+							li
+								a(href="/streams/#{stream.name}")=stream.name
+			-}
 	.row
 		.span10.offset1
 			form.well
@@ -47,8 +61,7 @@
 	.row
 		.span10.offset1#stream
 			ul.unstyled
-				-if (locals.streams && locals.streams.firehose && locals.streams.firehose.items) {
-					- var activities = locals.streams.firehose.items
+				-if (activities && activities.length) {
 					include activity
 				-}
 
