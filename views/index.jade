@@ -35,8 +35,66 @@
 
 .container
 	- var activities = [];
+
+	form
+		.row
+			.span4
+				h3 Actor
+				hr
+				#actor
+					.btn-group
+						a.btn.btn-warning.dropdown-toggle(data-toggle="dropdown")
+							span Person &nbsp;
+							span.caret
+						ul.dropdown-menu
+							-if (locals.objectTypes)
+								each objectType in locals.objectTypes
+									li=objectType
+					br
+					label Name
+					input(type="text")#title.span4
+					label Bio
+					textarea.span4#bio
+			.span4#verb
+				h3 Verb
+				hr
+				abbr The verb describes the type action the actor performed on the object.
+				br
+				br
+				.btn-group
+					a.btn.btn-danger.pull-right.dropdown-toggle(data-toggle="dropdown")
+						span Post &nbsp;
+						span.caret
+					ul.dropdown-menu
+						-if (locals.verbs)
+							each verb in locals.verbs
+								li=verb
+				br
+				#streamInfo
+					h3 Stream
+					hr
+					input(type="text")#title.span4
+			.span4
+				h3 Object
+				hr
+				#object
+					.btn-group
+						a.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
+							span Note &nbsp;
+							span.caret
+						ul.dropdown-menu
+							-if (locals.objectTypes)
+								each objectType in locals.objectTypes
+									li=objectType
+					br
+					label Title
+					input(type="text")#title.span4
+					label Content
+					textarea.span4#msg
+					button.btn.btn-success.pull-right#send-message Submit
+
 	.row
-		.span10.offset1
+		.span12
 			-if (locals.streams) {
 				ul.nav.nav-tabs
 					each stream in locals.streams
@@ -49,17 +107,7 @@
 								a(href="/streams/#{stream.name}")=stream.name
 			-}
 	.row
-		.span10.offset1
-			form.well
-				.row
-					.span8
-						label Content
-						textarea.span7#msg
-				.row
-					.span8
-						button#send-message Publish
-	.row
-		.span10.offset1#stream
+		.span12#stream
 			ul.unstyled
 				-if (activities && activities.length) {
 					include activity

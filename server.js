@@ -204,6 +204,12 @@ function NotFound(msg){
 	Error.captureStackTrace(this, arguments.callee);
 }
 
+function getMetaData(req, res, next) {
+    req.objectTypes = ['person', 'group', 'stream'];
+    req.verbs = ['post', 'join'];
+    next();
+};
+
 function loadUser(req, res, next) {
 	if (!req.session.uid) {
 		req.session.uid = (0 | Math.random()*1000000);
@@ -236,7 +242,7 @@ function getDistinctStreams(req, res, next){
 }
 
 // Routing
-app.get('/', loadUser, getDistinctStreams, function(req, res) {
+app.get('/', loadUser, getDistinctStreams, getMetaData, function(req, res) {
     req.session.desiredStream = "firehose";
 
     asmsDB.getActivityStreamFirehose(20, function (err, docs) {
@@ -245,12 +251,12 @@ app.get('/', loadUser, getDistinctStreams, function(req, res) {
             activities = docs;
         }
         req.streams.firehose.items = activities;
-        res.render('index', {'providerFavicon': req.providerFavicon, 'streams' : req.streams});
+        res.render('index', {'providerFavicon': req.providerFavicon, 'streams' : req.streams, objectTypes : req.objectTypes, verbs: req.verbs});
     });
 
 });
 
-app.get('/streams/:streamName', loadUser, getDistinctStreams, function(req, res) {
+app.get('/streams/:streamName', loadUser, getDistinctStreams, getMetaData, function(req, res) {
     req.session.desiredStream = req.params.streamName;
 
     asmsDB.getActivityStream(req.params.streamName, 20, function (err, docs) {
@@ -259,7 +265,7 @@ app.get('/streams/:streamName', loadUser, getDistinctStreams, function(req, res)
             activities = docs;
         }
         req.streams[req.params.streamName].items = activities;
-        res.render('index', {'providerFavicon': req.providerFavicon, 'streams' : req.streams});
+        res.render('index', {'providerFavicon': req.providerFavicon, 'streams' : req.streams, objectTypes : req.objectTypes, verbs: req.verbs});
     });
 
 });
