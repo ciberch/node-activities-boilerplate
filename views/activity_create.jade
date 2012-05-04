@@ -4,6 +4,7 @@ form
 			h3 Actor
 			hr
 			#actor
+				p You are the actor here. Login above to change your name and avatar.
 				.btn-group
 					a.btn.btn-warning.dropdown-toggle(data-toggle="dropdown")
 						span Person &nbsp;
@@ -13,15 +14,18 @@ form
 							each objectType in locals.objectTypes
 								li=objectType
 				br
-				label Name
-				.input-prepend
-					span.add-on @
-					input.prepend-fix(type="text")#displayName.span3
-				label Bio
-				textarea.span4#bio
+				.row
+					.span1
+						img.avatar(src="#{locals.user.image.url}")
+					.span3
+						label Display Name
+						.input-prepend
+							span.add-on @
+							input.prepend-fix(readonly=true, type="text", value="#{locals.user.displayName}")#displayName.span2
 		.span4#verb
 			h3 Verb
 			hr
+			p The verb describes the type of action the actor performs on the object.
 			.btn-group
 				a.btn.btn-danger.pull-right.dropdown-toggle(data-toggle="dropdown")
 					span Post &nbsp;
@@ -30,9 +34,6 @@ form
 					-if (locals.verbs)
 						each verb in locals.verbs
 							li=verb
-			br
-			abbr The verb describes the type action the actor performed on the object.
-			br
 			br
 			#streamInfo
 				h3 Stream

@@ -221,6 +221,9 @@ function loadUser(req, res, next) {
        else if (req.session.auth.facebook)
         req.providerFavicon = '//facebook.com/favicon.ico';
     }
+    var displayName = req.session.user ? req.session.user.name : 'UID: '+(req.session.uid || 'has no UID');
+    var avatarUrl = ((req.session.auth && req.session.user.image) ? req.session.user.image : '/img/codercat-sm.jpg');
+    req.user = {displayName: displayName, image: {url: avatarUrl}};
     next();
 }
 
@@ -251,7 +254,12 @@ app.get('/', loadUser, getDistinctStreams, getMetaData, function(req, res) {
             activities = docs;
         }
         req.streams.firehose.items = activities;
-        res.render('index', {'providerFavicon': req.providerFavicon, 'streams' : req.streams, objectTypes : req.objectTypes, verbs: req.verbs});
+        res.render('index', {
+            currentUser: req.user,
+            providerFavicon: req.providerFavicon,
+            streams : req.streams,
+            objectTypes : req.objectTypes,
+            verbs: req.verbs});
     });
 
 });
@@ -265,7 +273,13 @@ app.get('/streams/:streamName', loadUser, getDistinctStreams, getMetaData, funct
             activities = docs;
         }
         req.streams[req.params.streamName].items = activities;
-        res.render('index', {'providerFavicon': req.providerFavicon, 'streams' : req.streams, objectTypes : req.objectTypes, verbs: req.verbs});
+        res.render('index', {
+            currentUser: req.user,
+            providerFavicon: req.providerFavicon,
+            streams : req.streams,
+            objectTypes : req.objectTypes,
+            verbs: req.verbs
+        });
     });
 
 });
