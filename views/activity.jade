@@ -1,32 +1,40 @@
 each act in activities
-  li
-    .row.activity
-      .span2.actor
-        -if (act.actor.image && act.actor.image.url) {
-          img.avatar(src= act.actor.image.url)
-        -} else {
-          h2 :-)
-        -}
-      .span8.action
-        .row.title
-          .span8
-            strong=act.actor.displayName
-            &nbsp;
-            =act.title
-        .row.activity_object
-          .span8
-            blockquote
-              -if (act.object.image && act.object.image.url) {
-                img.avatar(src= act.object.image.url)
-              -}
-              span=act.object.displayName
-        .row.details
-          .span5
-            .timestamp.small=act.published
-          - if (act.provider && act.provider.icon) {
-              .span1
-                Via
-              .span2
-                img.service(src= act.provider.icon.url)
-          -}
+	li
+		.row.activity
+			.span2.actor
+				-if (act.actor.image && act.actor.image.url) {
+					img.avatar(src= act.actor.image.url)
+				-} else {
+					h2 :-)
+				-}
+			.span8.action
+				.row.title
+					.span8
+						strong=act.actor.displayName
+						&nbsp;
+						=act.title
+				.row.activity_object
+					.span8
+						br
+						blockquote
+							-if (act.object.image && act.object.image.url) {
+								img.avatar(src= act.object.image.url)
+							-}
+							-if (act.object.displayName) {
+								strong.activity-displayName=act.object.displayName
+							-} else if (act.object.title) {
+								strong.activity-title=act.object.title
+							-}
+							-if (act.object.content) {
+								.activity-content=act.object.content
+							-} 
+				.row.details
+					.span5
+						.timestamp.small=act.published
+					- if (act.provider && act.provider.icon) {
+							.span1
+								Via
+							.span2
+								img.service(src= act.provider.icon.url)
+					-}
 

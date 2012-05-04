@@ -10,37 +10,6 @@
 	background: #3daeb9;
 }
 
-
-/*.logins {*/
-	/*gradient: #2b2b2b_#010101;*/
-	/*border-radius: 5px;*/
-	/*border: 1px solid #000;*/
-	/*padding: 5px 5px;*/
-	/*margin: 0 0 5px;*/
-/*}*/
-/*.logins li {*/
-	/*padding: 4px 10px;*/
-	/*border-bottom: 1px solid #eee;*/
-/*}*/
-/*.logins li:last-child {*/
-	/*border-bottom: 0;*/
-/*}*/
-/*.logins img {*/
-	/*margin: 0 7px 0 0;*/
-	/*width: 16px;*/
-	/*height: 16px;*/
-/*}*/
-/*.logins a {*/
-	/*color: #000;*/
-/*}*/
-/*.logins .padding*/
-/*{*/
-	/*border-radius: 3px;*/
-	/*border: 1px solid #fff;*/
-	/*font-size: 13px;*/
-	/*background: #fff;*/
-/*}*/
-
 .timestamp {
 	font-size: 7pt;
 	font-style: italic;
@@ -52,6 +21,10 @@
 
 .activity {
 	margin-bottom: 15px;
+}
+
+.prepend-fix {
+	margin-bottom: 0px;
 }
 
 

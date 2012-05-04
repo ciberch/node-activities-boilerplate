@@ -1,0 +1,61 @@
+form
+	.row
+		.span4
+			h3 Actor
+			hr
+			#actor
+				.btn-group
+					a.btn.btn-warning.dropdown-toggle(data-toggle="dropdown")
+						span Person &nbsp;
+						span.caret
+					ul.dropdown-menu
+						-if (locals.objectTypes)
+							each objectType in locals.objectTypes
+								li=objectType
+				br
+				label Name
+				.input-prepend
+					span.add-on @
+					input.prepend-fix(type="text")#displayName.span3
+				label Bio
+				textarea.span4#bio
+		.span4#verb
+			h3 Verb
+			hr
+			.btn-group
+				a.btn.btn-danger.pull-right.dropdown-toggle(data-toggle="dropdown")
+					span Post &nbsp;
+					span.caret
+				ul.dropdown-menu
+					-if (locals.verbs)
+						each verb in locals.verbs
+							li=verb
+			br
+			abbr The verb describes the type action the actor performed on the object.
+			br
+			br
+			#streamInfo
+				h3 Stream
+				br
+				.input-prepend
+					span.add-on #
+					input#streamName.span3.prepend-fix(type="text", value=desiredStream)
+		.span4
+			h3 Object
+			hr
+			#object
+				.btn-group
+					a.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
+						span Note &nbsp;
+						span.caret
+					ul.dropdown-menu
+						-if (locals.objectTypes)
+							each objectType in locals.objectTypes
+								li=objectType
+				br
+				label Title
+				input(type="text")#title.span4
+				label Content
+				textarea.span4#msg
+				button.btn.btn-success.pull-right#send-message Submit
+

@@ -43,9 +43,17 @@
     $(document).ready(function(){
         $("#send-message").click(function() {
             var msg = $("#msg").val();
+            var title = $('#title').val();
+            var streamName = $('#streamName').val();
+
             if (msg && msg.length > 0) {
                 $("#msg").val('');
-                socketIoClient.send(msg);
+                $('#title').val('');
+
+                var act = {object: {content: msg, objectType: 'note', title: title}, verb: 'post', streams: [streamName]};
+
+                console.dir(act);
+                socketIoClient.emit("message", act);
             }
             return false;
         });

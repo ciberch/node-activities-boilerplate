@@ -179,7 +179,9 @@ buf.push('</div></div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('activity_object') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span8') }, {}));
-buf.push('><blockquote>');
+buf.push('><br');
+buf.push(attrs({  }, {}));
+buf.push('/><blockquote>');
 if (act.object.image && act.object.image.url) {
 {
 buf.push('<img');
@@ -187,10 +189,36 @@ buf.push(attrs({ 'src':(act.object.image.url), "class": ('avatar') }, {"src":tru
 buf.push('/>');
 }
 }
-buf.push('<span>');
+if (act.object.displayName) {
+{
+buf.push('<strong');
+buf.push(attrs({ "class": ('activity-displayName') }, {}));
+buf.push('>');
 var __val__ = act.object.displayName
 buf.push(escape(null == __val__ ? "" : __val__));
-buf.push('</span></blockquote></div></div><div');
+buf.push('</strong>');
+}
+} else if (act.object.title) {
+{
+buf.push('<strong');
+buf.push(attrs({ "class": ('activity-title') }, {}));
+buf.push('>');
+var __val__ = act.object.title
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</strong>');
+}
+}
+if (act.object.content) {
+{
+buf.push('<div');
+buf.push(attrs({ "class": ('activity-content') }, {}));
+buf.push('>');
+var __val__ = act.object.content
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div>');
+}
+} 
+buf.push('</blockquote></div></div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('details') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span5') }, {}));
@@ -249,7 +277,9 @@ buf.push('</div></div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('activity_object') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span8') }, {}));
-buf.push('><blockquote>');
+buf.push('><br');
+buf.push(attrs({  }, {}));
+buf.push('/><blockquote>');
 if (act.object.image && act.object.image.url) {
 {
 buf.push('<img');
@@ -257,10 +287,36 @@ buf.push(attrs({ 'src':(act.object.image.url), "class": ('avatar') }, {"src":tru
 buf.push('/>');
 }
 }
-buf.push('<span>');
+if (act.object.displayName) {
+{
+buf.push('<strong');
+buf.push(attrs({ "class": ('activity-displayName') }, {}));
+buf.push('>');
 var __val__ = act.object.displayName
 buf.push(escape(null == __val__ ? "" : __val__));
-buf.push('</span></blockquote></div></div><div');
+buf.push('</strong>');
+}
+} else if (act.object.title) {
+{
+buf.push('<strong');
+buf.push(attrs({ "class": ('activity-title') }, {}));
+buf.push('>');
+var __val__ = act.object.title
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</strong>');
+}
+}
+if (act.object.content) {
+{
+buf.push('<div');
+buf.push(attrs({ "class": ('activity-content') }, {}));
+buf.push('>');
+var __val__ = act.object.content
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div>');
+}
+} 
+buf.push('</blockquote></div></div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('details') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span5') }, {}));

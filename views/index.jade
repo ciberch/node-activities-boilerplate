@@ -34,65 +34,9 @@
 										span Github
 
 .container
+
+	- var desiredStream;
 	- var activities = [];
-
-	form
-		.row
-			.span4
-				h3 Actor
-				hr
-				#actor
-					.btn-group
-						a.btn.btn-warning.dropdown-toggle(data-toggle="dropdown")
-							span Person &nbsp;
-							span.caret
-						ul.dropdown-menu
-							-if (locals.objectTypes)
-								each objectType in locals.objectTypes
-									li=objectType
-					br
-					label Name
-					input(type="text")#title.span4
-					label Bio
-					textarea.span4#bio
-			.span4#verb
-				h3 Verb
-				hr
-				abbr The verb describes the type action the actor performed on the object.
-				br
-				br
-				.btn-group
-					a.btn.btn-danger.pull-right.dropdown-toggle(data-toggle="dropdown")
-						span Post &nbsp;
-						span.caret
-					ul.dropdown-menu
-						-if (locals.verbs)
-							each verb in locals.verbs
-								li=verb
-				br
-				#streamInfo
-					h3 Stream
-					hr
-					input(type="text")#title.span4
-			.span4
-				h3 Object
-				hr
-				#object
-					.btn-group
-						a.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
-							span Note &nbsp;
-							span.caret
-						ul.dropdown-menu
-							-if (locals.objectTypes)
-								each objectType in locals.objectTypes
-									li=objectType
-					br
-					label Title
-					input(type="text")#title.span4
-					label Content
-					textarea.span4#msg
-					button.btn.btn-success.pull-right#send-message Submit
-
 	.row
 		.span12
 			-if (locals.streams) {
@@ -100,12 +44,16 @@
 					each stream in locals.streams
 						-if (stream.items && stream.items.length>0)
 							li.active
+								- desiredStream = stream.name
 								- activities = stream.items
 								a(href="/streams/#{stream.name}")=stream.name
 						-else
 							li
 								a(href="/streams/#{stream.name}")=stream.name
 			-}
+
+	include activity_create
+
 	.row
 		.span12#stream
 			ul.unstyled
