@@ -8,6 +8,8 @@
 			a#connected.brand(:href = "#") Activity Streams
 			.nav-collapse
 				ul.nav
+					li
+						a(href="http://github.com/ciberch/node-activities-boilerplate", target="_blank") Fork on GitHub
 					- if(session.auth)
 						li.logout
 							a(href="/logout")
@@ -32,6 +34,28 @@
 									a(href="/auth/github")
 										img(src="//github.com/favicon.ico", alt="GitHub")
 										span Github
+				ul.nav
+					li.dropdown
+						a(href="#", "data-toggle"="dropdown")
+							span Built with
+							b.caret
+						ul.dropdown-menu
+							li
+								a(href="https://my.cloudfoundry.com/signup/hack", target="_blank") CloudFoundry
+							li
+								a(href="http://activitystrea.ms/", target="_blank") ActivityStrea.ms
+							li
+								a(href="http://mongodb.org/", target="_blank") MongoDB
+							li
+								a(href="http://mongoosejs.com/", target="_blank") MongooseJS
+							li
+								a(href="http://redis.io/", target="_blank") Redis
+							li
+								a(href="http://expressjs.com/", target="_blank") ExpressJS
+							li
+								a(href="http://socket.io/", target="_blank") socket.io
+							li
+								a(href="http://twitter.github.com/bootstrap/", target="_blank") Twitter Bootstrap
 
 .container
 
