@@ -1,62 +1,63 @@
-form
+form#new_activity
 	.row
 		.span4
-			h3 Actor
-			hr
-			#actor
-				p You are the actor here. Login above to change your name and avatar.
-				.btn-group
-					a.btn.btn-warning.dropdown-toggle(data-toggle="dropdown")
-						span Person &nbsp;
-						span.caret
-					ul.dropdown-menu
-						-if (locals.objectTypes)
-							each objectType in locals.objectTypes
-								li=objectType
-				br
-				.row
-					.span1
-						img.avatar(src="#{locals.user.image.url}")
-					.span3
-						label Display Name
-						.input-prepend
-							span.add-on @
-							input.prepend-fix(readonly=true, type="text", value="#{locals.user.displayName}")#displayName.span2
+			.well.create_mod
+				h3 Actor
+				hr
+				#actor
+					p You are the actor here. Login above to change your name and avatar.
+					.btn-group
+						a.btn.btn-warning.dropdown-toggle(data-toggle="dropdown")
+							span Person &nbsp;
+							span.caret
+						ul.dropdown-menu
+							-if (locals.objectTypes)
+								each objectType in locals.objectTypes
+									li=objectType
+					br
+					img.avatar(src="#{locals.currentUser.image.url}")
+
+					label Display Name
+					.input-prepend
+						span.add-on @
+						input.prepend-fix(readonly=true, type="text", value="#{locals.currentUser.displayName}").span2#displayName
 		.span4#verb
-			h3 Verb
-			hr
-			p The verb describes the type of action the actor performs on the object.
-			.btn-group
-				a.btn.btn-danger.pull-right.dropdown-toggle(data-toggle="dropdown")
-					span Post &nbsp;
-					span.caret
-				ul.dropdown-menu
-					-if (locals.verbs)
-						each verb in locals.verbs
-							li=verb
-			br
-			#streamInfo
-				h3 Stream
-				br
-				.input-prepend
-					span.add-on #
-					input#streamName.span3.prepend-fix(type="text", value=desiredStream)
-		.span4
-			h3 Object
-			hr
-			#object
+			.well.create_mod
+				h3 Verb
+				hr
+				p The verb describes the type of action the actor performs on the object.
 				.btn-group
-					a.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
-						span Note &nbsp;
+					a.btn.btn-danger.pull-right.dropdown-toggle(data-toggle="dropdown")
+						span Post &nbsp;
 						span.caret
 					ul.dropdown-menu
-						-if (locals.objectTypes)
-							each objectType in locals.objectTypes
-								li=objectType
+						-if (locals.verbs)
+							each verb in locals.verbs
+								li=verb
 				br
-				label Title
-				input(type="text")#title.span4
-				label Content
-				textarea.span4#msg
-				button.btn.btn-success.pull-right#send-message Submit
+				#streamInfo
+					h3 Stream
+					br
+					.input-prepend
+						span.add-on #
+						input#streamName.span3.prepend-fix(type="text", value=locals.desiredStream)
+		.span4
+			.well.create_mod
+				h3 Object
+				hr
+				#object
+					.btn-group
+						a.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
+							span Note &nbsp;
+							span.caret
+						ul.dropdown-menu
+							-if (locals.objectTypes)
+								each objectType in locals.objectTypes
+									li=objectType
+					br
+					label Title
+					input(type="text")#title
+					label Content
+					textarea#msg
+					button.btn.btn-success.pull-right#send-message Create New Activity
 

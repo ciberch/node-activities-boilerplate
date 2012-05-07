@@ -150,7 +150,7 @@ var interp;
 buf.push('<li><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('activity') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span2') + ' ' + ('actor') }, {}));
+buf.push(attrs({ "class": ('span1') + ' ' + ('actor') }, {}));
 buf.push('>');
 if (act.actor.image && act.actor.image.url) {
 {
@@ -164,11 +164,11 @@ buf.push('<h2>:-)</h2>');
 }
 }
 buf.push('</div><div');
-buf.push(attrs({ "class": ('span8') + ' ' + ('action') }, {}));
+buf.push(attrs({ "class": ('span5') + ' ' + ('action') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('title') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span8') }, {}));
+buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('><strong>');
 var __val__ = act.actor.displayName
 buf.push(escape(null == __val__ ? "" : __val__));
@@ -178,7 +178,7 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</div></div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('activity_object') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span8') }, {}));
+buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('><br');
 buf.push(attrs({  }, {}));
 buf.push('/><blockquote>');
@@ -248,7 +248,7 @@ buf.push('</div></div></div></li>');
 buf.push('<li><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('activity') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span2') + ' ' + ('actor') }, {}));
+buf.push(attrs({ "class": ('span1') + ' ' + ('actor') }, {}));
 buf.push('>');
 if (act.actor.image && act.actor.image.url) {
 {
@@ -262,11 +262,11 @@ buf.push('<h2>:-)</h2>');
 }
 }
 buf.push('</div><div');
-buf.push(attrs({ "class": ('span8') + ' ' + ('action') }, {}));
+buf.push(attrs({ "class": ('span5') + ' ' + ('action') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('title') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span8') }, {}));
+buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('><strong>');
 var __val__ = act.actor.displayName
 buf.push(escape(null == __val__ ? "" : __val__));
@@ -276,7 +276,7 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</div></div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('activity_object') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span8') }, {}));
+buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('><br');
 buf.push(attrs({  }, {}));
 buf.push('/><blockquote>');

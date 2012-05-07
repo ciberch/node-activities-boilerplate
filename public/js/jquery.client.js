@@ -26,7 +26,7 @@
 	var image = $.trim($('#image').val());
 	var service = $.trim($('#service').val());
 
-    var $ul = $$('#stream ul');
+    var $ul = $('#main_stream');
 
 	socketIoClient.on('message', function(json) {
 		var doc = JSON.parse(json);

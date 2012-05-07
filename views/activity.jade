@@ -1,20 +1,20 @@
 each act in activities
 	li
 		.row.activity
-			.span2.actor
+			.span1.actor
 				-if (act.actor.image && act.actor.image.url) {
 					img.avatar(src= act.actor.image.url)
 				-} else {
 					h2 :-)
 				-}
-			.span8.action
+			.span5.action
 				.row.title
-					.span8
+					.span5
 						strong=act.actor.displayName
 						&nbsp;
 						=act.title
 				.row.activity_object
-					.span8
+					.span5
 						br
 						blockquote
 							-if (act.object.image && act.object.image.url) {

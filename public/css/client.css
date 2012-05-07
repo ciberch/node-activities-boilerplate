@@ -15,8 +15,18 @@
 	font-style: italic;
 }
 
+.activity .avatar {
+	width: 48px;
+	float: left;
+	display: inline;
+	margin-right: 10px;
+}
+
 .activity_object .avatar {
 	width: 48px;
+	float: left;
+	display: inline;
+	margin-right: 10px;
 }
 
 .activity {
@@ -26,5 +36,22 @@
 .prepend-fix {
 	margin-bottom: 0px;
 }
+
+.create_mod {
+	height: 265px;
+}
+
+#stream{
+
+}
+
+
+#new_activity .avatar{
+	width: 60px;
+	float: left;
+	display: inline;
+	margin-right: 10px;
+}
+
 
 

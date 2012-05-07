@@ -227,7 +227,93 @@ function loadUser(req, res, next) {
     next();
 }
 
+function getDistinctVerbs(req, res, next){
+    req.usedVerbs = []
+    asmsDB.Activity.distinct('verb', {streams: req.session.desiredStream}, function(err, docs) {
+        if (!err && docs) {
+            _.each(docs, function(verb){
+                req.usedVerbs.push(verb);
+            });
+
+            console.log("Fetched all verbs *******");
+            console.dir(req.usedVerbs);
+            next();
+        } else {
+            next(new Error('Failed to fetch verbs'));
+        }
+    });
+};
+
+function getDistinctActors(req, res, next){
+    req.usedActors = []
+        asmsDB.Activity.distinct('actor', {streams: req.session.desiredStream}, function(err, docs) {
+            if (!err && docs) {
+                _.each(docs, function(obj){
+                    req.usedActors.push(obj);
+                });
+
+                console.log("Fetched all actors *******");
+                console.dir(req.usedActors);
+                next();
+            } else {
+                next(new Error('Failed to fetch actors'));
+            }
+        });
+};
+
+function getDistinctObjects(req, res, next){
+    req.usedObjects = []
+        asmsDB.Activity.distinct('object', {streams: req.session.desiredStream}, function(err, docs) {
+            if (!err && docs) {
+                _.each(docs, function(obj){
+                    req.usedObjects.push(obj);
+                });
+
+                console.log("Fetched all objs *******");
+                console.dir(req.usedObjects);
+                next();
+            } else {
+                next(new Error('Failed to fetch objects'));
+            }
+        });
+};
+
+function getDistinctObjectTypes(req, res, next){
+    req.usedObjectTypes = ['(none)']
+        asmsDB.Activity.distinct('object.objectType', {streams: req.session.desiredStream}, function(err, docs) {
+            if (!err && docs) {
+                _.each(docs, function(objType){
+                    req.usedObjectTypes.push(objType);
+                });
+
+                console.log("Fetched all objTypes *******");
+                console.dir(req.usedObjectTypes);
+                next();
+            } else {
+                next(new Error('Failed to fetch objTypes'));
+            }
+        });
+};
+
+function getDistinctActorObjectTypes(req, res, next){
+    req.usedActorObjectTypes = ['(none)']
+        asmsDB.Activity.distinct('actor.objectType', {streams: req.session.desiredStream}, function(err, docs) {
+            if (!err && docs) {
+                _.each(docs, function(objType){
+                    req.usedActorObjectTypes.push(objType);
+                });
+
+                console.log("Fetched all actor objTypes *******");
+                console.dir(req.usedActorObjectTypes);
+                next();
+            } else {
+                next(new Error('Failed to fetch actorobjTypes'));
+            }
+        });
+};
+
 function getDistinctStreams(req, res, next){
+    req.session.desiredStream = req.params.streamName ? req.params.streamName : "firehose";
     req.streams = {}
     asmsDB.Activity.distinct('streams', {}, function(err, docs) {
         if (!err && docs) {
@@ -245,8 +331,7 @@ function getDistinctStreams(req, res, next){
 }
 
 // Routing
-app.get('/', loadUser, getDistinctStreams, getMetaData, function(req, res) {
-    req.session.desiredStream = "firehose";
+app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObjectTypes, getDistinctObjects, getDistinctActors, getDistinctObjectTypes, getMetaData, function(req, res) {
 
     asmsDB.getActivityStreamFirehose(20, function (err, docs) {
         var activities = [];
@@ -258,14 +343,20 @@ app.get('/', loadUser, getDistinctStreams, getMetaData, function(req, res) {
             currentUser: req.user,
             providerFavicon: req.providerFavicon,
             streams : req.streams,
+            desiredStream : req.session.desiredStream,
             objectTypes : req.objectTypes,
-            verbs: req.verbs});
+            verbs: req.verbs,
+            usedVerbs: req.usedVerbs,
+            usedObjects: req.usedObjects,
+            usedObjectTypes: req.usedObjectTypes,
+            usedActorObjectTypes: req.usedActorObjectTypes,
+            usedActors: req.usedActors
+        });
     });
 
 });
 
-app.get('/streams/:streamName', loadUser, getDistinctStreams, getMetaData, function(req, res) {
-    req.session.desiredStream = req.params.streamName;
+app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctObjects, getDistinctActors, getDistinctObjectTypes, getDistinctActorObjectTypes, getDistinctVerbs, getMetaData, function(req, res) {
 
     asmsDB.getActivityStream(req.params.streamName, 20, function (err, docs) {
         var activities = [];
@@ -277,8 +368,14 @@ app.get('/streams/:streamName', loadUser, getDistinctStreams, getMetaData, funct
             currentUser: req.user,
             providerFavicon: req.providerFavicon,
             streams : req.streams,
+            desiredStream : req.session.desiredStream,
             objectTypes : req.objectTypes,
-            verbs: req.verbs
+            verbs: req.verbs,
+            usedVerbs: req.usedVerbs,
+            usedObjects: req.usedObjects,
+            usedObjectTypes: req.usedObjectTypes,
+            usedActorObjectTypes: req.usedActorObjectTypes,
+            usedActors: req.usedActors
         });
     });
 
