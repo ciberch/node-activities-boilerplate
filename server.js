@@ -55,6 +55,7 @@ app.listen(siteConf.internal_port, null);
 app.asmsDB = asmsDB;
 app.siteConf = siteConf;
 app.thisApp = thisApp;
+app.cookieName = "JSESSIONID"; //Hack to have sticky sessions. Default connect name is 'connect.sid';
 
 // Setup socket.io server
 var socketIo = new require('./lib/socket-io-server.js')(app, sessionStore);
@@ -127,7 +128,8 @@ app.configure(function() {
 	app.use(assetsMiddleware);
 
 	app.use(express.session({
-		'store': sessionStore
+        'key': app.cookieName
+		, 'store': sessionStore
 		, 'secret': siteConf.sessionSecret
 	}));
 	app.use(express.logger({format: ':response-time ms - :date - :req[x-real-ip] - :method :url :user-agent / :referrer'}));
