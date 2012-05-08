@@ -1,5 +1,6 @@
 // Fetch the site configuration
 var siteConf = require('./lib/getConfig');
+var cf = require('cloudfoundry');
 var _ = require('underscore')._;
 
 process.title = siteConf.uri.replace(/http:\/\/(www)?/, '');
@@ -31,19 +32,27 @@ var sessionStore = new RedisStore(siteConf.redisOptions);
 
 var asmsDB = require('activity-streams-mongoose')(mongoose, {full: false, redis: siteConf.redisOptions, defaultActor: '/img/default.png'});
 
-var thisApp = {displayName: 'Activity Streams App', url: siteConf.uri, image:{url: '/img/as-logo-sm.png'}};
+var thisApp = new asmsDB.ActivityObject({displayName: 'Activity Streams App', url: siteConf.uri, image:{url: '/img/as-logo-sm.png'}});
+var thisInstance = {displayName: "Instance 0 -- Local"};
+if (cf.app) {
+    thisInstance.image = {url: '/img/cf-process.jpg'};
+    thisInstance.url = "http://" + cf.host + ":" + cf.port;
+    thisInstance.displayName = "App Instance " + cf.app['instance_index'] + " at " + thisInstance.url;
+    thisInstance.content = cf.app['instance_id']
+    //temp
+    console.log("Instance JSON is *******");
+    console.dir(app);
+}
 
-// A quick test
-var target = new asmsDB.ActivityObject({displayName: "Cloud Foundry" , url: "http://www.cloudfoundry.com"});
-target.save(function (err) {
+thisApp.save(function (err) {
     if (err === null) {
         var startAct = new asmsDB.Activity(
             {
             actor: {displayName: siteConf.user_email, image:{url: "img/me.jpg"}},
             verb: 'start',
-            object: thisApp,
-            title: "started the app",
-            target: target._id
+            object: thisInstance,
+            target: thisApp._id,
+            title: "started"
             });
 
         asmsDB.publish('firehose', startAct);
@@ -55,6 +64,7 @@ app.listen(siteConf.internal_port, null);
 app.asmsDB = asmsDB;
 app.siteConf = siteConf;
 app.thisApp = thisApp;
+app.thisInstance = thisInstance;
 app.cookieName = "jsessionid"; //Hack to have sticky sessions. Default connect name is 'connect.sid';
 // Cookie name must be lowercase
 
