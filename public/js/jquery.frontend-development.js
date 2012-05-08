@@ -146,7 +146,7 @@ var doReload = true;
 
 	var $toolbar = $('<div id="frontend-development"></div>').appendTo('body');
 
-	var $refresh = $('<div title="Sync all browasers to this page" class="sync">S</div>').click(function (event) {
+	var $refresh = $('<div title="Sync all browsers to this page" class="sync">S</div>').click(function (event) {
 		doMoveAjax(currentPath);
 	}).appendTo($toolbar);
 

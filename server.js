@@ -55,7 +55,8 @@ app.listen(siteConf.internal_port, null);
 app.asmsDB = asmsDB;
 app.siteConf = siteConf;
 app.thisApp = thisApp;
-app.cookieName = "JSESSIONID"; //Hack to have sticky sessions. Default connect name is 'connect.sid';
+app.cookieName = "jsessionid"; //Hack to have sticky sessions. Default connect name is 'connect.sid';
+// Cookie name must be lowercase
 
 // Setup socket.io server
 var socketIo = new require('./lib/socket-io-server.js')(app, sessionStore);
@@ -213,6 +214,9 @@ function getMetaData(req, res, next) {
 };
 
 function loadUser(req, res, next) {
+    console.log("Request Session is");
+    console.dir(req.session);
+
 	if (!req.session.uid) {
 		req.session.uid = (0 | Math.random()*1000000);
 	} else if (req.session.auth){
@@ -236,9 +240,6 @@ function getDistinctVerbs(req, res, next){
             _.each(docs, function(verb){
                 req.usedVerbs.push(verb);
             });
-
-            console.log("Fetched all verbs *******");
-            console.dir(req.usedVerbs);
             next();
         } else {
             next(new Error('Failed to fetch verbs'));
@@ -253,9 +254,6 @@ function getDistinctActors(req, res, next){
                 _.each(docs, function(obj){
                     req.usedActors.push(obj);
                 });
-
-                console.log("Fetched all actors *******");
-                console.dir(req.usedActors);
                 next();
             } else {
                 next(new Error('Failed to fetch actors'));
@@ -270,9 +268,6 @@ function getDistinctObjects(req, res, next){
                 _.each(docs, function(obj){
                     req.usedObjects.push(obj);
                 });
-
-                console.log("Fetched all objs *******");
-                console.dir(req.usedObjects);
                 next();
             } else {
                 next(new Error('Failed to fetch objects'));
@@ -287,9 +282,6 @@ function getDistinctObjectTypes(req, res, next){
                 _.each(docs, function(objType){
                     req.usedObjectTypes.push(objType);
                 });
-
-                console.log("Fetched all objTypes *******");
-                console.dir(req.usedObjectTypes);
                 next();
             } else {
                 next(new Error('Failed to fetch objTypes'));
@@ -304,9 +296,6 @@ function getDistinctActorObjectTypes(req, res, next){
                 _.each(docs, function(objType){
                     req.usedActorObjectTypes.push(objType);
                 });
-
-                console.log("Fetched all actor objTypes *******");
-                console.dir(req.usedActorObjectTypes);
                 next();
             } else {
                 next(new Error('Failed to fetch actorobjTypes'));
@@ -322,9 +311,6 @@ function getDistinctStreams(req, res, next){
             _.each(docs, function(stream){
                 req.streams[stream] = {name: stream, items: []};
             });
-
-            console.log("Fetched all streams *******");
-            console.dir(req.streams);
             next();
         } else {
             next(new Error('Failed to fetch streams'));
