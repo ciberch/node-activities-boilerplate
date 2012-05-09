@@ -147,7 +147,12 @@ var interp;
     for (var $index = 0, $$l = activities.length; $index < $$l; $index++) {
       var act = activities[$index];
 
-buf.push('<li><div');
+ var objType = " objectType-" + (act.object.objectType ? act.object.objectType : 'none');
+ var actorType = " actorType-" + (act.actor.objectType ? act.actor.objectType : 'none');
+ var className = "verb-" + act.verb + objType+actorType;
+buf.push('<li');
+buf.push(attrs({ "class": (className) }, {"class":true}));
+buf.push('><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('activity') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span1') + ' ' + ('actor') }, {}));
@@ -245,7 +250,12 @@ buf.push('</div></div></div></li>');
     for (var $index in activities) {
       var act = activities[$index];
 
-buf.push('<li><div');
+ var objType = " objectType-" + (act.object.objectType ? act.object.objectType : 'none');
+ var actorType = " actorType-" + (act.actor.objectType ? act.actor.objectType : 'none');
+ var className = "verb-" + act.verb + objType+actorType;
+buf.push('<li');
+buf.push(attrs({ "class": (className) }, {"class":true}));
+buf.push('><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('activity') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span1') + ' ' + ('actor') }, {}));

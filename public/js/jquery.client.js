@@ -41,6 +41,15 @@
 	});
 
     $(document).ready(function(){
+
+        $(".filter-checkbox").live("click", function(){
+            if (this.checked == false) {
+                $("#main_stream ." + this.name + "-" +this.value).hide();
+            } else {
+                $("#main_stream ." + this.name + "-" +this.value).show();
+            }
+        });
+
         $("#send-message").click(function() {
             var msg = $("#msg").val();
             var title = $('#title').val();

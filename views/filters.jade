@@ -7,32 +7,34 @@ form#form_filters
 	-if (locals.usedVerbs)
 		each verb in locals.usedVerbs
 			label.checkbox=verb
-				input(type="checkbox", name="verb", value=verb, checked=true)
+				input.filter-checkbox(type="checkbox", name="verb", value=verb, checked=true)
 	hr
 	label
 		strong Object Types
 	-if (locals.usedObjectTypes)
 		each objType in locals.usedObjectTypes
 			label.checkbox=objType
-				input(type="checkbox", name="objType", value=objType, checked=true)
-		hr
-		label
-			strong Distinct Objects
-		-if (locals.usedObjects)
-			each obj in locals.usedObjects
-				label.checkbox=(obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
-					input(type="checkbox", name="obj", value=obj, checked=true)
+				input.filter-checkbox(type="checkbox", name="objectType", value=objType, checked=true)
 	hr
 	label
 		strong Actor Object Types
 	-if (locals.usedActorObjectTypes)
 		each objType in locals.usedActorObjectTypes
 			label.checkbox=objType
-				input(type="checkbox", name="objType", value=objType, checked=true)
+				input.filter-checkbox(type="checkbox", name="actorType", value=objType, checked=true)
+		hr
+		label
+			strong Distinct Objects
+		-if (locals.usedObjects)
+			each obj in locals.usedObjects
+				- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
+				label.checkbox=id
+					input.filter-checkbox(type="checkbox", name="object", value=id, checked=true)
 	hr
 	label
 		strong Distinct Actors
 	-if (locals.usedActors)
 		each obj in locals.usedActors
-			label.checkbox=(obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
-				input(type="checkbox", name="actor", value=obj, checked=true)
+			- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
+			label.checkbox=id
+				input.filter-checkbox(type="checkbox", name="actor", value=id, checked=true)

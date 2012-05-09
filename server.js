@@ -286,7 +286,7 @@ function getDistinctObjects(req, res, next){
 };
 
 function getDistinctObjectTypes(req, res, next){
-    req.usedObjectTypes = ['(none)']
+    req.usedObjectTypes = ['none']
         asmsDB.Activity.distinct('object.objectType', {streams: req.session.desiredStream}, function(err, docs) {
             if (!err && docs) {
                 _.each(docs, function(objType){
@@ -300,7 +300,7 @@ function getDistinctObjectTypes(req, res, next){
 };
 
 function getDistinctActorObjectTypes(req, res, next){
-    req.usedActorObjectTypes = ['(none)']
+    req.usedActorObjectTypes = ['none']
         asmsDB.Activity.distinct('actor.objectType', {streams: req.session.desiredStream}, function(err, docs) {
             if (!err && docs) {
                 _.each(docs, function(objType){
@@ -329,7 +329,8 @@ function getDistinctStreams(req, res, next){
 }
 
 // Routing
-app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObjectTypes, getDistinctObjects, getDistinctActors, getDistinctObjectTypes, getMetaData, function(req, res) {
+app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObjectTypes, getDistinctObjects,
+    getDistinctActors, getDistinctObjectTypes, getMetaData, function(req, res) {
 
     asmsDB.getActivityStreamFirehose(20, function (err, docs) {
         var activities = [];
@@ -354,7 +355,8 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
 
 });
 
-app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctObjects, getDistinctActors, getDistinctObjectTypes, getDistinctActorObjectTypes, getDistinctVerbs, getMetaData, function(req, res) {
+app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctObjects, getDistinctActors,
+    getDistinctObjectTypes, getDistinctActorObjectTypes, getDistinctVerbs, getMetaData, function(req, res) {
 
     asmsDB.getActivityStream(req.params.streamName, 20, function (err, docs) {
         var activities = [];

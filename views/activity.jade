@@ -1,5 +1,8 @@
 each act in activities
-	li
+	- var objType = " objectType-" + (act.object.objectType ? act.object.objectType : 'none');
+	- var actorType = " actorType-" + (act.actor.objectType ? act.actor.objectType : 'none');
+	- var className = "verb-" + act.verb + objType+actorType;
+	li(class=className)
 		.row.activity
 			.span1.actor
 				-if (act.actor.image && act.actor.image.url) {
