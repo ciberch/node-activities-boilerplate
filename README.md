@@ -55,7 +55,7 @@ sudo gem install vmc --pre
   vmc push --nostart
 ```
 
-## Get keys for all social netwOrks and services
+## Get keys for all social networks and services
 ### Build your Facebook App at
 - https://developers.facebook.com/apps
 - Add your app url to the Facebook App Domain list
