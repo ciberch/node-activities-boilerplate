@@ -13,6 +13,6 @@ applications:
     instances: 1
     services:
       mongo-asms:
-        type: mongodb
+        type: mongolab_dev
       redis-asms:
         type: :redis

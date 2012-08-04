@@ -53,9 +53,18 @@ if (cf.cloud) {
         console.dir(settings.redisOptions);
     }
 
+    var mongolab = 'mongolab_dev-2.0';
+
     if (cf.mongodb['mongo-asms']) {
         var cfg = cf.mongodb['mongo-asms'].credentials;
         settings.mongoUrl = ["mongodb://", cfg.username, ":", cfg.password, "@", cfg.hostname, ":", cfg.port,"/" + cfg.db].join('');
+    } else if (cf.services[mongolab] && cf.services[mongolab].length == 1) {
+        console.log("Using MongoLab Dev version");
+        var svc = cf.services[mongolab][0];
+        settings.mongoUrl = svc['credentials']['MONGOLAB_URI'];
+    } else {
+        console.log("Could not find a MongoDB :(")
+        console.dir(cf.services);
     }
     settings.user_email = cf.app['users'][0];
 }
