@@ -231,11 +231,11 @@ function loadUser(req, res, next) {
 		req.session.uid = (0 | Math.random()*1000000);
 	} else if (req.session.auth){
        if (req.session.auth.github)
-        req.providerFavicon = '//github.com/favicon.ico';
+        req.providerFavicon = '/github.ico';
        else if (req.session.auth.twitter)
-        req.providerFavicon = '//twitter.com/favicon.ico';
+        req.providerFavicon = '/twitter.ico';
        else if (req.session.auth.facebook)
-        req.providerFavicon = '//facebook.com/favicon.ico';
+        req.providerFavicon = '/facebook.ico';
     }
     var displayName = req.session.user ? req.session.user.name : 'UID: '+(req.session.uid || 'has no UID');
     var avatarUrl = ((req.session.auth && req.session.user.image) ? req.session.user.image : '/img/codercat-sm.jpg');

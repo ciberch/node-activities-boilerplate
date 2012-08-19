@@ -13,7 +13,8 @@ form#new_activity
 						ul.dropdown-menu
 							-if (locals.objectTypes)
 								each objectType in locals.objectTypes
-									li=objectType
+									li
+										a(href="#")=objectType
 					br
 					img.avatar(src="#{locals.currentUser.image.url}")
 
@@ -33,7 +34,8 @@ form#new_activity
 					ul.dropdown-menu
 						-if (locals.verbs)
 							each verb in locals.verbs
-								li=verb
+								li
+									a(href="#")=verb
 				br
 				#streamInfo
 					h3 Stream
@@ -53,7 +55,8 @@ form#new_activity
 						ul.dropdown-menu
 							-if (locals.objectTypes)
 								each objectType in locals.objectTypes
-									li=objectType
+									li
+										a(href="#")=objectType
 					br
 					label Title
 					input(type="text")#title
