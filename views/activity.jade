@@ -21,7 +21,7 @@ each act in activities
 						br
 						blockquote
 							-if (act.object.image && act.object.image.url) {
-								img.avatar(src= act.object.image.url)
+								img.img-rounded.avatar(src= act.object.image.url)
 							-}
 							-if (act.object.displayName) {
 								strong.activity-displayName=act.object.displayName

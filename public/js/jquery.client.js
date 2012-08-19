@@ -28,6 +28,12 @@
 
     var $ul = $('#main_stream');
 
+    // set up the router here - remember the router is like a controller in Rails
+    //var dashboardRouter = new DashboardRouter({filterView: filterView, colorView: colorView, carView: carListView});
+
+    // the required Backbone way to start up the router
+    //Backbone.history.start({pushState: true});
+
 	socketIoClient.on('message', function(json) {
 		var doc = JSON.parse(json);
         if (doc) {
@@ -40,9 +46,17 @@
         }
 	});
 
+    function trimForServer(items) {
+        if (items && items.length > 0) {
+            var val = items[0];
+            return val.innerText.trimRight().toLowerCase();
+        }
+        return null;
+    }
+
     $(document).ready(function(){
 
-        $(".filter-checkbox").live("click", function(){
+        $(".filter-checkbox").on("click", function(){
             if (this.checked == false) {
                 $("#main_stream ." + this.name + "-" +this.value).hide();
             } else {
@@ -50,16 +64,32 @@
             }
         });
 
+        $(".type-select").on("click", function() {
+            var itemName = $(this).data("type-show");
+            if (itemName) {
+                $("#" + itemName)[0].innerHTML= this.innerText + " &nbsp;";
+            }
+        });
+
+
         $("#send-message").click(function() {
             var msg = $("#msg").val();
+            var url = $('#url').val();
             var title = $('#title').val();
             var streamName = $('#streamName').val();
+            var objectType = trimForServer($('#object-show'));
+            var verb = trimForServer($('#verb-show'));
 
-            if (msg && msg.length > 0) {
+            if (verb && objectType && msg && msg.length > 0) {
                 $("#msg").val('');
                 $('#title').val('');
+                $('#url').val('');
 
-                var act = {object: {content: msg, objectType: 'note', title: title}, verb: 'post', streams: [streamName]};
+                var act = {
+                    object: {content: msg, objectType: objectType, title: title, url: url},
+                    verb: verb,
+                    streams: [streamName]
+                };
 
                 console.dir(act);
                 socketIoClient.emit("message", act);

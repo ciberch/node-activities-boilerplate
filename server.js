@@ -218,8 +218,11 @@ function NotFound(msg){
 }
 
 function getMetaData(req, res, next) {
-    req.objectTypes = ['person', 'group', 'stream'];
-    req.verbs = ['post', 'join'];
+    // 'Audio'
+    req.actorTypes = ['Person', 'Group', 'Application', 'Service'];
+    req.objectTypes = ['Application', 'Article', 'Bookmark', 'Comment', 'Event', 'File', 'Folder', 'Group', 'List', 'Note', 'Person', 'Photo', 'Place', 'Playlist', 'Product', 'Review', 'Stream', 'Service', 'Song', 'Status', 'Video'];
+
+    req.verbs = ['Post', 'Favorite', 'Follow', 'Join', 'Like', 'Friend', 'Play', 'Save', 'Share', 'Tag', 'Create', 'Update', 'Read', 'Delete', 'Check In'];
     next();
 };
 
@@ -344,6 +347,7 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
             streams : req.streams,
             desiredStream : req.session.desiredStream,
             objectTypes : req.objectTypes,
+            actorTypes : req.actorTypes,
             verbs: req.verbs,
             usedVerbs: req.usedVerbs,
             usedObjects: req.usedObjects,
@@ -369,6 +373,7 @@ app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, 
             providerFavicon: req.providerFavicon,
             streams : req.streams,
             desiredStream : req.session.desiredStream,
+            actorTypes: req.actorTypes,
             objectTypes : req.objectTypes,
             verbs: req.verbs,
             usedVerbs: req.usedVerbs,
