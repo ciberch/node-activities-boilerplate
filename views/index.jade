@@ -6,24 +6,25 @@ include nav_bar
 
 	.row
 		.span4#filters
-			.well
+			.well.second-hero
 				include filters
 		.span8#stream
 			h3 Activity Stream
-			hr
-			-if (locals.streams) {
-				ul.nav.nav-tabs
-					each stream in locals.streams
-						-if (stream.items && stream.items.length>0)
-							li.active
-								a(href="/streams/#{stream.name}")=stream.name
-						-else
-							li
-								a(href="/streams/#{stream.name}")=stream.name
-			-}
-			ul.unstyled#main_stream
-				- var activities = locals.streams[desiredStream].items
-				-if (activities && activities.length) {
-					include activity
-				-}
+			.wello
+				.nav-tabs-container
+					-if (locals.streams) {
+						ul.nav.nav-tabs
+							each stream in locals.streams
+								-if (stream.items && stream.items.length>0)
+									li.active
+										a(href="/streams/#{stream.name}")=stream.name
+								-else
+									li
+										a(href="/streams/#{stream.name}")=stream.name
+					-}
+				ul.unstyled#main_stream
+					- var activities = locals.streams[desiredStream].items
+					-if (activities && activities.length) {
+						include activity
+					-}
 

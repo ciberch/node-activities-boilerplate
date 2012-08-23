@@ -34,6 +34,13 @@ npm install
 ```
 
 * Edit siteConfig.js if needed
+* If you change the activities templates you need to regenerate the client side version of them, you can do this with `clientjade`
+
+```bash
+npm install -g clientjade
+clientjade views/activity.jade > public/js/templates.js
+```
+
 * Run locally
 
 ``` bash

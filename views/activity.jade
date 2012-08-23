@@ -2,11 +2,14 @@ each act in activities
 	- var objType = " objectType-" + (act.object.objectType ? act.object.objectType : 'none');
 	- var actorType = " actorType-" + (act.actor.objectType ? act.actor.objectType : 'none');
 	- var className = "verb-" + act.verb + objType+actorType;
+	- var objUrl = act.object.url ? act.object.url : '#';
+	- var actUrl = act.actor.url? act.actor.url: '#';
 	li(class=className)
 		.row.activity
 			.span1.actor
 				-if (act.actor.image && act.actor.image.url) {
-					img.avatar(src= act.actor.image.url)
+					a(href="#{actUrl}")
+						img.img-rounded.avatar(src= act.actor.image.url)
 				-} else {
 					h2 :-)
 				-}
@@ -21,7 +24,8 @@ each act in activities
 						br
 						blockquote
 							-if (act.object.image && act.object.image.url) {
-								img.img-rounded.avatar(src= act.object.image.url)
+								a(href="#{objUrl}")
+									img.img-rounded.avatar(src= act.object.image.url)
 							-}
 							-if (act.object.displayName) {
 								strong.activity-displayName=act.object.displayName

@@ -159,9 +159,11 @@ buf.push(attrs({ "class": ('span1') + ' ' + ('actor') }, {}));
 buf.push('>');
 if (act.actor.image && act.actor.image.url) {
 {
-buf.push('<img');
-buf.push(attrs({ 'src':(act.actor.image.url), "class": ('avatar') }, {"src":true}));
-buf.push('/>');
+buf.push('<a');
+buf.push(attrs({ 'href':("" + (act.actor.url) + "") }, {"href":true}));
+buf.push('><img');
+buf.push(attrs({ 'src':(act.actor.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
+buf.push('/></a>');
 }
 } else {
 {
@@ -189,9 +191,11 @@ buf.push(attrs({  }, {}));
 buf.push('/><blockquote>');
 if (act.object.image && act.object.image.url) {
 {
-buf.push('<img');
-buf.push(attrs({ 'src':(act.object.image.url), "class": ('avatar') }, {"src":true}));
-buf.push('/>');
+buf.push('<a');
+buf.push(attrs({ 'href':("" + (act.object.url) + "") }, {"href":true}));
+buf.push('><img');
+buf.push(attrs({ 'src':(act.object.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
+buf.push('/></a>');
 }
 }
 if (act.object.displayName) {
@@ -262,9 +266,11 @@ buf.push(attrs({ "class": ('span1') + ' ' + ('actor') }, {}));
 buf.push('>');
 if (act.actor.image && act.actor.image.url) {
 {
-buf.push('<img');
-buf.push(attrs({ 'src':(act.actor.image.url), "class": ('avatar') }, {"src":true}));
-buf.push('/>');
+buf.push('<a');
+buf.push(attrs({ 'href':("" + (act.actor.url) + "") }, {"href":true}));
+buf.push('><img');
+buf.push(attrs({ 'src':(act.actor.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
+buf.push('/></a>');
 }
 } else {
 {
@@ -292,9 +298,11 @@ buf.push(attrs({  }, {}));
 buf.push('/><blockquote>');
 if (act.object.image && act.object.image.url) {
 {
-buf.push('<img');
-buf.push(attrs({ 'src':(act.object.image.url), "class": ('avatar') }, {"src":true}));
-buf.push('/>');
+buf.push('<a');
+buf.push(attrs({ 'href':("" + (act.object.url) + "") }, {"href":true}));
+buf.push('><img');
+buf.push(attrs({ 'src':(act.object.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
+buf.push('/></a>');
 }
 }
 if (act.object.displayName) {

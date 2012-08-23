@@ -27,6 +27,7 @@
 	var service = $.trim($('#service').val());
 
     var $ul = $('#main_stream');
+    var map;
 
     // set up the router here - remember the router is like a controller in Rails
     //var dashboardRouter = new DashboardRouter({filterView: filterView, colorView: colorView, carView: carListView});
@@ -39,6 +40,7 @@
         if (doc) {
             console.log(doc);
             var $li = $(jade.templates["activity"]({activities: [doc]}));
+            console.dir(jade.templates);
             $ul.prepend($li);
         }
 		if ($ul.children.count > 20) {
@@ -52,6 +54,30 @@
             return val.innerText.trimRight().toLowerCase();
         }
         return null;
+    }
+
+    function GetLocation(position) {
+        var mapOptions = {
+          zoom: 15,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById('map'),mapOptions);
+        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        map.setCenter(pos);
+        var marker = new google.maps.Marker({
+          position: pos,
+          map: map,
+          title: 'Drag to the proper location',
+          draggable:true
+        });
+        google.maps.event.addListener(marker, 'click', function() {
+          console.log("New position is ");
+          console.dir(marker.getPosition());
+          map.setCenter(marker.getPosition());
+        });
+
+        $("#map").show();
+        console.dir(location);
     }
 
     $(document).ready(function(){
@@ -68,6 +94,14 @@
             var itemName = $(this).data("type-show");
             if (itemName) {
                 $("#" + itemName)[0].innerHTML= this.innerText + " &nbsp;";
+            }
+        });
+
+        $("#includeLocation").on("click", function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(GetLocation);
+            } else {
+                alert("Geo Location is not supported on your device");
             }
         });
 
@@ -101,6 +135,7 @@
 	socketIoClient.on('disconnect', function() {
 		$$('#connected').removeClass('on').find('strong').text('Offline');
 	});
+
 })(jQuery);
 
 
