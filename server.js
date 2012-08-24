@@ -23,14 +23,11 @@ var assetHandler = require('connect-assetmanager-handlers');
 var notifoMiddleware = require('connect-notifo');
 var DummyHelper = require('./lib/dummy-helper');
 
-var mongoose = require('mongoose');
-mongoose.connect(siteConf.mongoUrl);
-
 // Session store
 var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore(siteConf.redisOptions);
 
-var asmsDB = require('activity-streams-mongoose')(mongoose, {full: false, redis: siteConf.redisOptions, defaultActor: '/img/default.png'});
+var asmsDB = require('activity-streams-mongoose')({mongoUrl: siteConf.mongoUrl, redis: siteConf.redisOptions, defaultActor: '/img/default.png'});
 
 var thisApp = new asmsDB.ActivityObject({displayName: 'Activity Streams App', url: siteConf.uri, image:{url: '/img/as-logo-sm.png'}});
 var thisInstance = {displayName: "Instance 0 -- Local"};
@@ -83,6 +80,8 @@ var assetsSettings = {
             , 'bootstrap.js'
             , 'jquery.cookie.js'
             , 'jquery.client.js'
+            , 'backbone/backbone-0.9.2.js'
+            , 'backbone/models.js'
 		]
 		, 'debug': true
 		, 'postManipulate': {
@@ -339,6 +338,8 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
         var activities = [];
         if (!err && docs) {
             activities = docs;
+
+            console.dir(docs);
         }
         req.streams.firehose.items = activities;
         res.render('index', {

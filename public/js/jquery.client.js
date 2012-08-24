@@ -38,7 +38,9 @@
 	socketIoClient.on('message', function(json) {
 		var doc = JSON.parse(json);
         if (doc) {
-            console.log(doc);
+           var activity = new Activity(doc);
+           console.dir(activity);
+
             var $li = $(jade.templates["activity"]({activities: [doc]}));
             console.dir(jade.templates);
             $ul.prepend($li);
