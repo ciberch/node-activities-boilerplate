@@ -28,6 +28,7 @@
 
     var $ul = $('#main_stream');
     var map;
+    var streamView = new ActivityStreamView();
 
     // set up the router here - remember the router is like a controller in Rails
     //var dashboardRouter = new DashboardRouter({filterView: filterView, colorView: colorView, carView: carListView});
@@ -38,15 +39,7 @@
 	socketIoClient.on('message', function(json) {
 		var doc = JSON.parse(json);
         if (doc) {
-           var activity = new Activity(doc);
-           console.dir(activity);
-
-            var $li = $(jade.templates["activity"]({activities: [doc]}));
-            console.dir(jade.templates);
-            $ul.prepend($li);
-        }
-		if ($ul.children.count > 20) {
-            $ul.children.last.remove();
+            streamView.collection.add(new Activity(doc));
         }
 	});
 

@@ -78,10 +78,11 @@ var assetsSettings = {
 			'http://' + siteConf.internal_host+ ':' + siteConf.internal_port + '/socket.io/socket.io.js' // special case since the socket.io module serves its own js
 			, 'templates.js'
             , 'bootstrap.js'
-            , 'jquery.cookie.js'
-            , 'jquery.client.js'
             , 'backbone/backbone-0.9.2.js'
             , 'backbone/models.js'
+            , 'backbone/views.js'
+            , 'jquery.cookie.js'
+            , 'jquery.client.js'
 		]
 		, 'debug': true
 		, 'postManipulate': {
