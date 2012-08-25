@@ -150,6 +150,8 @@ var interp;
  var objType = " objectType-" + (act.object.objectType ? act.object.objectType : 'none');
  var actorType = " actorType-" + (act.actor.objectType ? act.actor.objectType : 'none');
  var className = "verb-" + act.verb + objType+actorType;
+ var objUrl = act.object.url ? act.object.url : '#';
+ var actUrl = act.actor.url? act.actor.url: '#';
 buf.push('<li');
 buf.push(attrs({ "class": (className) }, {"class":true}));
 buf.push('><div');
@@ -160,7 +162,7 @@ buf.push('>');
 if (act.actor.image && act.actor.image.url) {
 {
 buf.push('<a');
-buf.push(attrs({ 'href':("" + (act.actor.url) + "") }, {"href":true}));
+buf.push(attrs({ 'href':("" + (actUrl) + "") }, {"href":true}));
 buf.push('><img');
 buf.push(attrs({ 'src':(act.actor.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
 buf.push('/></a>');
@@ -192,7 +194,7 @@ buf.push('/><blockquote>');
 if (act.object.image && act.object.image.url) {
 {
 buf.push('<a');
-buf.push(attrs({ 'href':("" + (act.object.url) + "") }, {"href":true}));
+buf.push(attrs({ 'href':("" + (objUrl) + "") }, {"href":true}));
 buf.push('><img');
 buf.push(attrs({ 'src':(act.object.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
 buf.push('/></a>');
@@ -248,7 +250,23 @@ buf.push(attrs({ 'src':(act.provider.icon.url), "class": ('service') }, {"src":t
 buf.push('/></div>');
 }
 }
-buf.push('</div></div></div></li>');
+buf.push('</div><div');
+buf.push(attrs({ "class": ('row') + ' ' + ('actions') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span3') }, {}));
+buf.push('><small><a');
+buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-warning') + ' ' + ('like-button') }, {"href":true}));
+buf.push('><i');
+buf.push(attrs({ "class": ('icon-ok') + ' ' + ('icon-white') }, {}));
+buf.push('></i><small>&nbsp; Like</small></a></small></div><div');
+buf.push(attrs({ "class": ('span2') }, {}));
+buf.push('><small><a');
+buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-success') + ' ' + ('comment-button') }, {"href":true}));
+buf.push('><i');
+buf.push(attrs({ "class": ('icon-pencil') + ' ' + ('icon-white') }, {}));
+buf.push('></i><small>&nbsp; Comment</small></a></small></div></div><hr');
+buf.push(attrs({  }, {}));
+buf.push('/></div></div></li>');
     }
   } else {
     for (var $index in activities) {
@@ -257,6 +275,8 @@ buf.push('</div></div></div></li>');
  var objType = " objectType-" + (act.object.objectType ? act.object.objectType : 'none');
  var actorType = " actorType-" + (act.actor.objectType ? act.actor.objectType : 'none');
  var className = "verb-" + act.verb + objType+actorType;
+ var objUrl = act.object.url ? act.object.url : '#';
+ var actUrl = act.actor.url? act.actor.url: '#';
 buf.push('<li');
 buf.push(attrs({ "class": (className) }, {"class":true}));
 buf.push('><div');
@@ -267,7 +287,7 @@ buf.push('>');
 if (act.actor.image && act.actor.image.url) {
 {
 buf.push('<a');
-buf.push(attrs({ 'href':("" + (act.actor.url) + "") }, {"href":true}));
+buf.push(attrs({ 'href':("" + (actUrl) + "") }, {"href":true}));
 buf.push('><img');
 buf.push(attrs({ 'src':(act.actor.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
 buf.push('/></a>');
@@ -299,7 +319,7 @@ buf.push('/><blockquote>');
 if (act.object.image && act.object.image.url) {
 {
 buf.push('<a');
-buf.push(attrs({ 'href':("" + (act.object.url) + "") }, {"href":true}));
+buf.push(attrs({ 'href':("" + (objUrl) + "") }, {"href":true}));
 buf.push('><img');
 buf.push(attrs({ 'src':(act.object.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
 buf.push('/></a>');
@@ -355,7 +375,23 @@ buf.push(attrs({ 'src':(act.provider.icon.url), "class": ('service') }, {"src":t
 buf.push('/></div>');
 }
 }
-buf.push('</div></div></div></li>');
+buf.push('</div><div');
+buf.push(attrs({ "class": ('row') + ' ' + ('actions') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span3') }, {}));
+buf.push('><small><a');
+buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-warning') + ' ' + ('like-button') }, {"href":true}));
+buf.push('><i');
+buf.push(attrs({ "class": ('icon-ok') + ' ' + ('icon-white') }, {}));
+buf.push('></i><small>&nbsp; Like</small></a></small></div><div');
+buf.push(attrs({ "class": ('span2') }, {}));
+buf.push('><small><a');
+buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-success') + ' ' + ('comment-button') }, {"href":true}));
+buf.push('><i');
+buf.push(attrs({ "class": ('icon-pencil') + ' ' + ('icon-white') }, {}));
+buf.push('></i><small>&nbsp; Comment</small></a></small></div></div><hr');
+buf.push(attrs({  }, {}));
+buf.push('/></div></div></li>');
    }
   }
 }).call(this);

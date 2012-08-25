@@ -1,12 +1,24 @@
 var ActivityView = Backbone.View.extend({
-   tagName: 'li', // name of (orphan) root tag in this.el
    initialize: function(){
-     _.bindAll(this, 'render'); // every function that uses 'this' as the current object should be in here
+     _.bindAll(this, 'render', 'like', 'comment'); // every function that uses 'this' as the current object should be in here
    },
+    events: {
+        "click .like-button" : "like",
+        "click .comment-button" : "comment"
+    },
    render: function(){
-     $(this.el).html($(jade.templates["activity"]({activities: [this.model.toJSON()]})));
+     this.el = $(jade.templates["activity"]({activities: [this.model.toJSON()]}));
      return this; // for chainable calls, like .render().el
+   },
+   like : function() {
+       alert("Like");
+
+   },
+   comment: function() {
+
    }
+
+
  });
 
 var ActivityStreamView = Backbone.View.extend({
