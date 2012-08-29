@@ -19,7 +19,8 @@ var Activity = Backbone.Model.extend({
         likes: {},
         likes_count: 0,
         comments: [],
-        comments_count: 0
+        comments_count: 0,
+        userFriendlyDate: 'No idea when'
     }
 });
 var ActivityList = Backbone.Collection.extend({
@@ -57,4 +58,11 @@ var ActivityVerb = Backbone.Model.extend({});
 var ActivityVerbList = Backbone.Collection.extend({
 	model : ActivityVerb,
 	url : "/verbs"
+});
+
+var User = Backbone.Model.extend({
+    defaults : {
+        signedIn : false,
+        displayName : 'User'
+    }
 });
