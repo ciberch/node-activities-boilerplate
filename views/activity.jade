@@ -2,58 +2,72 @@ each act in activities
 	- var objType = " objectType-" + (act.object.objectType ? act.object.objectType : 'none');
 	- var actorType = " actorType-" + (act.actor.objectType ? act.actor.objectType : 'none');
 	- var className = "verb-" + act.verb + objType+actorType;
-	- var objUrl = act.object.url ? act.object.url : '#';
-	- var actUrl = act.actor.url? act.actor.url: '#';
 	li(class=className)
 		.row.activity
 			.span1.actor
-				-if (act.actor.image && act.actor.image.url) {
-					a(href="#{actUrl}")
-						img.img-rounded.avatar(src= act.actor.image.url)
-				-} else {
-					h2 :-)
-				-}
-			.span5.action
+				- var actor = act.actor;
+				include activity_stream_actor
+			.span6.action
 				.row.title
 					.span5
 						strong=act.actor.displayName
 						&nbsp;
 						=act.title
 				.row.activity_object
-					.span5
-						br
-						blockquote
-							-if (act.object.image && act.object.image.url) {
-								a(href="#{objUrl}")
-									img.img-rounded.avatar(src= act.object.image.url)
-							-}
-							-if (act.object.displayName) {
-								strong.activity-displayName=act.object.displayName
-							-} else if (act.object.title) {
-								strong.activity-title=act.object.title
-							-}
-							-if (act.object.content) {
-								.activity-content=act.object.content
-							-} 
+					- var object = act.object;
+					include activity_object
 				.row.details
 					.span5
-						.timestamp.small=act.published
-					- if (act.provider && act.provider.icon) {
-							.span1
-								Via
-							.span2
-								img.service(src= act.provider.icon.url)
-					-}
-				.row.actions
-					.span3
-						small
-							a.btn.btn-mini.btn-warning.like-button(href="#")
-								i.icon-ok.icon-white
-								small &nbsp; Like
-					.span2
+						- var timedItem = act;
+						include activity_details
+		.row.actions
+			.span2
+				small
+					a.btn.btn-mini.btn-warning.like-button(href="#")
+						i.icon-ok.icon-white
+						small &nbsp; Like
+			.span4
+				.row
+					textarea.span4.comment-area()
+				.row
+					.span2.offset2
 						small
 							a.btn.btn-mini.btn-success.comment-button(href="#")
 								i.icon-pencil.icon-white
-								small &nbsp; Comment
-				hr
+								small &nbsp; Post
+		.row.action_results
+			.span2
+				-if (act.likes_count && act.likes_count > 0) {
+					small#like_count
+						#{act.likes_count}
+					small.rest
+						| &nbsp; liked this
+				-}
+			-if (act.comments) {
+				.span4
+					ul
+						-for(var i=0; i < act.comments.length; i++) {
+						- var comment = comments[i];
+							li
+								.row.comment
+									.span1.actor
+										- var actor = comment.actor;
+										include activity_stream_actor
+									.span6.action
+										.row.title
+											.span5
+												strong=actor.displayName
+												&nbsp;
+												=comment.title
+										.row.activity_object
+											- var object = comment.object;
+											include activity_object
+										.row.details
+											.span5
+												- var timedItem = comment;
+												include activity_details
+
+						- }
+		- }
+	hr
 

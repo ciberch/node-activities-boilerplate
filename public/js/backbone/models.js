@@ -15,7 +15,11 @@ var Activity = Backbone.Model.extend({
         inReplyTo: null, //Activity
         provider: null, //ActivityObject
         generator: null, //ActivityObject
-        streams: ['firehose']
+        streams: ['firehose'],
+        likes: {},
+        likes_count: 0,
+        comments: [],
+        comments_count: 0
     }
 });
 var ActivityList = Backbone.Collection.extend({

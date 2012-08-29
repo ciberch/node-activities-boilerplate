@@ -7,22 +7,41 @@ var ActivityView = Backbone.View.extend({
         "click .comment-button" : "comment"
     },
    render: function(){
-     this.el = $(jade.templates["activity"]({activities: [this.model.toJSON()]}));
+     this.$el.html(jade.templates["activity"]({activities: [this.model.toJSON()]}));
      return this; // for chainable calls, like .render().el
    },
    like : function() {
-       alert("Like");
+       var likes = this.model.get("likes");
+       if (!likes) {
+           likes = {};
+       }
+       likes[this.user] = true;
+       this.model.set("likes", likes);
+
+       var likes_count = _.keys(likes).length;
+       this.model.set("likes_count", likes_count)
+       this.model.save();
+       this.render();
 
    },
    comment: function() {
-
+       var content = this.$el.find(".comment-area").val();
+       var comments = this.model.get("comments");
+       if (!comments){
+           comments = [];
+       }
+       comments.push({actor : locals.currentUser, object: { objectType : 'comment', content: content}});
+       var comments_count = comments.length;
+       this.model.set("comments_count", comments_count)
+       this.model.save();
+       this.render();
    }
 
 
  });
 
 var ActivityStreamView = Backbone.View.extend({
-    el: $('#main_stream'), // el attaches to existing element
+    el: '#main_stream', // el attaches to existing element
 
     initialize: function(){
         _.bindAll(this, 'render', 'appendItem'); // every function that uses 'this' as the current object should be in here

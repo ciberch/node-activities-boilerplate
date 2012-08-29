@@ -1,0 +1,7 @@
+.timestamp.small=timedItem.published
+	- if (timedItem.provider && timedItem.provider.icon) {
+		.span1
+			Via
+		.span2
+			img.service(src= timedItem.provider.icon.url)
+	-}
