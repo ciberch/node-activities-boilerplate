@@ -30,15 +30,16 @@ var sessionStore = new RedisStore(siteConf.redisOptions);
 var asmsDB = require('activity-streams-mongoose')({mongoUrl: siteConf.mongoUrl, redis: siteConf.redisOptions, defaultActor: '/img/default.png'});
 
 var thisApp = new asmsDB.ActivityObject({displayName: 'Activity Streams App', url: siteConf.uri, image:{url: '/img/as-logo-sm.png'}});
+
+var realMongoDB = asmsDB.ActivityObject.db.db;
+
+
 var thisInstance = {displayName: "Instance 0 -- Local"};
 if (cf.app) {
     thisInstance.image = {url: '/img/cf-process.jpg'};
     thisInstance.url = "http://" + cf.host + ":" + cf.port;
     thisInstance.displayName = "App Instance " + cf.app['instance_index'] + " at " + thisInstance.url;
     thisInstance.content = cf.app['instance_id']
-    //temp
-    console.log("Instance JSON is *******");
-    console.dir(app);
 }
 
 thisApp.save(function (err) {
@@ -343,7 +344,8 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
             console.dir(docs);
         }
         req.streams.firehose.items = activities;
-        res.render('index', {
+
+        var data = {
             currentUser: req.user,
             providerFavicon: req.providerFavicon,
             streams : req.streams,
@@ -356,9 +358,69 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
             usedObjectTypes: req.usedObjectTypes,
             usedActorObjectTypes: req.usedActorObjectTypes,
             usedActors: req.usedActors
-        });
+        };
+        if (req.is('json')) {
+            res.json(data);
+
+        } else {
+           res.render('index', data);
+        }
     });
 
+});
+
+app.post('/photos', loadUser, function(req, res, next){
+    console.log("In /photos");
+    if (req.files.image) {
+        console.log("Got image");
+        console.dir(req.files.image);
+      var fileId = req.files.image.name;
+      var gs = asmsDB.mongoose.mongo.GridStore(realMongoDB, fileId, "w", {
+            content_type : req.files.image.type,
+            metadata : {
+                author: req.user,
+                public : false,
+                path: req.files.image.path,
+                size_kb: req.files.image.size / 1024 | 0
+            }
+        });
+        gs.writeFile(req.files.image.path, function(err, doc){
+            if (err) {
+              console.log("Got an error trying to save photo");
+              console.dir(err);
+              res.status(500);
+              res.send('');
+            } else {
+
+              console.log("Write worked now trying to close");
+              res.status(201);
+              res.json({url : siteConf.uri + "/photos/" + fileId});
+        }
+        });
+    } else {
+        res.status(401);
+    }
+});
+
+app.get('/photos/:fileId', function(req, res) {
+   // Fetch the content
+    console.log("In GET photos for " + req.params.fileId);
+    var gs = new asmsDB.mongoose.mongo.GridStore(realMongoDB, req.params.fileId, "r");
+    gs.open(function(err, gs) {
+        gs.seek(0, function() {
+            gs.read(function(err, data) {
+                if (err) {
+                    console.log("Got an error trying to fetch photo with id" + req.params.fileId);
+                    console.dir(err);
+                    res.status(404);
+                    res.send('');
+                } else {
+                    res.writeHead('200', {'Content-Type': gs.content_type});
+                    res.end(data, 'binary');
+                }
+            });
+        });
+    });
 });
 
 app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctObjects, getDistinctActors,
@@ -370,7 +432,7 @@ app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, 
             activities = docs;
         }
         req.streams[req.params.streamName].items = activities;
-        res.render('index', {
+        var data = {
             currentUser: req.user,
             providerFavicon: req.providerFavicon,
             streams : req.streams,
@@ -383,10 +445,30 @@ app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, 
             usedObjectTypes: req.usedObjectTypes,
             usedActorObjectTypes: req.usedActorObjectTypes,
             usedActors: req.usedActors
-        });
+        };
+        if (req.is('json')) {
+            res.json(data);
+
+        } else {
+           res.render('index', data);
+        }
     });
 
 });
+
+app.get('/user', loadUser, function(req, res) {
+    res.json(req.user);
+});
+
+app.get('/metadata', getMetaData, function(req, res){
+    var data = {
+        actorTypes: req.actorTypes,
+        objectTypes : req.objectTypes,
+        verbs: req.verbs
+    };
+    res.json(data);
+});
+
 
 // Initiate this after all other routing is done, otherwise wildcard will go crazy.
 var dummyHelpers = new DummyHelper(app);
