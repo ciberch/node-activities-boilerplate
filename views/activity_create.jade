@@ -1,3 +1,12 @@
+- if(!session.auth)
+	form#new_photo(method="post", enctype="multipart/form-data", action="/photos")
+		.hero-unit.second-hero
+			.row
+				.span5
+					input(type="file", name="image")
+					input.btn(type="submit", value="Upload")
+
+
 form#new_activity
 	.hero-unit.second-hero
 		.row
