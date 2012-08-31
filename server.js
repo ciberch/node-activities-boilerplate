@@ -2,6 +2,7 @@
 var siteConf = require('./lib/getConfig');
 var cf = require('cloudfoundry');
 var _ = require('underscore')._;
+var Guid = require('guid');
 
 process.title = siteConf.uri.replace(/http:\/\/(www)?/, '');
 
@@ -370,11 +371,9 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
 });
 
 app.post('/photos', loadUser, function(req, res, next){
-    console.log("In /photos");
     if (req.files.image) {
-        console.log("Got image");
-        console.dir(req.files.image);
-      var fileId = req.files.image.name;
+      var guid = Guid.create();
+      var fileId = guid + '/' + req.files.image.name;
       var gs = asmsDB.mongoose.mongo.GridStore(realMongoDB, fileId, "w", {
             content_type : req.files.image.type,
             metadata : {
@@ -386,15 +385,14 @@ app.post('/photos', loadUser, function(req, res, next){
         });
         gs.writeFile(req.files.image.path, function(err, doc){
             if (err) {
-              console.log("Got an error trying to save photo");
+              console.log("Got an error trying to save photo with id: " + fileId);
               console.dir(err);
               res.status(500);
               res.send('');
             } else {
-
-              console.log("Write worked now trying to close");
               res.status(201);
               res.json({url : siteConf.uri + "/photos/" + fileId});
+              // TODO: Store url in users photo colllection
         }
         });
     } else {
@@ -403,24 +401,33 @@ app.post('/photos', loadUser, function(req, res, next){
     }
 });
 
-app.get('/photos/:fileId', function(req, res) {
+app.get('/photos/:guid/:fileId', function(req, res) {
    // Fetch the content
-    console.log("In GET photos for " + req.params.fileId);
-    var gs = new asmsDB.mongoose.mongo.GridStore(realMongoDB, req.params.fileId, "r");
-    gs.open(function(err, gs) {
-        gs.seek(0, function() {
-            gs.read(function(err, data) {
-                if (err) {
-                    console.log("Got an error trying to fetch photo with id" + req.params.fileId);
-                    console.dir(err);
-                    res.status(404);
-                    res.send('');
-                } else {
-                    res.writeHead('200', {'Content-Type': gs.content_type});
-                    res.end(data, 'binary');
-                }
+    var fileId = req.params.guid + '/' + req.params.fileId;
+
+    // TODO Check if current user allowed to see photo
+    var gs = new asmsDB.mongoose.mongo.GridStore(realMongoDB, fileId, "r");
+    gs.open(function(err1, gs) {
+        if (err1) {
+            console.log("Got an error trying to open photo with id: " + fileId);
+            console.dir(err1);
+            res.status(404);
+            res.json({error: err1});
+        } else {
+            gs.seek(0, function() {
+                gs.read(function(err, data) {
+                    if (err) {
+                        console.log("Got an error trying to read photo with id: " + fileId);
+                        console.dir(err);
+                        res.status(500);
+                        res.json({error: err});
+                    } else {
+                        res.writeHead('200', {'Content-Type': gs.content_type});
+                        res.end(data, 'binary');
+                    }
+                });
             });
-        });
+        }
     });
 });
 

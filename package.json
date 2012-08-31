@@ -19,7 +19,9 @@
     "cloudfoundry" : ">=0.1.0",
     "activity-streams-mongoose": ">=0.0.14",
 	  "hiredis": "",
-	  "underscore": ""
+	  "underscore": "",
+	  "mongoose-auth" : ">= 0.0.12",
+	  "guid" : ""
 
   }
 }
