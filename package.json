@@ -6,11 +6,11 @@
   "engines" : ["node"],
   "repository" : { "type":"git", "url":"http://github.com/ciberch/node-express-boilerplate" },
   "dependencies" : {
-    "connect" : ">=1.6.0",
+    "connect" : "1.x",
     "connect-assetmanager" : ">=0.0.21",
     "connect-assetmanager-handlers" : ">=0.0.17",
     "jade": "",
-    "express" : ">=2.4.3",
+    "express" : "2.x",
     "socket.io" : ">=0.7.8",
     "connect-redis" : ">=1.0.7",
     "connect-notifo" : ">=0.0.1",

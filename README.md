@@ -87,6 +87,7 @@ vmc env-add $APP_NAME facebook_app_secret=fb_secret
 vmc env-add $APP_NAME NODE_ENV=production
 vmc env-add $APP_NAME twitter_consumer_key=twitter_key
 vmc env-add $APP_NAME twitter_consumer_secret=twitter_secret
+vmc env-add $APP_NAME TMP=tmp
 ```
 
 ## Finally

@@ -399,6 +399,7 @@ app.post('/photos', loadUser, function(req, res, next){
         });
     } else {
         res.status(401);
+        res.json({error : "Could not find the file"});
     }
 });
 
