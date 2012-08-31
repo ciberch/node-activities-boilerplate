@@ -23,6 +23,7 @@ var assetManager = require('connect-assetmanager');
 var assetHandler = require('connect-assetmanager-handlers');
 var notifoMiddleware = require('connect-notifo');
 var DummyHelper = require('./lib/dummy-helper');
+var im = require('imagemagick');
 
 // Session store
 var RedisStore = require('connect-redis')(express);
@@ -372,29 +373,36 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
 
 app.post('/photos', loadUser, function(req, res, next){
     if (req.files.image) {
-      var guid = Guid.create();
-      var fileId = guid + '/' + req.files.image.name;
-      var gs = asmsDB.mongoose.mongo.GridStore(realMongoDB, fileId, "w", {
-            content_type : req.files.image.type,
-            metadata : {
-                author: req.user,
-                public : false,
-                path: req.files.image.path,
-                size_kb: req.files.image.size / 1024 | 0
+        im.identify(req.files.image.path, function(err, features){
+          var guid = Guid.create();
+          var fileId = guid + '/' + req.files.image.name;
+          var gs = asmsDB.mongoose.mongo.GridStore(realMongoDB, fileId, "w", {
+                content_type : req.files.image.type,
+                metadata : {
+                    author: req.user,
+                    public : false,
+                    features: features,
+                    filename: req.files.image.name,
+                    path: req.files.image.path,
+                    size_kb: req.files.image.size / 1024 | 0
+                }
+            });
+            gs.writeFile(req.files.image.path, function(err, doc){
+                if (err) {
+                  console.log("Got an error trying to save photo with id: " + fileId);
+                  console.dir(err);
+                  res.status(500);
+                  res.send('');
+                } else {
+                  res.status(201);
+                  res.json({url : siteConf.uri + "/photos/" + fileId, metadata: gs.metadata});
+                  // TODO: Store url in users photo colllection
             }
-        });
-        gs.writeFile(req.files.image.path, function(err, doc){
-            if (err) {
-              console.log("Got an error trying to save photo with id: " + fileId);
-              console.dir(err);
-              res.status(500);
-              res.send('');
-            } else {
-              res.status(201);
-              res.json({url : siteConf.uri + "/photos/" + fileId});
-              // TODO: Store url in users photo colllection
-        }
-        });
+            });
+
+            console.log("Using ImageMagick got features ")
+            console.dir(features)
+        })
     } else {
         res.status(401);
         res.json({error : "Could not find the file"});

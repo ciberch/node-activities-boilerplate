@@ -21,7 +21,8 @@
 	  "hiredis": "",
 	  "underscore": "",
 	  "mongoose-auth" : ">= 0.0.12",
-	  "guid" : ""
+	  "guid" : "",
+	  "imagemagick" : ""
 
   }
 }
