@@ -447,14 +447,19 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
 });
 
 app.post('/photos', loadUser, ingestPhoto, reducePhoto, reducePhoto, function(req, res, next){
-    if (req.photosUploaded) {
-        res.status(201);
-        res.json(req.photosUploaded);
+    if (!req.session.auth) {
+        res.status('401');
+        res.send();
     } else {
-        res.status(500);
-        console.log("Error uploading photo due to ");
-        console.dir(req);
-        res.json({error: "Couldn't upload photo"});
+        if (req.photosUploaded) {
+            res.status(201);
+            res.json(req.photosUploaded);
+        } else {
+            res.status(500);
+            console.log("Error uploading photo due to ");
+            console.dir(req);
+            res.json({error: "Couldn't upload photo"});
+        }
     }
 
 });
