@@ -319,6 +319,38 @@ function getDistinctActorObjectTypes(req, res, next){
         });
 };
 
+function ingestPhoto(req, res, next){
+    if (req.files.image) {
+        im.identify(req.files.image.path, function(err, features){
+          var guid = Guid.create();
+          var fileId = guid + '/' + req.files.image.name;
+          var gs = asmsDB.mongoose.mongo.GridStore(realMongoDB, fileId, "w", {
+                content_type : req.files.image.type,
+                metadata : {
+                    author: req.user,
+                    public : false,
+                    features: features,
+                    filename: req.files.image.name,
+                    path: req.files.image.path,
+                    size_kb: req.files.image.size / 1024 | 0
+                }
+            });
+            gs.writeFile(req.files.image.path, function(err, doc){
+                if (err) {
+                  next(err);
+                } else {
+                    req.photoIngested = {url : siteConf.uri + "/photos/" + fileId, metadata: gs.metadata};
+                    next();
+                }
+            });
+
+
+        })
+    } else {
+        next(new Error("Could not find the file"));
+    }
+};
+
 function getDistinctStreams(req, res, next){
     req.session.desiredStream = req.params.streamName ? req.params.streamName : "firehose";
     req.streams = {}
@@ -371,42 +403,17 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
 
 });
 
-app.post('/photos', loadUser, function(req, res, next){
-    if (req.files.image) {
-        im.identify(req.files.image.path, function(err, features){
-          var guid = Guid.create();
-          var fileId = guid + '/' + req.files.image.name;
-          var gs = asmsDB.mongoose.mongo.GridStore(realMongoDB, fileId, "w", {
-                content_type : req.files.image.type,
-                metadata : {
-                    author: req.user,
-                    public : false,
-                    features: features,
-                    filename: req.files.image.name,
-                    path: req.files.image.path,
-                    size_kb: req.files.image.size / 1024 | 0
-                }
-            });
-            gs.writeFile(req.files.image.path, function(err, doc){
-                if (err) {
-                  console.log("Got an error trying to save photo with id: " + fileId);
-                  console.dir(err);
-                  res.status(500);
-                  res.send('');
-                } else {
-                  res.status(201);
-                  res.json({url : siteConf.uri + "/photos/" + fileId, metadata: gs.metadata});
-                  // TODO: Store url in users photo colllection
-            }
-            });
-
-            console.log("Using ImageMagick got features ")
-            console.dir(features)
-        })
+app.post('/photos', loadUser, ingestPhoto, function(req, res, next){
+    if (req.photoIngested) {
+        res.status(201);
+        res.json(req.photoIngested);
     } else {
-        res.status(401);
-        res.json({error : "Could not find the file"});
+        res.status(500);
+        console.log("Error uploading photo due to ");
+        console.dir(req);
+        res.json({error: "Couldn't upload photo"});
     }
+
 });
 
 app.get('/photos/:guid/:fileId', function(req, res) {
