@@ -318,34 +318,77 @@ function getDistinctActorObjectTypes(req, res, next){
             }
         });
 };
+var sizes = [{name : 'sm', width : 256},{name : 'xs', 'width' : 60}]
+
+function reducePhoto(req, res, next){
+    var photoIngested = req.photosUploaded['original'];
+    if (photoIngested) {
+        var sizeName = sizes[req.nextSizeIndex].name;
+        var destPath = photoIngested.metadata.path + '-' + sizeName ;
+        var nameParts = photoIngested.metadata.filename.split('.');
+        var newName = nameParts[0] + '-' + sizeName + '.' + nameParts[1];
+
+        im.resize({
+          srcPath: photoIngested.metadata.path,
+          dstPath: destPath,
+          width:   sizes[req.nextSizeIndex].width
+        }, function(err, stdout, stderr){
+          if (err) {
+              next(err);
+          } else {
+            console.log("The photo was resized to 256px wide");
+            var guid = Guid.create();
+            var fileId = guid + '/' + newName;
+            var gs = asmsDB.mongoose.mongo.GridStore(realMongoDB, fileId, "w", {
+                  content_type : req.files.image.type,
+                  metadata : {
+                      author: req.user,
+                      public : false,
+                      filename: newName,
+                      width: sizes[req.nextSizeIndex].width,
+                      path: destPath
+                  }
+              });
+              gs.writeFile(destPath, function(err, doc){
+                  if (err) {
+                    next(err);
+                  } else {
+                      req.photosUploaded[sizeName] = {url : siteConf.uri + "/photos/" + fileId, metadata: gs.metadata};
+                      req.nextSizeIndex = req.nextSizeIndex + 1;
+                      next();
+                  }
+              });
+          }
+        });
+    }
+};
 
 function ingestPhoto(req, res, next){
     if (req.files.image) {
-        im.identify(req.files.image.path, function(err, features){
-          var guid = Guid.create();
-          var fileId = guid + '/' + req.files.image.name;
-          var gs = asmsDB.mongoose.mongo.GridStore(realMongoDB, fileId, "w", {
-                content_type : req.files.image.type,
-                metadata : {
-                    author: req.user,
-                    public : false,
-                    features: features,
-                    filename: req.files.image.name,
-                    path: req.files.image.path,
-                    size_kb: req.files.image.size / 1024 | 0
+        var guid = Guid.create();
+        var fileId = guid + '/' + req.files.image.name;
+        var gs = asmsDB.mongoose.mongo.GridStore(realMongoDB, fileId, "w", {
+            content_type : req.files.image.type,
+            metadata : {
+                author: req.user,
+                public : false,
+                filename: req.files.image.name,
+                path: req.files.image.path,
+                size_kb: req.files.image.size / 1024 | 0
+            }
+        });
+        gs.writeFile(req.files.image.path, function(err, doc){
+            if (err) {
+              next(err);
+            } else {
+                if (! req.photosUploaded) {
+                    req.photosUploaded = {};
                 }
-            });
-            gs.writeFile(req.files.image.path, function(err, doc){
-                if (err) {
-                  next(err);
-                } else {
-                    req.photoIngested = {url : siteConf.uri + "/photos/" + fileId, metadata: gs.metadata};
-                    next();
-                }
-            });
-
-
-        })
+                req.photosUploaded['original'] = {url : siteConf.uri + "/photos/" + fileId, metadata: gs.metadata};
+                req.nextSizeIndex = 0;
+                next();
+            }
+        });
     } else {
         next(new Error("Could not find the file"));
     }
@@ -403,10 +446,10 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
 
 });
 
-app.post('/photos', loadUser, ingestPhoto, function(req, res, next){
-    if (req.photoIngested) {
+app.post('/photos', loadUser, ingestPhoto, reducePhoto, reducePhoto, function(req, res, next){
+    if (req.photosUploaded) {
         res.status(201);
-        res.json(req.photoIngested);
+        res.json(req.photosUploaded);
     } else {
         res.status(500);
         console.log("Error uploading photo due to ");
