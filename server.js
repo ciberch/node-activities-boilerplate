@@ -147,7 +147,7 @@ app.configure(function() {
 		, 'secret': siteConf.sessionSecret
 	}));
 	app.use(express.logger({format: ':response-time ms - :date - :req[x-real-ip] - :method :url :user-agent / :referrer'}));
-	app.use(authentication.middleware.auth());
+	app.use(authentication.middleware.mongooseAuth());
 	app.use(authentication.middleware.normalizeUserData());
 	app.use(express['static'](__dirname+'/public', {maxAge: 86400000}));
 

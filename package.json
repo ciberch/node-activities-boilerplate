@@ -22,7 +22,8 @@
 	  "underscore": "",
 	  "mongoose-auth" : ">= 0.0.12",
 	  "guid" : "",
-	  "imagemagick" : ""
+	  "imagemagick" : "",
+	  "mongoose": "2.x"
 
   }
 }
