@@ -241,7 +241,7 @@ buf.push('>');
 buf.push('<div');
 buf.push(attrs({ "class": ('timestamp') + ' ' + ('small') }, {}));
 buf.push('>');
-var __val__ = timedItem.published
+var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
 buf.push(escape(null == __val__ ? "" : __val__));
  if (timedItem.provider && timedItem.provider.icon) {
 {
@@ -388,7 +388,7 @@ buf.push('>');
 buf.push('<div');
 buf.push(attrs({ "class": ('timestamp') + ' ' + ('small') }, {}));
 buf.push('>');
-var __val__ = timedItem.published
+var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
 buf.push(escape(null == __val__ ? "" : __val__));
  if (timedItem.provider && timedItem.provider.icon) {
 {
@@ -408,9 +408,7 @@ buf.push('</ul></div>');
 }
 buf.push('</div>');
  }
-buf.push('</li><hr');
-buf.push(attrs({  }, {}));
-buf.push('/>');
+buf.push('</li>');
     }
   } else {
     for (var $index in activities) {
@@ -510,7 +508,7 @@ buf.push('>');
 buf.push('<div');
 buf.push(attrs({ "class": ('timestamp') + ' ' + ('small') }, {}));
 buf.push('>');
-var __val__ = timedItem.published
+var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
 buf.push(escape(null == __val__ ? "" : __val__));
  if (timedItem.provider && timedItem.provider.icon) {
 {
@@ -657,7 +655,7 @@ buf.push('>');
 buf.push('<div');
 buf.push(attrs({ "class": ('timestamp') + ' ' + ('small') }, {}));
 buf.push('>');
-var __val__ = timedItem.published
+var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
 buf.push(escape(null == __val__ ? "" : __val__));
  if (timedItem.provider && timedItem.provider.icon) {
 {
@@ -677,9 +675,7 @@ buf.push('</ul></div>');
 }
 buf.push('</div>');
  }
-buf.push('</li><hr');
-buf.push(attrs({  }, {}));
-buf.push('/>');
+buf.push('</li>');
    }
   }
 }).call(this);

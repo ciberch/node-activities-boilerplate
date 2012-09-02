@@ -14,12 +14,15 @@
 		};
 	})();
 
-	var socketIoClient = io.connect(null, {
+    console.log("IO is");
+    console.dir(io);
+
+	App.socketIoClient = io.connect(null, {
 		'port': '#socketIoPort#'
 		, 'rememberTransport': true
 		, 'transports': ['xhr-polling']
 	});
-	socketIoClient.on('connect', function () {
+	App.socketIoClient.on('connect', function () {
 		$$('#connected').addClass('on').find('strong').text('Online');
 	});
 
@@ -27,7 +30,7 @@
 	var service = $.trim($('#service').val());
 
     var $ul = $('#main_stream');
-    var map;
+    App.map = null;
     var streamView = new ActivityStreamView();
 
     // set up the router here - remember the router is like a controller in Rails
@@ -36,44 +39,16 @@
     // the required Backbone way to start up the router
     //Backbone.history.start({pushState: true});
 
-	socketIoClient.on('message', function(json) {
+	App.socketIoClient.on('message', function(json) {
 		var doc = JSON.parse(json);
         if (doc) {
             streamView.collection.add(new Activity(doc));
         }
 	});
 
-    function trimForServer(items) {
-        if (items && items.length > 0) {
-            var val = items[0];
-            return val.innerText.trimRight().toLowerCase();
-        }
-        return null;
-    }
-
-    function GetLocation(position) {
-        var mapOptions = {
-          zoom: 15,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        map = new google.maps.Map(document.getElementById('map'),mapOptions);
-        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        map.setCenter(pos);
-        var marker = new google.maps.Marker({
-          position: pos,
-          map: map,
-          title: 'Drag to the proper location',
-          draggable:true
-        });
-        google.maps.event.addListener(marker, 'click', function() {
-          console.log("New position is ");
-          console.dir(marker.getPosition());
-          map.setCenter(marker.getPosition());
-        });
-
-        $("#map").show();
-        console.dir(location);
-    }
+    App.socketIoClient.on('disconnect', function() {
+   		$$('#connected').removeClass('on').find('strong').text('Offline');
+   	});
 
     $(document).ready(function(){
 
@@ -94,7 +69,7 @@
 
         $("#includeLocation").on("click", function() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(GetLocation);
+                navigator.geolocation.getCurrentPosition(App.getLocation);
             } else {
                 alert("Geo Location is not supported on your device");
             }
@@ -102,12 +77,13 @@
 
 
         $("#send-message").click(function() {
+            console.log("In send message");
             var msg = $("#msg").val();
             var url = $('#url').val();
             var title = $('#title').val();
             var streamName = $('#streamName').val();
-            var objectType = trimForServer($('#object-show'));
-            var verb = trimForServer($('#verb-show'));
+            var objectType = App.helper.trimForServer($('#object-show'));
+            var verb = App.helper.trimForServer($('#verb-show'));
 
             if (verb && objectType && msg && msg.length > 0) {
                 $("#msg").val('');
@@ -121,15 +97,14 @@
                 };
 
                 console.dir(act);
-                socketIoClient.emit("message", act);
+                console.log("Sending activity");
+                App.socketIoClient.emit("message", act);
             }
             return false;
         });
     });
 
-	socketIoClient.on('disconnect', function() {
-		$$('#connected').removeClass('on').find('strong').text('Offline');
-	});
+
 
 })(jQuery);
 
