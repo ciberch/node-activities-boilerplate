@@ -243,7 +243,7 @@ function loadUser(req, res, next) {
        else if (req.session.auth.facebook)
         req.providerFavicon = '/facebook.ico';
     }
-    var displayName = req.session.user ? req.session.user.name : 'UID: '+(req.session.uid || 'has no UID');
+    var displayName = req.session.user ? req.session.user.displayName : 'UID: '+(req.session.uid || 'has no UID');
     var avatarUrl = ((req.session.auth && req.session.user.image) ? req.session.user.image : '/img/codercat-sm.jpg');
     req.user = {displayName: displayName, image: {url: avatarUrl}};
     next();
