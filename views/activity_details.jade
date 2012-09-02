@@ -1,4 +1,4 @@
-.timestamp.small=timedItem.published
+.timestamp.small=(timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
 	- if (timedItem.provider && timedItem.provider.icon) {
 		.span1
 			Via
