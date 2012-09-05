@@ -139,23 +139,23 @@ app.configure(function() {
 });
 
 function getDistinctVerbs(req, res, next){
-    asmsClient.getDistinct(req, res, next, 'verb');
+    asmsClient.helpers.getDistinct(req, res, next, 'verb');
 };
 
 function getDistinctActors(req, res, next){
-    asmsClient.getDistinct(req, res, next, 'actor');
+    asmsClient.helpers.getDistinct(req, res, next, 'actor');
 };
 
 function getDistinctObjects(req, res, next){
-    asmsClient.getDistinct(req, res, next, 'object', ['none']);
+    asmsClient.helpers.getDistinct(req, res, next, 'object', ['none']);
 };
 
 function getDistinctObjectTypes(req, res, next){
-    asmsClient.getDistinct(req, res, next, 'object.object.type', ['none']);
+    asmsClient.helpers.getDistinct(req, res, next, 'object.object.type', ['none']);
 };
 
 function getDistinctActorObjectTypes(req, res, next){
-    asmsClient.getDistinct(req, res, next, 'actor.object.type', ['none']);
+    asmsClient.helpers.getDistinct(req, res, next, 'actor.object.type', ['none']);
 };
 
 // ENV based configuration
@@ -217,21 +217,11 @@ function getMetaData(req, res, next) {
 };
 
 function loadUser(req, res, next) {
-
-	if (!req.session.uid) {
-		req.session.uid = (0 | Math.random()*1000000);
-	} else if (req.session.auth){
-       if (req.session.auth.github)
-        req.providerFavicon = '/github.ico';
-       else if (req.session.auth.twitter)
-        req.providerFavicon = '/twitter.ico';
-       else if (req.session.auth.facebook)
-        req.providerFavicon = '/facebook.ico';
-    }
-    var displayName = req.session.user ? req.session.user.displayName : 'UID: '+(req.session.uid || 'has no UID');
-    var avatarUrl = ((req.session.auth && req.session.user.image) ? req.session.user.image : app.asmsClient.defaultAvatar);
-    req.user = {displayName: displayName, image: {url: avatarUrl}};
-    next();
+		if (!req.session.uid) {
+			req.session.uid = (0 | Math.random()*1000000);
+		}
+		req.user = app.asmsClient.helpers.getCurrentUserObject(req.session);
+		next();
 }
 
 
@@ -353,7 +343,7 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
 
             //console.dir(docs);
         }
-        req.streams.firehose.items = activities;
+        req.streams.firehose = {name: 'firehose', items: activities}
 
         var data = {
             currentUser: req.user,
