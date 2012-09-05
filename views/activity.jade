@@ -1,4 +1,5 @@
 each act in activities
+	- if (!act.object) continue;
 	- var objType = " objectType-" + (act.object.objectType ? act.object.objectType : 'none');
 	- var actorType = " actorType-" + (act.actor.objectType ? act.actor.objectType : 'none');
 	- var className = "verb-" + act.verb + objType+actorType;
