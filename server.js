@@ -529,4 +529,14 @@ app.all('*', function(req, res){
 
 console.log('Running in '+(process.env.NODE_ENV || 'development')+' mode @ '+siteConf.uri);
 
+var startAct = new asmsClient.asmsDB.Activity({
+    actor: asmsClient.default.owner,
+    verb: 'start',
+    object: asmsClient.default.instance,
+    target: asmsClient.default.app._id,
+    title: "started"
+});
+
+startAct.publish('firehose');
+
 
