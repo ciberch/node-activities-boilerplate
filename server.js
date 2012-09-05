@@ -28,17 +28,30 @@ var im = require('imagemagick');
 // Session store
 var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore(siteConf.redisOptions);
+var app = module.exports = express.createServer();
 
-var asmsDB = require('activity-streams-mongoose')({mongoUrl: siteConf.mongoUrl, redis: siteConf.redisOptions, defaultActor: '/img/default.png'});
+app.defaultAvatar = siteConf.uri + '/img/codercat-sm.jpg'
+var streamLib = require('activity-streams-mongoose')({mongoUrl: siteConf.mongoUrl, redis: siteConf.redisOptions, defaultActor: app.defaultAvatar});
 
-var thisApp = new asmsDB.ActivityObject({displayName: 'Activity Streams App', url: siteConf.uri, image:{url: '/img/as-logo-sm.png'}});
+app.streamLib = streamLib;
+app.siteConf = siteConf;
+var authentication = new require('./lib/authentication.js')(app, siteConf);
+app.cookieName = "jsessionid"; //Hack to have sticky sessions. Default connect name is 'connect.sid';
+// Cookie name must be lowercase
 
-var realMongoDB = asmsDB.ActivityObject.db.db;
+var asmsDB = new streamLib.DB(streamLib.db, streamLib.types);
+app.asmsDB = asmsDB;
+var thisApp = new asmsDB.ActivityObject({
+    displayName: 'Activity Streams App',
+    url: siteConf.uri,
+    image:{url: siteConf.uri + '/img/as-logo-sm.png'}
+});
 
+app.listen(siteConf.internal_port, null);
 
 var thisInstance = {displayName: "Instance 0 -- Local"};
 if (cf.app) {
-    thisInstance.image = {url: '/img/cf-process.jpg'};
+    thisInstance.image = {url: siteConf.uri +'/img/cf-process.jpg'};
     thisInstance.url = "http://" + cf.host + ":" + cf.port;
     thisInstance.displayName = "App Instance " + cf.app['instance_index'] + " at " + thisInstance.url;
     thisInstance.content = cf.app['instance_id']
@@ -48,29 +61,22 @@ thisApp.save(function (err) {
     if (err === null) {
         var startAct = new asmsDB.Activity(
             {
-            actor: {displayName: siteConf.user_email, image:{url: "img/me.jpg"}},
+            actor: {displayName: siteConf.user_email, image:{url: siteConf.uri + "/img/me.jpg"}},
             verb: 'start',
             object: thisInstance,
             target: thisApp._id,
             title: "started"
             });
 
-        asmsDB.publish('firehose', startAct);
+        startAct.publish('firehose');
     }
 });
-
-var app = module.exports = express.createServer();
-app.listen(siteConf.internal_port, null);
-app.asmsDB = asmsDB;
-app.siteConf = siteConf;
 app.thisApp = thisApp;
 app.thisInstance = thisInstance;
-app.cookieName = "jsessionid"; //Hack to have sticky sessions. Default connect name is 'connect.sid';
-// Cookie name must be lowercase
 
 // Setup socket.io server
 var socketIo = new require('./lib/socket-io-server.js')(app, sessionStore);
-var authentication = new require('./lib/authentication.js')(app, siteConf);
+
 // Setup groups for CSS / JS assets
 var assetsSettings = {
 	'js': {
@@ -230,8 +236,6 @@ function getMetaData(req, res, next) {
 };
 
 function loadUser(req, res, next) {
-    console.log("Request Session is");
-    console.dir(req.session);
 
 	if (!req.session.uid) {
 		req.session.uid = (0 | Math.random()*1000000);
@@ -244,7 +248,7 @@ function loadUser(req, res, next) {
         req.providerFavicon = '/facebook.ico';
     }
     var displayName = req.session.user ? req.session.user.displayName : 'UID: '+(req.session.uid || 'has no UID');
-    var avatarUrl = ((req.session.auth && req.session.user.image) ? req.session.user.image : '/img/codercat-sm.jpg');
+    var avatarUrl = ((req.session.auth && req.session.user.image) ? req.session.user.image : app.defaultAvatar);
     req.user = {displayName: displayName, image: {url: avatarUrl}};
     next();
 }
@@ -327,11 +331,12 @@ function reducePhoto(req, res, next){
         var destPath = photoIngested.metadata.path + '-' + sizeName ;
         var nameParts = photoIngested.metadata.filename.split('.');
         var newName = nameParts[0] + '-' + sizeName + '.' + nameParts[1];
+        var width = sizes[req.nextSizeIndex].width;
 
         im.resize({
           srcPath: photoIngested.metadata.path,
           dstPath: destPath,
-          width:   sizes[req.nextSizeIndex].width
+          width:   width
         }, function(err, stdout, stderr){
           if (err) {
               next(err);
@@ -339,13 +344,16 @@ function reducePhoto(req, res, next){
             console.log("The photo was resized to 256px wide");
             var guid = Guid.create();
             var fileId = guid + '/' + newName;
-            var gs = asmsDB.mongoose.mongo.GridStore(realMongoDB, fileId, "w", {
+            var ratio = photoIngested.metadata.width / width;
+            var height = photoIngested.metadata.height / ratio;
+            var gs = streamLib.GridStore(streamLib.realMongoDB, fileId, "w", {
                   content_type : req.files.image.type,
                   metadata : {
-                      author: req.user,
+                      author: req.session.user._id,
                       public : false,
                       filename: newName,
-                      width: sizes[req.nextSizeIndex].width,
+                      width: width,
+                      height: height,
                       path: destPath
                   }
               });
@@ -353,7 +361,8 @@ function reducePhoto(req, res, next){
                   if (err) {
                     next(err);
                   } else {
-                      req.photosUploaded[sizeName] = {url : siteConf.uri + "/photos/" + fileId, metadata: gs.metadata};
+                      var url = siteConf.uri + "/photos/" + fileId;
+                      req.photosUploaded[sizeName] = {url : url, metadata: gs.metadata};
                       req.nextSizeIndex = req.nextSizeIndex + 1;
                       next();
                   }
@@ -365,28 +374,39 @@ function reducePhoto(req, res, next){
 
 function ingestPhoto(req, res, next){
     if (req.files.image) {
-        var guid = Guid.create();
-        var fileId = guid + '/' + req.files.image.name;
-        var gs = asmsDB.mongoose.mongo.GridStore(realMongoDB, fileId, "w", {
-            content_type : req.files.image.type,
-            metadata : {
-                author: req.user,
-                public : false,
-                filename: req.files.image.name,
-                path: req.files.image.path,
-                size_kb: req.files.image.size / 1024 | 0
-            }
-        });
-        gs.writeFile(req.files.image.path, function(err, doc){
-            if (err) {
-              next(err);
+        im.identify(req.files.image.path, function(err, features){
+            if (features && features.width) {
+                var guid = Guid.create();
+                var fileId = guid + '/' + req.files.image.name;
+                var gs = streamLib.GridStore(streamLib.realMongoDB, fileId, "w", {
+                    content_type : req.files.image.type,
+                    metadata : {
+                        author: req.session.user._id,
+                        public : false,
+                        filename: req.files.image.name,
+                        path: req.files.image.path,
+                        width: features.width,
+                        height: features.height,
+                        format: features.format,
+                        size_kb: req.files.image.size / 1024 | 0
+                    }
+                });
+                gs.writeFile(req.files.image.path, function(err, doc){
+                    if (err) {
+                      next(err);
+                    } else {
+                        if (! req.photosUploaded) {
+                            req.photosUploaded = {};
+                        }
+                        var url = siteConf.uri + "/photos/" + fileId;
+                        req.photosUploaded['original'] = {url : url, metadata: gs.metadata};
+                        req.nextSizeIndex = 0;
+                        next();
+                    }
+                });
             } else {
-                if (! req.photosUploaded) {
-                    req.photosUploaded = {};
-                }
-                req.photosUploaded['original'] = {url : siteConf.uri + "/photos/" + fileId, metadata: gs.metadata};
-                req.nextSizeIndex = 0;
-                next();
+                if (err) throw err;
+                throw(new Error("Cannot get width for photo"));
             }
         });
     } else {
@@ -413,12 +433,12 @@ function getDistinctStreams(req, res, next){
 app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObjectTypes, getDistinctObjects,
     getDistinctActors, getDistinctObjectTypes, getMetaData, function(req, res) {
 
-    asmsDB.getActivityStreamFirehose(20, function (err, docs) {
+    asmsDB.Activity.getFirehose(20, function (err, docs) {
         var activities = [];
         if (!err && docs) {
             activities = docs;
 
-            console.dir(docs);
+            //console.dir(docs);
         }
         req.streams.firehose.items = activities;
 
@@ -436,6 +456,7 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
             usedActorObjectTypes: req.usedActorObjectTypes,
             usedActors: req.usedActors
         };
+
         if (req.is('json')) {
             res.json(data);
 
@@ -453,7 +474,62 @@ app.post('/photos', loadUser, ingestPhoto, reducePhoto, reducePhoto, function(re
     } else {
         if (req.photosUploaded) {
             res.status(201);
-            res.json(req.photosUploaded);
+            if (req.session.user) {
+
+                asmsDB.User.findOne(req.session.user._id, function(err, doc) {
+                    if (err) {
+                        next(err);
+                    } else {
+                        if (_.isUndefined(doc.photos)) {
+                            doc.photos = [];
+                        }
+                        var aoHash = {
+                            author: doc,
+                            objectType : 'image',
+                            url: req.photosUploaded.original.url,
+                            displayName : req.photosUploaded.original.metadata.filename,
+                            image: {
+                                url:req.photosUploaded.sm.url,
+                                width: req.photosUploaded.sm.metadata.width,
+                                height: req.photosUploaded.sm.metadata.height
+                            },
+                            fullImage : {
+                                url: req.photosUploaded.original.url,
+                                width: req.photosUploaded.original.metadata.width,
+                                height: req.photosUploaded.original.metadata.height
+                            },
+                            thumbnail : {
+                                url: req.photosUploaded.xs.url,
+                                width: req.photosUploaded.xs.metadata.width,
+                                height: req.photosUploaded.xs.metadata.height
+                            }
+                        };
+                        var ao = new asmsDB.ActivityObject(aoHash);
+                        ao.save(function(err, imageDoc){
+                            doc.photos.push(imageDoc._id);
+
+                            doc.save(function(err2) {
+                                if (err2) {
+                                    next(err2);
+                                } else {
+                                    var act = new asmsDB.Activity({
+                                        verb: 'post',
+                                        actor: doc,
+                                        title: 'posted a photo',
+                                        object: aoHash
+                                    });
+                                    act.publish('personal');
+                                    res.json(act);
+                                }
+                            });
+                        });
+
+
+                }
+            });
+            } else {
+                res.json(req.photosUploaded);
+            }
         } else {
             res.status(500);
             console.log("Error uploading photo due to ");
@@ -469,7 +545,7 @@ app.get('/photos/:guid/:fileId', function(req, res) {
     var fileId = req.params.guid + '/' + req.params.fileId;
 
     // TODO Check if current user allowed to see photo
-    var gs = new asmsDB.mongoose.mongo.GridStore(realMongoDB, fileId, "r");
+    var gs = new streamLib.GridStore(streamLib.realMongoDB, fileId, "r");
     gs.open(function(err1, gs) {
         if (err1) {
             console.log("Got an error trying to open photo with id: " + fileId);
@@ -497,7 +573,7 @@ app.get('/photos/:guid/:fileId', function(req, res) {
 app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctObjects, getDistinctActors,
     getDistinctObjectTypes, getDistinctActorObjectTypes, getDistinctVerbs, getMetaData, function(req, res) {
 
-    asmsDB.getActivityStream(req.params.streamName, 20, function (err, docs) {
+    asmsDB.Activity.getStream(req.params.streamName, 20, function (err, docs) {
         var activities = [];
         if (!err && docs) {
             activities = docs;
@@ -528,7 +604,7 @@ app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, 
 });
 
 app.get('/user', loadUser, function(req, res) {
-    res.json(req.user);
+    res.json(req.session.user);
 });
 
 app.get('/metadata', getMetaData, function(req, res){
