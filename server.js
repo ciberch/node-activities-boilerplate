@@ -217,11 +217,11 @@ function getMetaData(req, res, next) {
 };
 
 function loadUser(req, res, next) {
-		if (!req.session.uid) {
-			req.session.uid = (0 | Math.random()*1000000);
-		}
-		req.user = app.asmsClient.helpers.getCurrentUserObject(req.session);
-		next();
+    if (!req.session.uid) {
+        req.session.uid = Guid.create();
+    }
+    req.user = app.asmsClient.helpers.getCurrentUserObject(req.session);
+    next();
 }
 
 
@@ -244,7 +244,7 @@ function reducePhoto(req, res, next){
           if (err) {
               next(err);
           } else {
-            console.log("The photo was resized to 256px wide");
+            console.log("The photo was resized to " + width + "px wide");
             var guid = Guid.create();
             var fileId = guid + '/' + newName;
             var ratio = photoIngested.metadata.width / width;
@@ -347,7 +347,6 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
 
         var data = {
             currentUser: req.user,
-            providerFavicon: req.providerFavicon,
             streams : req.streams,
             desiredStream : req.session.desiredStream,
             objectTypes : req.objectTypes,
@@ -484,7 +483,6 @@ app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, 
         req.streams[req.params.streamName].items = activities;
         var data = {
             currentUser: req.user,
-            providerFavicon: req.providerFavicon,
             streams : req.streams,
             desiredStream : req.session.desiredStream,
             actorTypes: req.actorTypes,
@@ -506,8 +504,9 @@ app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, 
 
 });
 
-app.get('/user', loadUser, function(req, res) {
-    res.json(req.session.user);
+app.get('/me', loadUser, function(req, res) {
+    res.json(asmsClient.helpers.getCurrentUserObject(req.session));
+    //res.json(req.session.user);
 });
 
 app.get('/metadata', getMetaData, function(req, res){
