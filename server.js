@@ -30,49 +30,14 @@ var RedisStore = require('connect-redis')(express);
 var sessionStore = new RedisStore(siteConf.redisOptions);
 var app = module.exports = express.createServer();
 
-app.defaultAvatar = siteConf.uri + '/img/codercat-sm.jpg'
-var streamLib = require('activity-streams-mongoose')({mongoUrl: siteConf.mongoUrl, redis: siteConf.redisOptions, defaultActor: app.defaultAvatar});
-
-app.streamLib = streamLib;
 app.siteConf = siteConf;
-var authentication = new require('./lib/authentication.js')(app, siteConf);
 app.cookieName = "jsessionid"; //Hack to have sticky sessions. Default connect name is 'connect.sid';
-// Cookie name must be lowercase
 
-var asmsDB = new streamLib.DB(streamLib.db, streamLib.types);
-app.asmsDB = asmsDB;
-var thisApp = new asmsDB.ActivityObject({
-    displayName: 'Activity Streams App',
-    url: siteConf.uri,
-    image:{url: siteConf.uri + '/img/as-logo-sm.png'}
-});
+// Setup the Schema and Auth
+var asmsClient = new require('./lib/asms-client.js')(app, cf);
+app.asmsClient = asmsClient;
 
 app.listen(siteConf.internal_port, null);
-
-var thisInstance = {displayName: "Instance 0 -- Local"};
-if (cf.app) {
-    thisInstance.image = {url: siteConf.uri +'/img/cf-process.jpg'};
-    thisInstance.url = "http://" + cf.host + ":" + cf.port;
-    thisInstance.displayName = "App Instance " + cf.app['instance_index'] + " at " + thisInstance.url;
-    thisInstance.content = cf.app['instance_id']
-}
-
-thisApp.save(function (err) {
-    if (err === null) {
-        var startAct = new asmsDB.Activity(
-            {
-            actor: {displayName: siteConf.user_email, image:{url: siteConf.uri + "/img/me.jpg"}},
-            verb: 'start',
-            object: thisInstance,
-            target: thisApp._id,
-            title: "started"
-            });
-
-        startAct.publish('firehose');
-    }
-});
-app.thisApp = thisApp;
-app.thisInstance = thisInstance;
 
 // Setup socket.io server
 var socketIo = new require('./lib/socket-io-server.js')(app, sessionStore);
@@ -153,8 +118,8 @@ app.configure(function() {
 		, 'secret': siteConf.sessionSecret
 	}));
 	app.use(express.logger({format: ':response-time ms - :date - :req[x-real-ip] - :method :url :user-agent / :referrer'}));
-	app.use(authentication.middleware.mongooseAuth());
-	app.use(authentication.middleware.normalizeUserData());
+	app.use(asmsClient.authentication.middleware.mongooseAuth());
+	app.use(asmsClient.authentication.middleware.normalizeUserData());
 	app.use(express['static'](__dirname+'/public', {maxAge: 86400000}));
 
 	// Send notification to computer/phone @ visit. Good to use for specific events or low traffic sites.
@@ -173,7 +138,25 @@ app.configure(function() {
 	}
 });
 
+function getDistinctVerbs(req, res, next){
+    asmsClient.getDistinct(req, res, next, 'verb');
+};
 
+function getDistinctActors(req, res, next){
+    asmsClient.getDistinct(req, res, next, 'actor');
+};
+
+function getDistinctObjects(req, res, next){
+    asmsClient.getDistinct(req, res, next, 'object', ['none']);
+};
+
+function getDistinctObjectTypes(req, res, next){
+    asmsClient.getDistinct(req, res, next, 'object.object.type', ['none']);
+};
+
+function getDistinctActorObjectTypes(req, res, next){
+    asmsClient.getDistinct(req, res, next, 'actor.object.type', ['none']);
+};
 
 // ENV based configuration
 
@@ -227,11 +210,9 @@ function NotFound(msg){
 }
 
 function getMetaData(req, res, next) {
-    // 'Audio'
-    req.actorTypes = ['Person', 'Group', 'Application', 'Service'];
-    req.objectTypes = ['Application', 'Article', 'Bookmark', 'Comment', 'Event', 'File', 'Folder', 'Group', 'List', 'Note', 'Person', 'Photo', 'Place', 'Playlist', 'Product', 'Review', 'Stream', 'Service', 'Song', 'Status', 'Video'];
-
-    req.verbs = ['Post', 'Favorite', 'Follow', 'Join', 'Like', 'Friend', 'Play', 'Save', 'Share', 'Tag', 'Create', 'Update', 'Read', 'Delete', 'Check In'];
+    req.actorTypes = asmsClient.metadata.actorTypes;
+    req.objectTypes = asmsClient.metadata.objectTypes;
+    req.verbs = asmsClient.metadata.verbs;
     next();
 };
 
@@ -248,80 +229,12 @@ function loadUser(req, res, next) {
         req.providerFavicon = '/facebook.ico';
     }
     var displayName = req.session.user ? req.session.user.displayName : 'UID: '+(req.session.uid || 'has no UID');
-    var avatarUrl = ((req.session.auth && req.session.user.image) ? req.session.user.image : app.defaultAvatar);
+    var avatarUrl = ((req.session.auth && req.session.user.image) ? req.session.user.image : app.asmsClient.defaultAvatar);
     req.user = {displayName: displayName, image: {url: avatarUrl}};
     next();
 }
 
-function getDistinctVerbs(req, res, next){
-    req.usedVerbs = []
-    asmsDB.Activity.distinct('verb', {streams: req.session.desiredStream}, function(err, docs) {
-        if (!err && docs) {
-            _.each(docs, function(verb){
-                req.usedVerbs.push(verb);
-            });
-            next();
-        } else {
-            next(new Error('Failed to fetch verbs'));
-        }
-    });
-};
 
-function getDistinctActors(req, res, next){
-    req.usedActors = []
-        asmsDB.Activity.distinct('actor', {streams: req.session.desiredStream}, function(err, docs) {
-            if (!err && docs) {
-                _.each(docs, function(obj){
-                    req.usedActors.push(obj);
-                });
-                next();
-            } else {
-                next(new Error('Failed to fetch actors'));
-            }
-        });
-};
-
-function getDistinctObjects(req, res, next){
-    req.usedObjects = []
-        asmsDB.Activity.distinct('object', {streams: req.session.desiredStream}, function(err, docs) {
-            if (!err && docs) {
-                _.each(docs, function(obj){
-                    req.usedObjects.push(obj);
-                });
-                next();
-            } else {
-                next(new Error('Failed to fetch objects'));
-            }
-        });
-};
-
-function getDistinctObjectTypes(req, res, next){
-    req.usedObjectTypes = ['none']
-        asmsDB.Activity.distinct('object.objectType', {streams: req.session.desiredStream}, function(err, docs) {
-            if (!err && docs) {
-                _.each(docs, function(objType){
-                    req.usedObjectTypes.push(objType);
-                });
-                next();
-            } else {
-                next(new Error('Failed to fetch objTypes'));
-            }
-        });
-};
-
-function getDistinctActorObjectTypes(req, res, next){
-    req.usedActorObjectTypes = ['none']
-        asmsDB.Activity.distinct('actor.objectType', {streams: req.session.desiredStream}, function(err, docs) {
-            if (!err && docs) {
-                _.each(docs, function(objType){
-                    req.usedActorObjectTypes.push(objType);
-                });
-                next();
-            } else {
-                next(new Error('Failed to fetch actorobjTypes'));
-            }
-        });
-};
 var sizes = [{name : 'sm', width : 256},{name : 'xs', 'width' : 60}]
 
 function reducePhoto(req, res, next){
@@ -346,7 +259,7 @@ function reducePhoto(req, res, next){
             var fileId = guid + '/' + newName;
             var ratio = photoIngested.metadata.width / width;
             var height = photoIngested.metadata.height / ratio;
-            var gs = streamLib.GridStore(streamLib.realMongoDB, fileId, "w", {
+            var gs = asmsClient.streamLib.GridStore(asmsClient.streamLib.realMongoDB, fileId, "w", {
                   content_type : req.files.image.type,
                   metadata : {
                       author: req.session.user._id,
@@ -378,7 +291,7 @@ function ingestPhoto(req, res, next){
             if (features && features.width) {
                 var guid = Guid.create();
                 var fileId = guid + '/' + req.files.image.name;
-                var gs = streamLib.GridStore(streamLib.realMongoDB, fileId, "w", {
+                var gs = asmsClient.streamLib.GridStore(asmsClient.streamLib.realMongoDB, fileId, "w", {
                     content_type : req.files.image.type,
                     metadata : {
                         author: req.session.user._id,
@@ -417,7 +330,7 @@ function ingestPhoto(req, res, next){
 function getDistinctStreams(req, res, next){
     req.session.desiredStream = req.params.streamName ? req.params.streamName : "firehose";
     req.streams = {}
-    asmsDB.Activity.distinct('streams', {}, function(err, docs) {
+    asmsClient.asmsDB.Activity.distinct('streams', {}, function(err, docs) {
         if (!err && docs) {
             _.each(docs, function(stream){
                 req.streams[stream] = {name: stream, items: []};
@@ -433,7 +346,7 @@ function getDistinctStreams(req, res, next){
 app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObjectTypes, getDistinctObjects,
     getDistinctActors, getDistinctObjectTypes, getMetaData, function(req, res) {
 
-    asmsDB.Activity.getFirehose(20, function (err, docs) {
+    asmsClient.asmsDB.Activity.getFirehose(20, function (err, docs) {
         var activities = [];
         if (!err && docs) {
             activities = docs;
@@ -450,11 +363,11 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
             objectTypes : req.objectTypes,
             actorTypes : req.actorTypes,
             verbs: req.verbs,
-            usedVerbs: req.usedVerbs,
-            usedObjects: req.usedObjects,
-            usedObjectTypes: req.usedObjectTypes,
-            usedActorObjectTypes: req.usedActorObjectTypes,
-            usedActors: req.usedActors
+            usedVerbs: req['used.verb'],
+            usedObjects: req['used.object'],
+            usedObjectTypes: req['used.object.type'],
+            usedActorObjectTypes: req['used.actor.object.type'],
+            usedActors: req['used.actor']
         };
 
         if (req.is('json')) {
@@ -476,7 +389,7 @@ app.post('/photos', loadUser, ingestPhoto, reducePhoto, reducePhoto, function(re
             res.status(201);
             if (req.session.user) {
 
-                asmsDB.User.findOne(req.session.user._id, function(err, doc) {
+                asmsClient.asmsDB.User.findOne(req.session.user._id, function(err, doc) {
                     if (err) {
                         next(err);
                     } else {
@@ -504,7 +417,7 @@ app.post('/photos', loadUser, ingestPhoto, reducePhoto, reducePhoto, function(re
                                 height: req.photosUploaded.xs.metadata.height
                             }
                         };
-                        var ao = new asmsDB.ActivityObject(aoHash);
+                        var ao = new asmsClient.asmsDB.ActivityObject(aoHash);
                         ao.save(function(err, imageDoc){
                             doc.photos.push(imageDoc._id);
 
@@ -545,7 +458,7 @@ app.get('/photos/:guid/:fileId', function(req, res) {
     var fileId = req.params.guid + '/' + req.params.fileId;
 
     // TODO Check if current user allowed to see photo
-    var gs = new streamLib.GridStore(streamLib.realMongoDB, fileId, "r");
+    var gs = new asmsClient.streamLib.GridStore(asmsClient.streamLib.realMongoDB, fileId, "r");
     gs.open(function(err1, gs) {
         if (err1) {
             console.log("Got an error trying to open photo with id: " + fileId);
@@ -573,7 +486,7 @@ app.get('/photos/:guid/:fileId', function(req, res) {
 app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctObjects, getDistinctActors,
     getDistinctObjectTypes, getDistinctActorObjectTypes, getDistinctVerbs, getMetaData, function(req, res) {
 
-    asmsDB.Activity.getStream(req.params.streamName, 20, function (err, docs) {
+        asmsClient.asmsDB.Activity.getStream(req.params.streamName, 20, function (err, docs) {
         var activities = [];
         if (!err && docs) {
             activities = docs;
@@ -587,11 +500,11 @@ app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, 
             actorTypes: req.actorTypes,
             objectTypes : req.objectTypes,
             verbs: req.verbs,
-            usedVerbs: req.usedVerbs,
-            usedObjects: req.usedObjects,
-            usedObjectTypes: req.usedObjectTypes,
-            usedActorObjectTypes: req.usedActorObjectTypes,
-            usedActors: req.usedActors
+            usedVerbs: req['used.verb'],
+            usedObjects: req['used.object'],
+            usedObjectTypes: req['used.object.type'],
+            usedActorObjectTypes: req['used.actor.object.type'],
+            usedActors: req['used.actor']
         };
         if (req.is('json')) {
             res.json(data);
