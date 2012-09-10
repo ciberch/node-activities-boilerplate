@@ -38,7 +38,7 @@ npm install
 
 ```bash
 npm install -g clientjade
-clientjade views/activity.jade > public/js/templates.js
+clientjade views/*.* > public/js/templates.js
 ```
 
 * Run locally
