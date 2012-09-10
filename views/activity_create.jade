@@ -1,50 +1,37 @@
-- if(session.auth)
-	form#new_photo(method="post", enctype="multipart/form-data", action="/photos")
-		.hero-unit.second-hero
-			.row
-				.span5
-					input(type="file", name="image")
-					input.btn(type="submit", value="Upload")
-
-
-form#new_activity
-	.hero-unit.second-hero
-		.row
-			.span1.offset1
-				p Did you
-			include user-box
-			.span2
-				.btn-group.span1#verb
-					a.btn.btn-primary.dropdown-toggle(data-toggle="dropdown")
-						span#verb-show=locals.verbs[0] + " &nbsp;"
-						span.caret
-					ul.dropdown-menu
-						each verb in locals.verbs
-							li
-								a.type-select(href="#", data-type-show="verb-show")=verb
-			.span1
-				p a new
-			.span2
-				.btn-group.span2#objectType
-					a.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
-						span#object-show=locals.objectTypes[0] + "&nbsp;"
-						span.caret
-					ul.dropdown-menu
-						each objectType in locals.objectTypes
-							li
-								a.type-select(href="#", data-type-show="object-show")=objectType
-			.span1 ?
-		br
-		include application
-		hr
-		.row
-			.span2.offset1
-				p To finish you can
-			.span1
-				button.btn.btn-success#send-message Publish
-			.span2
-				p the activity to the
-			.span3
-				.input-prepend
-					span.add-on #
-					input#streamName.span2.prepend-fix(type="text", value=locals.desiredStream)
+.row
+	.span8
+		h3 Share something...
+#new_activity
+	.row
+		include user-box
+		.span5.large-text
+			| Did you
+			span.btn-group#verb
+				a.btn.btn-link.dropdown-toggle(data-toggle="dropdown")
+					span#verb-show=chosenVerb
+				ul.dropdown-menu
+					each verb in locals.verbs
+						li
+							a.type-select(href="#", data-type-show="verb-show")=verb
+			| a new
+			span.btn-group#objectType
+				a.btn.btn-link.dropdown-toggle(data-toggle="dropdown")
+					span#object-show=chosenObject
+				ul.dropdown-menu
+					each objectType in locals.objectTypes
+						li
+							a.type-select(href="#", data-type-show="object-show")=objectType
+			| ?
+	#specific-activity-input.row
+	hr
+	.row
+		.span2.offset1
+			p To finish you can
+		.span1
+			button.btn.btn-success#send-message Publish
+		.span2
+			p the activity to the
+		.span3
+			.input-prepend
+				span.add-on #
+				input#streamName.span2.prepend-fix(type="text", value=locals.desiredStream)

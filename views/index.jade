@@ -2,7 +2,14 @@ include nav_bar
 
 .container
 	include start-modal
-	include activity_create
+	- var chosenVerb = locals.verbs[0];
+	- var chosenObject = locals.objectTypes[0];
+	- if(session.auth)
+		include activity_create
+	- else
+		.hero-unit.second-hero
+			h1 Welcome
+			p Login or Sign Up to Share Activities !
 
 	.row
 		.span4#filters
