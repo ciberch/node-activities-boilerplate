@@ -31,9 +31,13 @@ function AppHelper(){
     };
 
     this.trimForServer = function (items) {
-        if (items && items.length > 0) {
-            var val = items[0];
-            return val.innerText.trimRight().toLowerCase();
+        if (items) {
+            if (typeof(items) === "object") {
+                var val = items[0];
+                return val.innerText.trimRight().toLowerCase();
+            } else {
+                return items.trimRight().toLowerCase();
+            }
         }
         return null;
     };
