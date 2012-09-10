@@ -55,11 +55,6 @@ var ActivityStreamView = Backbone.View.extend({
         this.collection.bind('add', this.appendItem); // collection event binder
         this.maxSize = 20;
     },
-
-    events: {
-        // TODO
-    },
-
     render: function(){
         _(this.collection.models).each(function(item){ // in case collection is not empty
             self.appendItem(item);
