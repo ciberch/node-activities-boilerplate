@@ -20,13 +20,13 @@
     "airbrake" : ">=0.2.0",
     "everyauth" : "0.2.x",
     "cloudfoundry" : ">=0.1.0",
-    "activity-streams-mongoose": ">=0.1.0",
+    "activity-streams-mongoose": "0.1.1",
 	  "hiredis": "",
 	  "underscore": "",
 	  "mongoose-auth" : ">= 0.0.12",
 	  "guid" : "",
 	  "imagemagick" : "",
-	  "mongoose": "2.x",
+	  "mongoose": "3.x",
 	  "mocha" : "1.4.1",
 	  "should" : "1.1.0"
 
