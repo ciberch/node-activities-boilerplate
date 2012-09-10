@@ -54,8 +54,10 @@ var assetsSettings = {
             , 'bootstrap.js'
             , 'backbone/backbone-0.9.2.js'
             , 'backbone/models.js'
+            , 'backbone/activity_create_view.js'
             , 'backbone/views.js'
             , 'jquery.cookie.js'
+            , 'jquery.form.js'
             , 'jquery.client.js'
 		]
 		, 'debug': true
@@ -339,9 +341,10 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
     asmsClient.asmsDB.Activity.getFirehose(20, function (err, docs) {
         var activities = [];
         if (!err && docs) {
-            activities = docs;
 
-            //console.dir(docs);
+            activities = docs;
+        } else {
+            throw err;
         }
         req.streams.firehose = {name: 'firehose', items: activities}
 
@@ -479,6 +482,8 @@ app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, 
         var activities = [];
         if (!err && docs) {
             activities = docs;
+        } else {
+            throw err;
         }
         req.streams[req.params.streamName].items = activities;
         var data = {
