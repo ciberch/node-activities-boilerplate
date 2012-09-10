@@ -14,9 +14,6 @@
 		};
 	})();
 
-    console.log("IO is");
-    console.dir(io);
-
 	App.socketIoClient = io.connect(null, {
 		'port': '#socketIoPort#'
 		, 'rememberTransport': true
@@ -26,12 +23,40 @@
 		$$('#connected').addClass('on').find('strong').text('Online');
 	});
 
+    $('#new_photo').ajaxForm(function(data) {
+        $('#new_activity');
+        // TODO: Make this prettier like a flash alert
+        alert("Uploaded Photo to your Personal Stream");
+    });
+
 	var image = $.trim($('#image').val());
 	var service = $.trim($('#service').val());
 
     var $ul = $('#main_stream');
     App.map = null;
     var streamView = new ActivityStreamView();
+
+    var defaultSync = Backbone.sync;
+
+    Backbone.sync = function(method, model, options) {
+        console.dir(model);
+        if (model.url === "/activities") {
+            if (method === "create") {
+								var act = model.toJSON();
+								App.socketIoClient.emit("create-activity", act);
+            } else if (method === "save") {
+                var act = model.toJSON();
+        				App.socketIoClient.emit("save-activity", act);
+                alert("Saving activity");
+            }
+            return true;
+        } else {
+            alert("Doing a different kind of operation " + model.urlRoot);
+            defaultSync(method, model, options);
+        }
+    }
+
+    var newActView = new ActivityCreateView();
 
     // set up the router here - remember the router is like a controller in Rails
     //var dashboardRouter = new DashboardRouter({filterView: filterView, colorView: colorView, carView: carListView});
@@ -60,48 +85,6 @@
             }
         });
 
-        $(".type-select").on("click", function() {
-            var itemName = $(this).data("type-show");
-            if (itemName) {
-                $("#" + itemName)[0].innerHTML= this.innerText + " &nbsp;";
-            }
-        });
-
-        $("#includeLocation").on("click", function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(App.getLocation);
-            } else {
-                alert("Geo Location is not supported on your device");
-            }
-        });
-
-
-        $("#send-message").click(function() {
-            console.log("In send message");
-            var msg = $("#msg").val();
-            var url = $('#url').val();
-            var title = $('#title').val();
-            var streamName = $('#streamName').val();
-            var objectType = App.helper.trimForServer($('#object-show'));
-            var verb = App.helper.trimForServer($('#verb-show'));
-
-            if (verb && objectType && msg && msg.length > 0) {
-                $("#msg").val('');
-                $('#title').val('');
-                $('#url').val('');
-
-                var act = {
-                    object: {content: msg, objectType: objectType, title: title, url: url},
-                    verb: verb,
-                    streams: [streamName]
-                };
-
-                console.dir(act);
-                console.log("Sending activity");
-                App.socketIoClient.emit("message", act);
-            }
-            return false;
-        });
     });
 
 
