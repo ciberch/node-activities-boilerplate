@@ -1,5 +1,5 @@
 var Activity = Backbone.Model.extend({
-
+    url : "/activities",
     // From activity-streams-mongoose/lib/activityMongoose.js
     defaults: {
         verb: 'post',
@@ -21,7 +21,16 @@ var Activity = Backbone.Model.extend({
         comments: [],
         comments_count: 0,
         userFriendlyDate: 'No idea when'
+    },
+    validate: function(attrs) {
+
+    if (! attrs.object) {
+        return "Object is missing"
     }
+    if (!attrs.object.title) {
+      return "Title is missing";
+    }
+  }
 });
 var ActivityList = Backbone.Collection.extend({
 	model: Activity,
