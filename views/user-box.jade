@@ -1,5 +1,4 @@
 .user-box.span1
-	a(href="#", rel="tooltip", title="#{locals.currentUser.image.url}")
+	a(href="#", rel="tooltip", title="#{locals.currentUser.displayName}")
 		img.avatar-small.img-rounded.avatar(src="#{locals.currentUser.image.url}")
 		.clearfix
-		small.user-name="@ " + locals.currentUser.displayName
