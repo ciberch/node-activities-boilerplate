@@ -153,11 +153,11 @@ function getDistinctObjects(req, res, next){
 };
 
 function getDistinctObjectTypes(req, res, next){
-    asmsClient.helpers.getDistinct(req, res, next, 'object.object.type', ['none']);
+    asmsClient.helpers.getDistinct(req, res, next, 'object.objectType', ['none']);
 };
 
 function getDistinctActorObjectTypes(req, res, next){
-    asmsClient.helpers.getDistinct(req, res, next, 'actor.object.type', ['none']);
+    asmsClient.helpers.getDistinct(req, res, next, 'actor.objectType', ['none']);
 };
 
 // ENV based configuration
@@ -357,12 +357,12 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
             verbs: req.verbs,
             usedVerbs: req['used.verb'],
             usedObjects: req['used.object'],
-            usedObjectTypes: req['used.object.type'],
-            usedActorObjectTypes: req['used.actor.object.type'],
+            usedObjectTypes: req['used.object.objectType'],
+            usedActorObjectTypes: req['used.actor.objectType'],
             usedActors: req['used.actor']
         };
 
-        if (req.is('json')) {
+        if (req.is('json') || req.query.json) {
             res.json(data);
 
         } else {
@@ -499,7 +499,7 @@ app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, 
             usedActorObjectTypes: req['used.actor.object.type'],
             usedActors: req['used.actor']
         };
-        if (req.is('json')) {
+        if (req.is('json') || req.query.json) {
             res.json(data);
 
         } else {
