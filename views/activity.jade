@@ -1,43 +1,25 @@
 each act in activities
+	- if (!act.object) continue;
 	- var objType = " objectType-" + (act.object.objectType ? act.object.objectType : 'none');
 	- var actorType = " actorType-" + (act.actor.objectType ? act.actor.objectType : 'none');
 	- var className = "verb-" + act.verb + objType+actorType;
 	li(class=className)
 		.row.activity
 			.span1.actor
-				-if (act.actor.image && act.actor.image.url) {
-					img.avatar(src= act.actor.image.url)
-				-} else {
-					h2 :-)
-				-}
-			.span5.action
+				- var actor = act.actor;
+				include activity_stream_actor
+			.span6.action
 				.row.title
 					.span5
 						strong=act.actor.displayName
 						&nbsp;
 						=act.title
 				.row.activity_object
-					.span5
-						br
-						blockquote
-							-if (act.object.image && act.object.image.url) {
-								img.avatar(src= act.object.image.url)
-							-}
-							-if (act.object.displayName) {
-								strong.activity-displayName=act.object.displayName
-							-} else if (act.object.title) {
-								strong.activity-title=act.object.title
-							-}
-							-if (act.object.content) {
-								.activity-content=act.object.content
-							-} 
+					- var object = act.object;
+					include activity_object
 				.row.details
 					.span5
-						.timestamp.small=act.published
-					- if (act.provider && act.provider.icon) {
-							.span1
-								Via
-							.span2
-								img.service(src= act.provider.icon.url)
-					-}
+						- var timedItem = act;
+						include activity_details
+		include actions
 

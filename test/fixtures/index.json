@@ -1,0 +1,75 @@
+{
+	"currentUser":{
+	"displayName":"Monica Wilkinson", // Should have more info on user
+	"image":{
+		"url":"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc4/276322_608201527_2138067735_q.jpg"
+	}
+},
+	"providerFavicon": "/facebook.ico", // FIX to use Absolute
+	"streams":{
+		"firehose":{
+			"name":"firehose",
+			"items":[
+				{
+					"title":"started",
+					"_id":"503e9cf914d6db492e000002", //ugly
+					"__v":0, // ugly
+					"streams":["firehose"],
+					"generator":null,
+					"provider":null,
+					"updated":"2012-08-29T22:51:37.503Z",
+					"published":"2012-08-29T22:51:37.503Z",
+					"target":"503e9cf914d6db492e000001",
+					"actor":{
+						"displayName":"mwilkinson@vmware.com",
+						"image":{
+							"url":"img/me.jpg" // FIX to use Absolute
+						}
+					},
+					"object":{
+						"displayName":"Instance 0 -- Local" // Can also have title, content, url, location
+					},
+					"icon":null,
+					"verb":"start"
+				}
+			]
+		}
+},
+	"desiredStream":"firehose",
+	"objectTypes":["Application", "Article", "Bookmark", "Comment", "Event", "File", "Folder", "Group", "List", "Note", "Person", "Photo", "Place", "Playlist", "Product", "Review", "Stream", "Service", "Song", "Status", "Video"],
+	"actorTypes":["Person", "Group", "Application", "Service"],
+	"verbs":["Post", "Favorite", "Follow", "Join", "Like", "Friend", "Play", "Save", "Share", "Tag", "Create", "Update", "Read", "Delete", "Check In"],
+	"usedVerbs":["start", "connect", "post", "disconnect", "like"],
+	"usedObjects":[
+	{
+		"displayName":"Instance 0 -- Local"
+	},
+	{
+		"url":"http://asms.cloudfoundry.com",
+		"title":"ASMS",
+		"objectType":"application",
+		"content":"Streams Data"
+	},
+	{
+		"url":"http://ciberch.cloudfoundry.com",
+		"title":"A photo of Awesome",
+		"objectType":"photo",
+		"content":"Smell"
+	}
+],
+	"usedObjectTypes":["none", "application", "photo"],
+	"usedActorObjectTypes":["none"],
+	"usedActors":[
+	{
+		"image":{
+			"url":"img/me.jpg" // FIX to use Absolute
+		},
+		"displayName":"mwilkinson@vmware.com"
+	},
+	{
+		"image":{
+			"url":"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc4/276322_608201527_2138067735_q.jpg"
+		},
+		"displayName":"Monica Wilkinson"
+	}
+]}

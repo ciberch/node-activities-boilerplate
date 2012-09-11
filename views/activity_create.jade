@@ -1,63 +1,34 @@
-form#new_activity
+.row
+	.span8
+		h3 Share something...
+#new_activity
 	.row
-		.span4
-			.well.create_mod
-				h3 Actor
-				hr
-				#actor
-					p You are the actor here. Login above to change your name and avatar.
-					.btn-group
-						a.btn.btn-warning.dropdown-toggle(data-toggle="dropdown")
-							span Person &nbsp;
-							span.caret
-						ul.dropdown-menu
-							-if (locals.objectTypes)
-								each objectType in locals.objectTypes
-									li=objectType
-					br
-					img.avatar(src="#{locals.currentUser.image.url}")
-
-					label Display Name
-					.input-prepend
-						span.add-on @
-						input.prepend-fix(readonly=true, type="text", value="#{locals.currentUser.displayName}").span2#displayName
-		.span4#verb
-			.well.create_mod
-				h3 Verb
-				hr
-				p The verb describes the type of action the actor performs on the object.
-				.btn-group
-					a.btn.btn-danger.pull-right.dropdown-toggle(data-toggle="dropdown")
-						span Post &nbsp;
-						span.caret
-					ul.dropdown-menu
-						-if (locals.verbs)
-							each verb in locals.verbs
-								li=verb
-				br
-				#streamInfo
-					h3 Stream
-					br
-					.input-prepend
-						span.add-on #
-						input#streamName.span3.prepend-fix(type="text", value=locals.desiredStream)
-		.span4
-			.well.create_mod
-				h3 Object
-				hr
-				#object
-					.btn-group
-						a.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
-							span Note &nbsp;
-							span.caret
-						ul.dropdown-menu
-							-if (locals.objectTypes)
-								each objectType in locals.objectTypes
-									li=objectType
-					br
-					label Title
-					input(type="text")#title
-					label Content
-					textarea#msg
-					button.btn.btn-success.pull-right#send-message Create New Activity
-
+		include user-box
+		.span5.large-text
+			| Did you&nbsp;
+			span.btn-group#verb
+				a.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
+					span#verb-show=chosenVerb
+				ul.dropdown-menu
+					each verb in locals.verbs
+						li
+							a.type-select(href="#", data-type-show="verb-show")=verb
+			| &nbsp;a new&nbsp;
+			span.btn-group#objectType
+				a.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
+					span#object-show=chosenObject
+				ul.dropdown-menu
+					each objectType in locals.objectTypes
+						li
+							a.type-select(href="#", data-type-show="object-show")=objectType
+			| &nbsp;?
+	.row
+		#specific-activity-input
+	.row#finish
+		.span10.offset2
+			span.large-text Final Step:&nbsp;
+			button.btn.btn-success#send-message Publish
+			| &nbsp;the activity to the&nbsp;
+			span.input-prepend
+				span.add-on #
+				input#streamName.span2.prepend-fix(type="text", value=locals.desiredStream)
