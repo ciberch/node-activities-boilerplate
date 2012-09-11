@@ -10,9 +10,16 @@
 	background: #3daeb9;
 }
 
-.timestamp {
-	font-size: 7pt;
-	font-style: italic;
+.timestamp, .timestamp span, .timestamp a {
+	font-size: 8pt;
+}
+
+img.service {
+	margin: 5px;
+}
+
+.right {
+	text-align: right;
 }
 
 .activity .avatar {

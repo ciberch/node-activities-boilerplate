@@ -1,7 +1,9 @@
-.timestamp.small=(timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
-	- if (timedItem.provider && timedItem.provider.icon) {
-		.span1
-			Via
-		.span2
+.span3.timestamp
+	.small=(timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
+- if (timedItem.provider && timedItem.provider.icon) {
+	.span3.timestamp
+		span Via&nbsp;
+		a(href="#{timedItem.provider.url}", target="_blank")
+			span=timedItem.provider.displayName
 			img.service(src= timedItem.provider.icon.url)
-	-}
+-}

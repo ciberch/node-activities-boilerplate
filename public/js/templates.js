@@ -136,126 +136,12 @@ jade.render = function(node, template, data) {
   node.innerHTML = tmp;
 };
 
-jade.templates["activity"] = function(locals, attrs, escape, rethrow) {
+jade.templates["actions"] = function(locals, attrs, escape, rethrow) {
 var attrs = jade.attrs, escape = jade.escape, rethrow = jade.rethrow;
 var buf = [];
 with (locals || {}) {
 var interp;
-// iterate activities
-;(function(){
-  if ('number' == typeof activities.length) {
-    for (var $index = 0, $$l = activities.length; $index < $$l; $index++) {
-      var act = activities[$index];
-
- if (!act.object) continue;
- var objType = " objectType-" + (act.object.objectType ? act.object.objectType : 'none');
- var actorType = " actorType-" + (act.actor.objectType ? act.actor.objectType : 'none');
- var className = "verb-" + act.verb + objType+actorType;
-buf.push('<li');
-buf.push(attrs({ "class": (className) }, {"class":true}));
-buf.push('><div');
-buf.push(attrs({ "class": ('row') + ' ' + ('activity') }, {}));
-buf.push('><div');
-buf.push(attrs({ "class": ('span1') + ' ' + ('actor') }, {}));
-buf.push('>');
- var actor = act.actor;
- var actUrl = actor.url? actor.url: '#';
-if (actor.image && actor.image.url) {
-{
-buf.push('<a');
-buf.push(attrs({ 'href':("" + (actUrl) + ""), "class": ('actor') }, {"href":true}));
-buf.push('><img');
-buf.push(attrs({ 'src':(actor.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
-buf.push('/></a>');
-}
-} else {
-{
-buf.push('<h2>:-)</h2>');
-}
-}
-buf.push('</div><div');
-buf.push(attrs({ "class": ('span6') + ' ' + ('action') }, {}));
-buf.push('><div');
-buf.push(attrs({ "class": ('row') + ' ' + ('title') }, {}));
-buf.push('><div');
-buf.push(attrs({ "class": ('span5') }, {}));
-buf.push('><strong>');
-var __val__ = act.actor.displayName
-buf.push(escape(null == __val__ ? "" : __val__));
-buf.push('</strong>&nbsp;');
-var __val__ = act.title
-buf.push(escape(null == __val__ ? "" : __val__));
-buf.push('</div></div><div');
-buf.push(attrs({ "class": ('row') + ' ' + ('activity_object') }, {}));
-buf.push('>');
- var object = act.object;
- var objUrl = object.url ? object.url : '#';
 buf.push('<div');
-buf.push(attrs({ "class": ('span6') }, {}));
-buf.push('><br');
-buf.push(attrs({  }, {}));
-buf.push('/><blockquote>');
-if (object.image && object.image.url) {
-{
-buf.push('<a');
-buf.push(attrs({ 'href':("" + (objUrl) + "") }, {"href":true}));
-buf.push('><img');
-buf.push(attrs({ 'src':(object.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
-buf.push('/></a>');
-}
-}
-if (object.displayName) {
-{
-buf.push('<strong');
-buf.push(attrs({ "class": ('activity-displayName') }, {}));
-buf.push('>');
-var __val__ = object.displayName
-buf.push(escape(null == __val__ ? "" : __val__));
-buf.push('</strong>');
-}
-} else if (object.title) {
-{
-buf.push('<strong');
-buf.push(attrs({ "class": ('activity-title') }, {}));
-buf.push('>');
-var __val__ = object.title
-buf.push(escape(null == __val__ ? "" : __val__));
-buf.push('</strong>');
-}
-}
-if (object.content) {
-{
-buf.push('<div');
-buf.push(attrs({ "class": ('activity-content') }, {}));
-buf.push('>');
-var __val__ = object.content
-buf.push(escape(null == __val__ ? "" : __val__));
-buf.push('</div>');
-}
-}
-buf.push('</blockquote></div></div><div');
-buf.push(attrs({ "class": ('row') + ' ' + ('details') }, {}));
-buf.push('><div');
-buf.push(attrs({ "class": ('span5') }, {}));
-buf.push('>');
- var timedItem = act;
-buf.push('<div');
-buf.push(attrs({ "class": ('timestamp') + ' ' + ('small') }, {}));
-buf.push('>');
-var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
-buf.push(escape(null == __val__ ? "" : __val__));
- if (timedItem.provider && timedItem.provider.icon) {
-{
-buf.push('<div');
-buf.push(attrs({ "class": ('span1') }, {}));
-buf.push('><Via></Via></div><div');
-buf.push(attrs({ "class": ('span2') }, {}));
-buf.push('><img');
-buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
-buf.push('/></div>');
-}
-}
-buf.push('</div></div></div></div></div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('actions') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span2') }, {}));
@@ -264,15 +150,17 @@ buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('b
 buf.push('><i');
 buf.push(attrs({ "class": ('icon-ok') + ' ' + ('icon-white') }, {}));
 buf.push('></i><small>&nbsp; Like</small></a></small></div><div');
-buf.push(attrs({ "class": ('span4') }, {}));
+buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('row') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span5') + ' ' + ('right') }, {}));
 buf.push('><textarea');
 buf.push(attrs({ "class": ('span4') + ' ' + ('comment-area') }, {}));
-buf.push('></textarea></div><div');
+buf.push('></textarea></div></div><div');
 buf.push(attrs({ "class": ('row') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span2') + ' ' + ('offset2') }, {}));
+buf.push(attrs({ 'id':('comment-post'), "class": ('span2') + ' ' + ('offset3') + ' ' + ('right') }, {}));
 buf.push('><small><a');
 buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-success') + ' ' + ('comment-button') }, {"href":true}));
 buf.push('><i');
@@ -387,22 +275,318 @@ buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('>');
  var timedItem = comment;
 buf.push('<div');
-buf.push(attrs({ "class": ('timestamp') + ' ' + ('small') }, {}));
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('small') }, {}));
 buf.push('>');
 var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
 buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div></div>');
  if (timedItem.provider && timedItem.provider.icon) {
 {
 buf.push('<div');
-buf.push(attrs({ "class": ('span1') }, {}));
-buf.push('><Via></Via></div><div');
-buf.push(attrs({ "class": ('span2') }, {}));
-buf.push('><img');
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><span>Via&nbsp;</span><a');
+buf.push(attrs({ 'href':("" + (timedItem.provider.url) + ""), 'target':("_blank") }, {"href":true,"target":true}));
+buf.push('><span>');
+var __val__ = timedItem.provider.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</span><img');
 buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
-buf.push('/></div>');
+buf.push('/></a></div>');
 }
 }
-buf.push('</div></div></div></div></div></li>');
+buf.push('</div></div></div></div></li>');
+}
+ }
+buf.push('</ul></div>');
+}
+buf.push('</div>');
+ }
+}
+return buf.join("");
+}
+jade.templates["activity"] = function(locals, attrs, escape, rethrow) {
+var attrs = jade.attrs, escape = jade.escape, rethrow = jade.rethrow;
+var buf = [];
+with (locals || {}) {
+var interp;
+// iterate activities
+;(function(){
+  if ('number' == typeof activities.length) {
+    for (var $index = 0, $$l = activities.length; $index < $$l; $index++) {
+      var act = activities[$index];
+
+ if (!act.object) continue;
+ var objType = " objectType-" + (act.object.objectType ? act.object.objectType : 'none');
+ var actorType = " actorType-" + (act.actor.objectType ? act.actor.objectType : 'none');
+ var className = "verb-" + act.verb + objType+actorType;
+buf.push('<li');
+buf.push(attrs({ "class": (className) }, {"class":true}));
+buf.push('><div');
+buf.push(attrs({ "class": ('row') + ' ' + ('activity') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span1') + ' ' + ('actor') }, {}));
+buf.push('>');
+ var actor = act.actor;
+ var actUrl = actor.url? actor.url: '#';
+if (actor.image && actor.image.url) {
+{
+buf.push('<a');
+buf.push(attrs({ 'href':("" + (actUrl) + ""), "class": ('actor') }, {"href":true}));
+buf.push('><img');
+buf.push(attrs({ 'src':(actor.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
+buf.push('/></a>');
+}
+} else {
+{
+buf.push('<h2>:-)</h2>');
+}
+}
+buf.push('</div><div');
+buf.push(attrs({ "class": ('span6') + ' ' + ('action') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('row') + ' ' + ('title') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span5') }, {}));
+buf.push('><strong>');
+var __val__ = act.actor.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</strong>&nbsp;');
+var __val__ = act.title
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div></div><div');
+buf.push(attrs({ "class": ('row') + ' ' + ('activity_object') }, {}));
+buf.push('>');
+ var object = act.object;
+ var objUrl = object.url ? object.url : '#';
+buf.push('<div');
+buf.push(attrs({ "class": ('span6') }, {}));
+buf.push('><br');
+buf.push(attrs({  }, {}));
+buf.push('/><blockquote>');
+if (object.image && object.image.url) {
+{
+buf.push('<a');
+buf.push(attrs({ 'href':("" + (objUrl) + "") }, {"href":true}));
+buf.push('><img');
+buf.push(attrs({ 'src':(object.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
+buf.push('/></a>');
+}
+}
+if (object.displayName) {
+{
+buf.push('<strong');
+buf.push(attrs({ "class": ('activity-displayName') }, {}));
+buf.push('>');
+var __val__ = object.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</strong>');
+}
+} else if (object.title) {
+{
+buf.push('<strong');
+buf.push(attrs({ "class": ('activity-title') }, {}));
+buf.push('>');
+var __val__ = object.title
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</strong>');
+}
+}
+if (object.content) {
+{
+buf.push('<div');
+buf.push(attrs({ "class": ('activity-content') }, {}));
+buf.push('>');
+var __val__ = object.content
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div>');
+}
+}
+buf.push('</blockquote></div></div><div');
+buf.push(attrs({ "class": ('row') + ' ' + ('details') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span5') }, {}));
+buf.push('>');
+ var timedItem = act;
+buf.push('<div');
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('small') }, {}));
+buf.push('>');
+var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div></div>');
+ if (timedItem.provider && timedItem.provider.icon) {
+{
+buf.push('<div');
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><span>Via&nbsp;</span><a');
+buf.push(attrs({ 'href':("" + (timedItem.provider.url) + ""), 'target':("_blank") }, {"href":true,"target":true}));
+buf.push('><span>');
+var __val__ = timedItem.provider.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</span><img');
+buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
+buf.push('/></a></div>');
+}
+}
+buf.push('</div></div></div></div><div');
+buf.push(attrs({ "class": ('row') + ' ' + ('actions') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span2') }, {}));
+buf.push('><small><a');
+buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-warning') + ' ' + ('like-button') }, {"href":true}));
+buf.push('><i');
+buf.push(attrs({ "class": ('icon-ok') + ' ' + ('icon-white') }, {}));
+buf.push('></i><small>&nbsp; Like</small></a></small></div><div');
+buf.push(attrs({ "class": ('span5') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('row') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span5') + ' ' + ('right') }, {}));
+buf.push('><textarea');
+buf.push(attrs({ "class": ('span4') + ' ' + ('comment-area') }, {}));
+buf.push('></textarea></div></div><div');
+buf.push(attrs({ "class": ('row') }, {}));
+buf.push('><div');
+buf.push(attrs({ 'id':('comment-post'), "class": ('span2') + ' ' + ('offset3') + ' ' + ('right') }, {}));
+buf.push('><small><a');
+buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-success') + ' ' + ('comment-button') }, {"href":true}));
+buf.push('><i');
+buf.push(attrs({ "class": ('icon-pencil') + ' ' + ('icon-white') }, {}));
+buf.push('></i><small>&nbsp; Post</small></a></small></div></div></div></div><div');
+buf.push(attrs({ "class": ('row') + ' ' + ('action_results') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span2') }, {}));
+buf.push('>');
+if (act.likes_count && act.likes_count > 0) {
+{
+buf.push('<small');
+buf.push(attrs({ 'id':('like_count') }, {}));
+buf.push('>' + escape((interp = act.likes_count) == null ? '' : interp) + '</small><small');
+buf.push(attrs({ "class": ('rest') }, {}));
+buf.push('>&nbsp; liked this</small>');
+}
+}
+buf.push('</div>');
+if (act.comments) {
+{
+buf.push('<div');
+buf.push(attrs({ "class": ('span4') }, {}));
+buf.push('><ul>');
+for(var i=0; i < act.comments.length; i++) {
+ var comment = comments[i];
+{
+buf.push('<li><div');
+buf.push(attrs({ "class": ('row') + ' ' + ('comment') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span1') + ' ' + ('actor') }, {}));
+buf.push('>');
+ var actor = comment.actor;
+ var actUrl = actor.url? actor.url: '#';
+if (actor.image && actor.image.url) {
+{
+buf.push('<a');
+buf.push(attrs({ 'href':("" + (actUrl) + ""), "class": ('actor') }, {"href":true}));
+buf.push('><img');
+buf.push(attrs({ 'src':(actor.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
+buf.push('/></a>');
+}
+} else {
+{
+buf.push('<h2>:-)</h2>');
+}
+}
+buf.push('</div><div');
+buf.push(attrs({ "class": ('span6') + ' ' + ('action') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('row') + ' ' + ('title') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span5') }, {}));
+buf.push('><strong>');
+var __val__ = actor.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</strong>&nbsp;');
+var __val__ = comment.title
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div></div><div');
+buf.push(attrs({ "class": ('row') + ' ' + ('activity_object') }, {}));
+buf.push('>');
+ var object = comment.object;
+ var objUrl = object.url ? object.url : '#';
+buf.push('<div');
+buf.push(attrs({ "class": ('span6') }, {}));
+buf.push('><br');
+buf.push(attrs({  }, {}));
+buf.push('/><blockquote>');
+if (object.image && object.image.url) {
+{
+buf.push('<a');
+buf.push(attrs({ 'href':("" + (objUrl) + "") }, {"href":true}));
+buf.push('><img');
+buf.push(attrs({ 'src':(object.image.url), "class": ('img-rounded') + ' ' + ('avatar') }, {"src":true}));
+buf.push('/></a>');
+}
+}
+if (object.displayName) {
+{
+buf.push('<strong');
+buf.push(attrs({ "class": ('activity-displayName') }, {}));
+buf.push('>');
+var __val__ = object.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</strong>');
+}
+} else if (object.title) {
+{
+buf.push('<strong');
+buf.push(attrs({ "class": ('activity-title') }, {}));
+buf.push('>');
+var __val__ = object.title
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</strong>');
+}
+}
+if (object.content) {
+{
+buf.push('<div');
+buf.push(attrs({ "class": ('activity-content') }, {}));
+buf.push('>');
+var __val__ = object.content
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div>');
+}
+}
+buf.push('</blockquote></div></div><div');
+buf.push(attrs({ "class": ('row') + ' ' + ('details') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span5') }, {}));
+buf.push('>');
+ var timedItem = comment;
+buf.push('<div');
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('small') }, {}));
+buf.push('>');
+var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div></div>');
+ if (timedItem.provider && timedItem.provider.icon) {
+{
+buf.push('<div');
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><span>Via&nbsp;</span><a');
+buf.push(attrs({ 'href':("" + (timedItem.provider.url) + ""), 'target':("_blank") }, {"href":true,"target":true}));
+buf.push('><span>');
+var __val__ = timedItem.provider.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</span><img');
+buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
+buf.push('/></a></div>');
+}
+}
+buf.push('</div></div></div></div></li>');
 }
  }
 buf.push('</ul></div>');
@@ -508,22 +692,28 @@ buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('>');
  var timedItem = act;
 buf.push('<div');
-buf.push(attrs({ "class": ('timestamp') + ' ' + ('small') }, {}));
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('small') }, {}));
 buf.push('>');
 var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
 buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div></div>');
  if (timedItem.provider && timedItem.provider.icon) {
 {
 buf.push('<div');
-buf.push(attrs({ "class": ('span1') }, {}));
-buf.push('><Via></Via></div><div');
-buf.push(attrs({ "class": ('span2') }, {}));
-buf.push('><img');
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><span>Via&nbsp;</span><a');
+buf.push(attrs({ 'href':("" + (timedItem.provider.url) + ""), 'target':("_blank") }, {"href":true,"target":true}));
+buf.push('><span>');
+var __val__ = timedItem.provider.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</span><img');
 buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
-buf.push('/></div>');
+buf.push('/></a></div>');
 }
 }
-buf.push('</div></div></div></div></div><div');
+buf.push('</div></div></div></div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('actions') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span2') }, {}));
@@ -532,15 +722,17 @@ buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('b
 buf.push('><i');
 buf.push(attrs({ "class": ('icon-ok') + ' ' + ('icon-white') }, {}));
 buf.push('></i><small>&nbsp; Like</small></a></small></div><div');
-buf.push(attrs({ "class": ('span4') }, {}));
+buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('row') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span5') + ' ' + ('right') }, {}));
 buf.push('><textarea');
 buf.push(attrs({ "class": ('span4') + ' ' + ('comment-area') }, {}));
-buf.push('></textarea></div><div');
+buf.push('></textarea></div></div><div');
 buf.push(attrs({ "class": ('row') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span2') + ' ' + ('offset2') }, {}));
+buf.push(attrs({ 'id':('comment-post'), "class": ('span2') + ' ' + ('offset3') + ' ' + ('right') }, {}));
 buf.push('><small><a');
 buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-success') + ' ' + ('comment-button') }, {"href":true}));
 buf.push('><i');
@@ -655,22 +847,28 @@ buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('>');
  var timedItem = comment;
 buf.push('<div');
-buf.push(attrs({ "class": ('timestamp') + ' ' + ('small') }, {}));
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('small') }, {}));
 buf.push('>');
 var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
 buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div></div>');
  if (timedItem.provider && timedItem.provider.icon) {
 {
 buf.push('<div');
-buf.push(attrs({ "class": ('span1') }, {}));
-buf.push('><Via></Via></div><div');
-buf.push(attrs({ "class": ('span2') }, {}));
-buf.push('><img');
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><span>Via&nbsp;</span><a');
+buf.push(attrs({ 'href':("" + (timedItem.provider.url) + ""), 'target':("_blank") }, {"href":true,"target":true}));
+buf.push('><span>');
+var __val__ = timedItem.provider.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</span><img');
 buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
-buf.push('/></div>');
+buf.push('/></a></div>');
 }
 }
-buf.push('</div></div></div></div></div></li>');
+buf.push('</div></div></div></div></li>');
 }
  }
 buf.push('</ul></div>');
@@ -793,8 +991,10 @@ buf.push(attrs({ 'id':('specific-activity-input') }, {}));
 buf.push('></div></div><div');
 buf.push(attrs({ 'id':('finish'), "class": ('row') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span10') + ' ' + ('offset1') }, {}));
-buf.push('>To finish you can&nbsp;<button');
+buf.push(attrs({ "class": ('span10') + ' ' + ('offset2') }, {}));
+buf.push('><span');
+buf.push(attrs({ "class": ('large-text') }, {}));
+buf.push('>Final Step:&nbsp;</span><button');
 buf.push(attrs({ 'id':('send-message'), "class": ('btn') + ' ' + ('btn-success') }, {}));
 buf.push('>Publish</button>&nbsp;the activity to the&nbsp;<span');
 buf.push(attrs({ "class": ('input-prepend') }, {}));
@@ -812,22 +1012,27 @@ var buf = [];
 with (locals || {}) {
 var interp;
 buf.push('<div');
-buf.push(attrs({ "class": ('timestamp') + ' ' + ('small') }, {}));
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('small') }, {}));
 buf.push('>');
 var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
 buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div></div>');
  if (timedItem.provider && timedItem.provider.icon) {
 {
 buf.push('<div');
-buf.push(attrs({ "class": ('span1') }, {}));
-buf.push('><Via></Via></div><div');
-buf.push(attrs({ "class": ('span2') }, {}));
-buf.push('><img');
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><span>Via&nbsp;</span><a');
+buf.push(attrs({ 'href':("" + (timedItem.provider.url) + ""), 'target':("_blank") }, {"href":true,"target":true}));
+buf.push('><span>');
+var __val__ = timedItem.provider.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</span><img');
 buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
-buf.push('/></div>');
+buf.push('/></a></div>');
 }
 }
-buf.push('</div>');
 }
 return buf.join("");
 }
@@ -1434,8 +1639,10 @@ buf.push(attrs({ 'id':('specific-activity-input') }, {}));
 buf.push('></div></div><div');
 buf.push(attrs({ 'id':('finish'), "class": ('row') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span10') + ' ' + ('offset1') }, {}));
-buf.push('>To finish you can&nbsp;<button');
+buf.push(attrs({ "class": ('span10') + ' ' + ('offset2') }, {}));
+buf.push('><span');
+buf.push(attrs({ "class": ('large-text') }, {}));
+buf.push('>Final Step:&nbsp;</span><button');
 buf.push(attrs({ 'id':('send-message'), "class": ('btn') + ' ' + ('btn-success') }, {}));
 buf.push('>Publish</button>&nbsp;the activity to the&nbsp;<span');
 buf.push(attrs({ "class": ('input-prepend') }, {}));
@@ -1857,22 +2064,28 @@ buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('>');
  var timedItem = act;
 buf.push('<div');
-buf.push(attrs({ "class": ('timestamp') + ' ' + ('small') }, {}));
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('small') }, {}));
 buf.push('>');
 var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
 buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div></div>');
  if (timedItem.provider && timedItem.provider.icon) {
 {
 buf.push('<div');
-buf.push(attrs({ "class": ('span1') }, {}));
-buf.push('><Via></Via></div><div');
-buf.push(attrs({ "class": ('span2') }, {}));
-buf.push('><img');
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><span>Via&nbsp;</span><a');
+buf.push(attrs({ 'href':("" + (timedItem.provider.url) + ""), 'target':("_blank") }, {"href":true,"target":true}));
+buf.push('><span>');
+var __val__ = timedItem.provider.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</span><img');
 buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
-buf.push('/></div>');
+buf.push('/></a></div>');
 }
 }
-buf.push('</div></div></div></div></div><div');
+buf.push('</div></div></div></div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('actions') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span2') }, {}));
@@ -1881,15 +2094,17 @@ buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('b
 buf.push('><i');
 buf.push(attrs({ "class": ('icon-ok') + ' ' + ('icon-white') }, {}));
 buf.push('></i><small>&nbsp; Like</small></a></small></div><div');
-buf.push(attrs({ "class": ('span4') }, {}));
+buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('row') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span5') + ' ' + ('right') }, {}));
 buf.push('><textarea');
 buf.push(attrs({ "class": ('span4') + ' ' + ('comment-area') }, {}));
-buf.push('></textarea></div><div');
+buf.push('></textarea></div></div><div');
 buf.push(attrs({ "class": ('row') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span2') + ' ' + ('offset2') }, {}));
+buf.push(attrs({ 'id':('comment-post'), "class": ('span2') + ' ' + ('offset3') + ' ' + ('right') }, {}));
 buf.push('><small><a');
 buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-success') + ' ' + ('comment-button') }, {"href":true}));
 buf.push('><i');
@@ -2004,22 +2219,28 @@ buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('>');
  var timedItem = comment;
 buf.push('<div');
-buf.push(attrs({ "class": ('timestamp') + ' ' + ('small') }, {}));
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('small') }, {}));
 buf.push('>');
 var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
 buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div></div>');
  if (timedItem.provider && timedItem.provider.icon) {
 {
 buf.push('<div');
-buf.push(attrs({ "class": ('span1') }, {}));
-buf.push('><Via></Via></div><div');
-buf.push(attrs({ "class": ('span2') }, {}));
-buf.push('><img');
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><span>Via&nbsp;</span><a');
+buf.push(attrs({ 'href':("" + (timedItem.provider.url) + ""), 'target':("_blank") }, {"href":true,"target":true}));
+buf.push('><span>');
+var __val__ = timedItem.provider.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</span><img');
 buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
-buf.push('/></div>');
+buf.push('/></a></div>');
 }
 }
-buf.push('</div></div></div></div></div></li>');
+buf.push('</div></div></div></div></li>');
 }
  }
 buf.push('</ul></div>');
@@ -2125,22 +2346,28 @@ buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('>');
  var timedItem = act;
 buf.push('<div');
-buf.push(attrs({ "class": ('timestamp') + ' ' + ('small') }, {}));
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('small') }, {}));
 buf.push('>');
 var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
 buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div></div>');
  if (timedItem.provider && timedItem.provider.icon) {
 {
 buf.push('<div');
-buf.push(attrs({ "class": ('span1') }, {}));
-buf.push('><Via></Via></div><div');
-buf.push(attrs({ "class": ('span2') }, {}));
-buf.push('><img');
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><span>Via&nbsp;</span><a');
+buf.push(attrs({ 'href':("" + (timedItem.provider.url) + ""), 'target':("_blank") }, {"href":true,"target":true}));
+buf.push('><span>');
+var __val__ = timedItem.provider.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</span><img');
 buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
-buf.push('/></div>');
+buf.push('/></a></div>');
 }
 }
-buf.push('</div></div></div></div></div><div');
+buf.push('</div></div></div></div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('actions') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span2') }, {}));
@@ -2149,15 +2376,17 @@ buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('b
 buf.push('><i');
 buf.push(attrs({ "class": ('icon-ok') + ' ' + ('icon-white') }, {}));
 buf.push('></i><small>&nbsp; Like</small></a></small></div><div');
-buf.push(attrs({ "class": ('span4') }, {}));
+buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('row') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('span5') + ' ' + ('right') }, {}));
 buf.push('><textarea');
 buf.push(attrs({ "class": ('span4') + ' ' + ('comment-area') }, {}));
-buf.push('></textarea></div><div');
+buf.push('></textarea></div></div><div');
 buf.push(attrs({ "class": ('row') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span2') + ' ' + ('offset2') }, {}));
+buf.push(attrs({ 'id':('comment-post'), "class": ('span2') + ' ' + ('offset3') + ' ' + ('right') }, {}));
 buf.push('><small><a');
 buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-success') + ' ' + ('comment-button') }, {"href":true}));
 buf.push('><i');
@@ -2272,22 +2501,28 @@ buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('>');
  var timedItem = comment;
 buf.push('<div');
-buf.push(attrs({ "class": ('timestamp') + ' ' + ('small') }, {}));
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><div');
+buf.push(attrs({ "class": ('small') }, {}));
 buf.push('>');
 var __val__ = (timedItem.userFriendlyDate ? timedItem.userFriendlyDate : timedItem.published)
 buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</div></div>');
  if (timedItem.provider && timedItem.provider.icon) {
 {
 buf.push('<div');
-buf.push(attrs({ "class": ('span1') }, {}));
-buf.push('><Via></Via></div><div');
-buf.push(attrs({ "class": ('span2') }, {}));
-buf.push('><img');
+buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
+buf.push('><span>Via&nbsp;</span><a');
+buf.push(attrs({ 'href':("" + (timedItem.provider.url) + ""), 'target':("_blank") }, {"href":true,"target":true}));
+buf.push('><span>');
+var __val__ = timedItem.provider.displayName
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</span><img');
 buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
-buf.push('/></div>');
+buf.push('/></a></div>');
 }
 }
-buf.push('</div></div></div></div></div></li>');
+buf.push('</div></div></div></div></li>');
 }
  }
 buf.push('</ul></div>');
