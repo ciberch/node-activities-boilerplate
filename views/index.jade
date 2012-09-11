@@ -8,8 +8,16 @@ include nav_bar
 		include activity_create
 	- else
 		.hero-unit.second-hero
-			h1 Welcome
-			p Login or Sign Up to Share Activities !
+			.row
+				.span5
+					a(href="http://blog.cloudfoundry.com/tag/asms/", target="_blank")
+						img.arch(src="/img/asms-blog.png")
+				.span5
+					h1 Welcome
+					p This is a boilerplate Activity Streams App. Login or Sign Up to Share Activities !
+					.btn-group
+						a.btn.btn-primary.dropdown-toggle(href="#", "data-toggle"="dropdown") Get Started via
+						include auth
 
 	.row
 		.span4#filters

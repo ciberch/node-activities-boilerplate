@@ -390,9 +390,10 @@ app.post('/photos', loadUser, ingestPhoto, reducePhoto, reducePhoto, function(re
                         }
                         var aoHash = {
                             author: doc,
-                            objectType : 'image',
+                            objectType : 'photo',
                             url: req.photosUploaded.original.url,
                             displayName : req.photosUploaded.original.metadata.filename,
+                            title: req.photosUploaded.original.metadata.filename,
                             image: {
                                 url:req.photosUploaded.sm.url,
                                 width: req.photosUploaded.sm.metadata.width,

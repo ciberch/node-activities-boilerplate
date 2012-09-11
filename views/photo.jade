@@ -1,21 +1,35 @@
 .row
-	.span8.offset2
-		form#new_photo.span8(method="post", enctype="multipart/form-data", action="/photos")
-			.span2
-				.input-file
-					input(type="file", name="image", accept="image/*", required="required")
-			.span2
-				input.btn.btn-info(type="submit", value="Upload File")
-.row
-	.span8.offset1
+	- var photoTitle = act.object ? act.object.title : '';
+	- var photoUrl = act.object ? act.object.url : '';
+	- if(act.object && act.object.image) {
+		.span3#thumbnail.offset1
+			img(src="#{act.object.image.url}")
+	- } else {
+		.span3#photo.offset1
+			form#new_photo(method="post", enctype="multipart/form-data", action="/photos")
+				.row
+					.span3
+						h4 Step 1: Select Photo
+				.row
+					.span3
+						.input-file
+							input#input-file-input(type="file", name="image", accept="image/*", required="required")
+						.clearfix
+						h4 Step 2: Upload to Cloud Foundry
+						input.btn.btn-warning#upload-file(type="submit", value="Upload File")
+	- }
+	.span7#details
 		.row
-			.span8
-				input.span8#input-title(type="text", placeholder="Describe the photo")#title
+			.span7
+				h4 Step 3: Complete details
 		.row
-			.span8
-				input.span8(type="text", placeholder="Url of photo on another site ?")#url
+			.span7
+				input.span6#input-title(type="text", placeholder="Describe the photo", value="#{photoTitle}")#title
 		.row
-			.span6
+			.span7
+				input.span6(type="text", placeholder="Url of photo on another site ?", value="#{photoUrl}")#url
+		.row
+			.span7
 				label.checkbox
 					input#includeLocation(type="checkbox")
 					span Include Location ?

@@ -23,11 +23,6 @@
 		$$('#connected').addClass('on').find('strong').text('Online');
 	});
 
-    $('#new_photo').ajaxForm(function(data) {
-        $('#new_activity');
-        // TODO: Make this prettier like a flash alert
-        alert("Uploaded Photo to your Personal Stream");
-    });
 
 	var image = $.trim($('#image').val());
 	var service = $.trim($('#service').val());
@@ -42,11 +37,11 @@
         console.dir(model);
         if (model.url === "/activities") {
             if (method === "create") {
-								var act = model.toJSON();
-								App.socketIoClient.emit("create-activity", act);
+                var act = model.toJSON();
+                App.socketIoClient.emit("create-activity", act);
             } else if (method === "save") {
                 var act = model.toJSON();
-        				App.socketIoClient.emit("save-activity", act);
+                App.socketIoClient.emit("save-activity", act);
                 alert("Saving activity");
             }
             return true;

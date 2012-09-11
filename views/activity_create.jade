@@ -5,33 +5,30 @@
 	.row
 		include user-box
 		.span5.large-text
-			| Did you
+			| Did you&nbsp;
 			span.btn-group#verb
-				a.btn.btn-link.dropdown-toggle(data-toggle="dropdown")
+				a.btn.dropdown-toggle(data-toggle="dropdown")
 					span#verb-show=chosenVerb
 				ul.dropdown-menu
 					each verb in locals.verbs
 						li
 							a.type-select(href="#", data-type-show="verb-show")=verb
-			| a new
+			| &nbsp;a new&nbsp;
 			span.btn-group#objectType
-				a.btn.btn-link.dropdown-toggle(data-toggle="dropdown")
+				a.btn.dropdown-toggle(data-toggle="dropdown")
 					span#object-show=chosenObject
 				ul.dropdown-menu
 					each objectType in locals.objectTypes
 						li
 							a.type-select(href="#", data-type-show="object-show")=objectType
-			| ?
-	#specific-activity-input.row
-	hr
+			| &nbsp;?
 	.row
-		.span2.offset1
-			p To finish you can
-		.span1
+		#specific-activity-input
+	.row#finish
+		.span10.offset1
+			| To finish you can&nbsp;
 			button.btn.btn-success#send-message Publish
-		.span2
-			p the activity to the
-		.span3
-			.input-prepend
+			| &nbsp;the activity to the&nbsp;
+			span.input-prepend
 				span.add-on #
 				input#streamName.span2.prepend-fix(type="text", value=locals.desiredStream)

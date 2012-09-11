@@ -23,7 +23,7 @@
 }
 
 .activity_object .avatar {
-	width: 48px;
+	width: 120px;
 	float: left;
 	display: inline;
 	margin-right: 10px;
@@ -62,7 +62,7 @@ body {
 	background-color: #fff;
 }
 
-.main-hero, .second-hero {
+.main-hero, .second-hero, #new_activity {
 	background: #f7fbfc; /* Old browsers */
 	background: -moz-linear-gradient(top, #f7fbfc 0%, #d9edf2 40%, #add9e4 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7fbfc), color-stop(40%,#d9edf2), color-stop(100%,#add9e4)); /* Chrome,Safari4+ */
@@ -81,10 +81,43 @@ body {
 	width: 60px;
 }
 
+#new_activity {
+	margin-bottom: 30px;
+	padding:15px;
+}
+
+#new_activity .row {
+	margin-bottom: 10px;
+}
+
 #new_activity .avatar {
 	float: left;
 	display: inline;
 	margin-right: 10px;
+}
+
+.large-text, .large-text span {
+	font-size: 18px;
+}
+
+#new_photo {
+	margin-bottom: 20px;
+}
+
+.arch {
+	border: solid 4px white;
+	border-radius: 3px;
+}
+
+/*.input-file {*/
+	/*overflow: hidden;*/
+	/*width: 50px;*/
+	/*height: 50px;*/
+	/*background-color: gray;*/
+	/*border: solid 5px #aaa;*/
+/*}*/
+#input-file-input{
+	cursor: pointer;
 }
 
 

@@ -1,7 +1,7 @@
 var ActivityCreateView = Backbone.View.extend({
     el: '#new_activity',
     initialize: function(){
-        _.bindAll(this, 'newAct', 'render', 'changeType', 'includeLocation', 'sendMessage');
+        _.bindAll(this, 'newAct', 'render', 'changeType', 'includeLocation', 'sendMessage', 'fileSelected');
 
         this.trimForServer = App.helper.trimForServer;
 
@@ -15,7 +15,8 @@ var ActivityCreateView = Backbone.View.extend({
     events: {
         "click .type-select" : "changeType",
         "click #includeLocation" : "includeLocation",
-        "click #send-message" : "sendMessage"
+        "click #send-message" : "sendMessage",
+        "change #input-file-input" : "fileSelected"
     },
     newAct : function(streamName, verb, objectType) {
         this.streamName = streamName;
@@ -26,8 +27,16 @@ var ActivityCreateView = Backbone.View.extend({
         });
     },
     render: function(){
-      var actData = this.model.toJSON();
-      this.$el.find("#specific-activity-input").html(jade.templates[actData.object.objectType]());
+        var actData = this.model.toJSON();
+        this.$el.find("#specific-activity-input").html(jade.templates[actData.object.objectType]({act: actData}));
+
+        if(!actData.object.image) {
+            var actView = this;
+            $('#new_photo').ajaxForm(function(data) {
+                actView.model.set('object', data.object);
+                actView.render();
+            });
+        }
 
       return this; // for chainable calls, like .render().el
     },
@@ -77,6 +86,15 @@ var ActivityCreateView = Backbone.View.extend({
             }
         }
 
-    }
+    },
+    fileSelected : function(event){
 
+        if (event.target.files && event.target.files[0]) {
+            var file = event.target.files[0];
+            this.file = file;
+            console.dir(file);
+            $('#title').val(file.name);
+        }
+        this.$el.find("#upload-file").show();
+    }
 });
