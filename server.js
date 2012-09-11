@@ -325,7 +325,8 @@ function getDistinctStreams(req, res, next){
     asmsClient.asmsDB.Activity.distinct('streams', {}, function(err, docs) {
         if (!err && docs) {
             _.each(docs, function(stream){
-                req.streams[stream] = {name: stream, items: []};
+                if (stream !== "personal")
+                    req.streams[stream] = {name: stream, items: []};
             });
             next();
         } else {
@@ -334,11 +335,35 @@ function getDistinctStreams(req, res, next){
     });
 }
 
+function processMongoQuery(req, res, next){
+    var streamName = req.params.streamName ? req.params.streamName : "firehose";
+    var streamQuery = {"$and" : [{streams: streamName}, {streams: {"$nin" : ["personal"]}}]};
+
+    req.included = {};
+    req.included.verbs = req.query.verb ? req.query.verb : ['post'];
+    if (req.included.verbs.length > 0)
+        streamQuery["$and"].push({verb: {"$in": req.included.verbs}});
+
+    req.included.objectTypes = req.query.objectType ? req.query.objectType : ['photo', 'application', 'article', 'person', 'place', 'service'];
+    if (req.included.objectTypes.length > 0)
+        streamQuery["$and"].push({"object.objectType": {"$in": req.included.objectTypes}});
+
+    req.included.actorObjectTypes = [];
+
+    console.log("Stream Query is");
+    console.dir(streamQuery);
+
+    req.streamQuery = streamQuery;
+    req.session.streamQuery = streamQuery;
+
+    next();
+}
+
 // Routing
-app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObjectTypes, getDistinctObjects,
+app.get('/', loadUser, processMongoQuery, getDistinctStreams, getDistinctVerbs, getDistinctActorObjectTypes, getDistinctObjects,
     getDistinctActors, getDistinctObjectTypes, getMetaData, function(req, res) {
 
-    asmsClient.asmsDB.Activity.getFirehose(20, function (err, docs) {
+        asmsClient.asmsDB.Activity.find(req.streamQuery).sort('-published').limit(20).exec(function (err, docs) {
         var activities = [];
         if (!err && docs) {
 
@@ -359,7 +384,8 @@ app.get('/', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctActorObj
             usedObjects: req['used.object'],
             usedObjectTypes: req['used.object.objectType'],
             usedActorObjectTypes: req['used.actor.objectType'],
-            usedActors: req['used.actor']
+            usedActors: req['used.actor'],
+            included : req.included
         };
 
         if (req.is('json') || req.query.json) {
@@ -476,10 +502,10 @@ app.get('/photos/:guid/:fileId', function(req, res) {
     });
 });
 
-app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, getDistinctObjects, getDistinctActors,
+app.get('/streams/:streamName', loadUser, processMongoQuery, getDistinctStreams, getDistinctVerbs, getDistinctObjects, getDistinctActors,
     getDistinctObjectTypes, getDistinctActorObjectTypes, getDistinctVerbs, getMetaData, function(req, res) {
 
-        asmsClient.asmsDB.Activity.getStream(req.params.streamName, 20, function (err, docs) {
+        asmsClient.asmsDB.Activity.find(req.streamQuery).sort('-published').limit(20).exec(function (err, docs) {
         var activities = [];
         if (!err && docs) {
             activities = docs;
@@ -498,7 +524,8 @@ app.get('/streams/:streamName', loadUser, getDistinctStreams, getDistinctVerbs, 
             usedObjects: req['used.object'],
             usedObjectTypes: req['used.object.type'],
             usedActorObjectTypes: req['used.actor.object.type'],
-            usedActors: req['used.actor']
+            usedActors: req['used.actor'],
+            included : req.included
         };
         if (req.is('json') || req.query.json) {
             res.json(data);

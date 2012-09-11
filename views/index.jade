@@ -22,7 +22,8 @@ include nav_bar
 	.row
 		.span4#filters
 			.well.second-hero
-				include filters
+				- var included = locals.included
+					include filters
 		.span8#stream
 			h3 Activity Stream
 			.wello
