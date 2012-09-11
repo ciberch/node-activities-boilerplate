@@ -7,7 +7,7 @@
 		.span5.large-text
 			| Did you&nbsp;
 			span.btn-group#verb
-				a.btn.dropdown-toggle(data-toggle="dropdown")
+				a.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
 					span#verb-show=chosenVerb
 				ul.dropdown-menu
 					each verb in locals.verbs
@@ -15,7 +15,7 @@
 							a.type-select(href="#", data-type-show="verb-show")=verb
 			| &nbsp;a new&nbsp;
 			span.btn-group#objectType
-				a.btn.dropdown-toggle(data-toggle="dropdown")
+				a.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
 					span#object-show=chosenObject
 				ul.dropdown-menu
 					each objectType in locals.objectTypes
@@ -25,8 +25,8 @@
 	.row
 		#specific-activity-input
 	.row#finish
-		.span10.offset1
-			| To finish you can&nbsp;
+		.span10.offset2
+			span.large-text Final Step:&nbsp;
 			button.btn.btn-success#send-message Publish
 			| &nbsp;the activity to the&nbsp;
 			span.input-prepend

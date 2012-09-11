@@ -38,6 +38,11 @@
 
 }
 
+#details {
+	border-left: dotted 3px gray;
+	padding-left: 20px;
+}
+
 body {
 }
 
