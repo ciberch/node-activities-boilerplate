@@ -1,5 +1,7 @@
 # node-activities-boilerplate
 
+Copyright (c) 2012 VMware, Inc
+
 `node-activities-boilerplate` is a fork of [node-express-boilerplate](https://github.com/mape/node-express-boilerplate) which is a simple express boilerplate app which does SSO using `Facebook`, `Twitter` and `GitHub`
 
 Instead of raw messaging back and forth between clients and server, `node-activities-boilerplate` uses [activitystrea.ms](http://activitystrea.ms/) to send well structured messages(activities) and
@@ -95,3 +97,9 @@ vmc env-add $APP_NAME TMP=tmp
 ``` bash
   vmc start
 ```
+
+## License
+
+Apache License
+
+See LICENSE file for more details and node-express-boilerplate app License
