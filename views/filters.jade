@@ -7,21 +7,30 @@ form#form_filters
 	-if (locals.usedVerbs)
 		each verb in locals.usedVerbs
 			label.checkbox=verb
-				input.filter-checkbox(type="checkbox", name="verb", value=verb, checked=true)
+				- if (included.verbs.indexOf(verb) > -1)
+					input.filter-checkbox(type="checkbox", name="verb", value=verb, checked=true)
+				- else
+					input.filter-checkbox(type="checkbox", name="verb", value=verb)
 	hr
 	label
 		strong Object Types
 	-if (locals.usedObjectTypes)
 		each objType in locals.usedObjectTypes
 			label.checkbox=objType
-				input.filter-checkbox(type="checkbox", name="objectType", value=objType, checked=true)
+				- if (included.objectTypes.indexOf(objType) > -1)
+					input.filter-checkbox(type="checkbox", name="objectType", value=objType, checked=true)
+				- else
+					input.filter-checkbox(type="checkbox", name="objectType", value=objType)
 	hr
 	label
 		strong Actor Object Types
 	-if (locals.usedActorObjectTypes)
 		each objType in locals.usedActorObjectTypes
 			label.checkbox=objType
-				input.filter-checkbox(type="checkbox", name="actorType", value=objType, checked=true)
+				- if (included.actorObjectTypes.indexOf(objType) > -1)
+					input.filter-checkbox(type="checkbox", name="actorType", value=objType, checked=true)
+				- else
+					input.filter-checkbox(type="checkbox", name="actorType", value=objType)
 		hr
 		label
 			strong Distinct Objects

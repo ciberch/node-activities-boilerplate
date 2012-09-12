@@ -14,35 +14,65 @@
 		};
 	})();
 
-	var socketIoClient = io.connect(null, {
+	App.socketIoClient = io.connect(null, {
 		'port': '#socketIoPort#'
 		, 'rememberTransport': true
 		, 'transports': ['xhr-polling']
 	});
-	socketIoClient.on('connect', function () {
+	App.socketIoClient.on('connect', function () {
 		$$('#connected').addClass('on').find('strong').text('Online');
 	});
+
 
 	var image = $.trim($('#image').val());
 	var service = $.trim($('#service').val());
 
     var $ul = $('#main_stream');
+    App.map = null;
+    var streamView = new ActivityStreamView();
 
-	socketIoClient.on('message', function(json) {
+    var defaultSync = Backbone.sync;
+
+    Backbone.sync = function(method, model, options) {
+        console.dir(model);
+        if (model.url === "/activities") {
+            if (method === "create") {
+                var act = model.toJSON();
+                App.socketIoClient.emit("create-activity", act);
+            } else if (method === "save") {
+                var act = model.toJSON();
+                App.socketIoClient.emit("save-activity", act);
+                alert("Saving activity");
+            }
+            return true;
+        } else {
+            alert("Doing a different kind of operation " + model.urlRoot);
+            defaultSync(method, model, options);
+        }
+    }
+
+    var newActView = new ActivityCreateView();
+
+    // set up the router here - remember the router is like a controller in Rails
+    //var dashboardRouter = new DashboardRouter({filterView: filterView, colorView: colorView, carView: carListView});
+
+    // the required Backbone way to start up the router
+    //Backbone.history.start({pushState: true});
+
+	App.socketIoClient.on('message', function(json) {
 		var doc = JSON.parse(json);
         if (doc) {
-            console.log(doc);
-            var $li = $(jade.templates["activity"]({activities: [doc]}));
-            $ul.prepend($li);
-        }
-		if ($ul.children.count > 20) {
-            $ul.children.last.remove();
+            streamView.collection.add(new Activity(doc));
         }
 	});
 
+    App.socketIoClient.on('disconnect', function() {
+   		$$('#connected').removeClass('on').find('strong').text('Offline');
+   	});
+
     $(document).ready(function(){
 
-        $(".filter-checkbox").live("click", function(){
+        $(".filter-checkbox").on("click", function(){
             if (this.checked == false) {
                 $("#main_stream ." + this.name + "-" +this.value).hide();
             } else {
@@ -50,27 +80,10 @@
             }
         });
 
-        $("#send-message").click(function() {
-            var msg = $("#msg").val();
-            var title = $('#title').val();
-            var streamName = $('#streamName').val();
-
-            if (msg && msg.length > 0) {
-                $("#msg").val('');
-                $('#title').val('');
-
-                var act = {object: {content: msg, objectType: 'note', title: title}, verb: 'post', streams: [streamName]};
-
-                console.dir(act);
-                socketIoClient.emit("message", act);
-            }
-            return false;
-        });
     });
 
-	socketIoClient.on('disconnect', function() {
-		$$('#connected').removeClass('on').find('strong').text('Offline');
-	});
+
+
 })(jQuery);
 
 

@@ -10,19 +10,19 @@
 	background: #3daeb9;
 }
 
-.timestamp {
-	font-size: 7pt;
-	font-style: italic;
+.timestamp, .timestamp span, .timestamp a {
+	font-size: 8pt;
+}
+
+img.service {
+	margin: 5px;
+}
+
+.right {
+	text-align: right;
 }
 
 .activity .avatar {
-	width: 48px;
-	float: left;
-	display: inline;
-	margin-right: 10px;
-}
-
-.activity_object .avatar {
 	width: 48px;
 	float: left;
 	display: inline;
@@ -45,12 +45,84 @@
 
 }
 
+#details {
+	border-left: dotted 3px gray;
+	padding-left: 20px;
+}
 
-#new_activity .avatar{
+body {
+}
+
+#main_stream {
+	background-color: #fff;
+	padding: 10px;
+
+}
+.nav-tabs-container .nav-tabs{
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+}
+
+.nav-tabs .active a {
+	background-color: #fff;
+}
+
+.main-hero, .second-hero, #new_activity {
+	background: #f7fbfc; /* Old browsers */
+	background: -moz-linear-gradient(top, #f7fbfc 0%, #d9edf2 40%, #add9e4 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7fbfc), color-stop(40%,#d9edf2), color-stop(100%,#add9e4)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #f7fbfc 0%,#d9edf2 40%,#add9e4 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #f7fbfc 0%,#d9edf2 40%,#add9e4 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #f7fbfc 0%,#d9edf2 40%,#add9e4 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #f7fbfc 0%,#d9edf2 40%,#add9e4 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7fbfc', endColorstr='#add9e4',GradientType=0 ); /* IE6-9 */
+}
+
+#map {
+	height: 400px;
+	width: 600px;
+}
+.avatar-small.avatar{
 	width: 60px;
+}
+
+#new_activity {
+	margin-bottom: 30px;
+	padding:15px;
+}
+
+#new_activity .row {
+	margin-bottom: 10px;
+}
+
+#new_activity .avatar {
 	float: left;
 	display: inline;
 	margin-right: 10px;
+}
+
+.large-text, .large-text span {
+	font-size: 18px;
+}
+
+#new_photo {
+	margin-bottom: 20px;
+}
+
+.arch {
+	border: solid 4px white;
+	border-radius: 3px;
+}
+
+/*.input-file {*/
+	/*overflow: hidden;*/
+	/*width: 50px;*/
+	/*height: 50px;*/
+	/*background-color: gray;*/
+	/*border: solid 5px #aaa;*/
+/*}*/
+#input-file-input{
+	cursor: pointer;
 }
 
 

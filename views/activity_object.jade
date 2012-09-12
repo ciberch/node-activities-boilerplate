@@ -1,0 +1,16 @@
+- var objUrl = object.url ? object.url : '#';
+.span6
+	br
+	blockquote
+		-if (object.image && object.image.url) {
+			a(href="#{objUrl}")
+				img.img-rounded.avatar(src= object.image.url)
+		-}
+		-if (object.displayName) {
+			strong.activity-displayName=object.displayName
+		-} else if (object.title) {
+			strong.activity-title=object.title
+		-}
+		-if (object.content) {
+			.activity-content=object.content
+		-}
