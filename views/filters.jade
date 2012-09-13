@@ -4,8 +4,8 @@ form#form_filters
 	label
 		strong Verbs
 	p The verb describes the type of action the actor performs on the object.
-	-if (locals.usedVerbs)
-		each verb in locals.usedVerbs
+	-if (filters.usedVerbs)
+		each verb in filters.usedVerbs
 			label.checkbox=verb
 				- if (included.verbs.indexOf(verb) > -1)
 					input.filter-checkbox(type="checkbox", name="verb", value=verb, checked=true)
@@ -14,8 +14,8 @@ form#form_filters
 	hr
 	label
 		strong Object Types
-	-if (locals.usedObjectTypes)
-		each objType in locals.usedObjectTypes
+	-if (filters.usedObjectTypes)
+		each objType in filters.usedObjectTypes
 			label.checkbox=objType
 				- if (included.objectTypes.indexOf(objType) > -1)
 					input.filter-checkbox(type="checkbox", name="objectType", value=objType, checked=true)
@@ -24,8 +24,8 @@ form#form_filters
 	hr
 	label
 		strong Actor Object Types
-	-if (locals.usedActorObjectTypes)
-		each objType in locals.usedActorObjectTypes
+	-if (filters.usedActorObjectTypes)
+		each objType in filters.usedActorObjectTypes
 			label.checkbox=objType
 				- if (included.actorObjectTypes.indexOf(objType) > -1)
 					input.filter-checkbox(type="checkbox", name="actorType", value=objType, checked=true)
@@ -34,16 +34,16 @@ form#form_filters
 		hr
 		label
 			strong Distinct Objects
-		-if (locals.usedObjects)
-			each obj in locals.usedObjects
+		-if (filters.usedObjects)
+			each obj in filters.usedObjects
 				- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
 				label.checkbox=id
 					input.filter-checkbox(type="checkbox", name="object", value=id, checked=true)
 	hr
 	label
 		strong Distinct Actors
-	-if (locals.usedActors)
-		each obj in locals.usedActors
+	-if (filters.usedActors)
+		each obj in filters.usedActors
 			- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
 			label.checkbox=id
 				input.filter-checkbox(type="checkbox", name="actor", value=id, checked=true)

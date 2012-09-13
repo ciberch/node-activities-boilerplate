@@ -10,7 +10,7 @@
 				a.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
 					span#verb-show=chosenVerb
 				ul.dropdown-menu
-					each verb in locals.verbs
+					each verb in metadata.verbs
 						li
 							a.type-select(href="#", data-type-show="verb-show")=verb
 			| &nbsp;a new&nbsp;
@@ -18,7 +18,7 @@
 				a.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
 					span#object-show=chosenObject
 				ul.dropdown-menu
-					each objectType in locals.objectTypes
+					each objectType in metadata.objectTypes
 						li
 							a.type-select(href="#", data-type-show="object-show")=objectType
 			| &nbsp;?
