@@ -1,6 +1,10 @@
 var cf = require('cloudfoundry');
 var settings = {
     'user_email' : 'mwilkinson@vmware.com',
+    'user' : {
+        'name' : 'Monica Wilkinson',
+        'website' : 'http://ciberch.cloudfoundry.com'
+    },
 	'sessionSecret': 'sessionSecret'
     , 'internal_host' : '127.0.0.1'
     , 'internal_port' : 8080

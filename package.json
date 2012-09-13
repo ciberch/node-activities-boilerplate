@@ -20,7 +20,7 @@
     "airbrake" : ">=0.2.0",
     "everyauth" : "0.2.x",
     "cloudfoundry" : ">=0.1.0",
-    "activity-streams-mongoose": "0.1.1",
+    "activity-streams-mongoose": "0.1.2",
 	  "hiredis": "",
 	  "underscore": "",
 	  "mongoose-auth" : ">= 0.0.12",

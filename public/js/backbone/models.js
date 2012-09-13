@@ -34,7 +34,32 @@ var Activity = Backbone.Model.extend({
 });
 var ActivityList = Backbone.Collection.extend({
 	model: Activity,
-    url : "/activities"
+    urlRoot : "/streams",
+    initialize : function() {
+        this.name = App.desiredStream;
+        this.included =  App.included;
+        this.filters = App.filters;
+        this.names = ['verb', 'objectType', 'actorObjectType'];
+    },
+    url : function(){
+        var query = '';
+        for (var i=0; i < this.names.length; i++){
+            var itemName = this.names[i];
+            var arr = this.included[itemName + 's'];
+            for (var j=0; j < arr.length; j++) {
+                query += "&" + itemName + "=" + arr[j];
+            }
+        }
+        console.log("Query is " + query);
+        return this.urlRoot + "/" + this.name +"?json=1" + query;
+    },
+    parse: function(response){
+        this.name = response.desiredStream;
+        this.included = response.included;
+        this.filters = response.filters;
+        var data = response.streams[response.desiredStream].items;
+        return data;
+    }
 });
 
 var ActivityObject = Backbone.Model.extend({
