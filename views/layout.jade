@@ -12,6 +12,12 @@ html
 		script(type="text/javascript")
 			var App = {
 				helper : new AppHelper()
-			}
+			};
+		- if (locals.currentUser && locals.filters)
+			script(type="text/javascript")
+				App.desiredStream = "#{locals.desiredStream}";
+				App.currentUser = !{JSON.stringify(locals.currentUser)};
+				App.filters = !{JSON.stringify(locals.filters)};
+				App.included = !{JSON.stringify(locals.included)};
 		script(src="/static/js/#{assetsCacheHashes.js||0}/client.js", type="text/javascript")
 		script(src="https://maps.googleapis.com/maps/api/js?sensor=true")
