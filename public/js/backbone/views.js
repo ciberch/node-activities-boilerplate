@@ -50,14 +50,15 @@ var ActivityStreamView = Backbone.View.extend({
     el: '#main_stream', // el attaches to existing element
 
     initialize: function(){
-        _.bindAll(this, 'render', 'appendItem'); // every function that uses 'this' as the current object should be in here
+        _.bindAll(this, 'render', 'appendItem', 'changeStreamFilter');
         this.collection = new ActivityList();
         this.collection.bind('add', this.appendItem); // collection event binder
         this.maxSize = 20;
     },
     render: function(){
+        this.$el.empty();
         _(this.collection.models).each(function(item){ // in case collection is not empty
-            self.appendItem(item);
+            this.appendItem(item);
         }, this);
     },
 
@@ -69,6 +70,51 @@ var ActivityStreamView = Backbone.View.extend({
       if (this.el.children.count > this.maxSize) {
           this.el.children.last.remove();
       }
+    },
+    changeStreamFilter : function(name, val, show){
+        var className = "." + name + "-" + val;
+        var name = name + 's';
+        var isPresent = _.include(this.collection.included[name], val);
+        if (show) {
+            this.$el.find(className).show();
+            if (!isPresent)
+                this.collection.included[name].push(val);
+        }
+        else {
+            this.$el.find(className).hide();
+            if (isPresent) {
+                this.collection.included[name] = [];
+                for(var i=0; i< this.collection.included[name].length; i++) {
+                    var item =  this.collection.included[name][i];
+                    if (item !== val) {
+                        this.collection.included[name].push(item);
+                    }
+                }
+            }
+        }
+
+        var _this = this;
+        this.collection.fetch({success: function(){
+            _this.render();
+        }});
+    }
+});
+
+
+var ActivityFilterView = Backbone.View.extend({
+    el: '#form_filters',
+    initialize: function(){
+        _.bindAll(this, 'render', 'filterClick');
+    },
+    events: {
+        "click .filter-checkbox" : "filterClick"
+    },
+    render:  function(){
+    },
+    filterClick : function(event){
+        console.log("filter click");
+        console.dir(event.target);
+        this.streamView.changeStreamFilter(event.target.name, event.target.value, event.target.checked);
     }
 });
 

@@ -145,19 +145,19 @@ function getDistinctVerbs(req, res, next){
 };
 
 function getDistinctActors(req, res, next){
-    asmsClient.helpers.getDistinct(req, res, next, 'actor');
+    asmsClient.helpers.getDistinct(req, res, next, 'actor.displayName');
 };
 
 function getDistinctObjects(req, res, next){
-    asmsClient.helpers.getDistinct(req, res, next, 'object', ['none']);
+    asmsClient.helpers.getDistinct(req, res, next, 'object.displayName');
 };
 
 function getDistinctObjectTypes(req, res, next){
-    asmsClient.helpers.getDistinct(req, res, next, 'object.objectType', ['none']);
+    asmsClient.helpers.getDistinct(req, res, next, 'object.objectType');
 };
 
 function getDistinctActorObjectTypes(req, res, next){
-    asmsClient.helpers.getDistinct(req, res, next, 'actor.objectType', ['none']);
+    asmsClient.helpers.getDistinct(req, res, next, 'actor.objectType');
 };
 
 // ENV based configuration
@@ -336,7 +336,7 @@ function getDistinctStreams(req, res, next){
 
 function getQueryArray(data, defaultVal){
     if (data) {
-        if (typeof(data) === "String") {
+        if (typeof(data) === "string") {
             data = [data];
         }
 
@@ -364,8 +364,9 @@ function processMongoQuery(req, res, next){
         streamQuery["$and"].push({"actor.objectType": {"$in": req.included.actorObjectTypes}});
 
 
-    console.log("streamQuery is");
-    console.dir(streamQuery);
+    console.log("Processing streamQuery $and");
+    for (var i=0; i < streamQuery['$and'].length; i++)
+        console.dir(streamQuery['$and'][i]);
 
     req.streamQuery = streamQuery;
     req.session.streamQuery = streamQuery;
@@ -391,10 +392,10 @@ function getStream(req, res, next) {
             metadata : req.metadata,
             filters : {
                 usedVerbs: req['used.verb'],
-                usedObjects: req['used.object'],
+                usedObjects: req['used.object.displayName'],
                 usedObjectTypes: req['used.object.objectType'],
                 usedActorObjectTypes: req['used.actor.objectType'],
-                usedActors: req['used.actor']
+                usedActors: req['used.actor.displayName']
             }
         };
         req.data = data;

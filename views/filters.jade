@@ -36,14 +36,12 @@ form#form_filters
 			strong Distinct Objects
 		-if (filters.usedObjects)
 			each obj in filters.usedObjects
-				- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
-				label.checkbox=id
-					input.filter-checkbox(type="checkbox", name="object", value=id, checked=true)
+				label.checkbox=obj
+					input.filter-checkbox(type="checkbox", name="object", value=obj, checked=true)
 	hr
 	label
 		strong Distinct Actors
 	-if (filters.usedActors)
 		each obj in filters.usedActors
-			- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
-			label.checkbox=id
-				input.filter-checkbox(type="checkbox", name="actor", value=id, checked=true)
+			label.checkbox=obj
+				input.filter-checkbox(type="checkbox", name="actor", value=obj, checked=true)
