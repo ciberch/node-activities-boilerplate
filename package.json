@@ -1,6 +1,6 @@
 {
   "name" : "node-activities-boilerplate",
-  "description" : "A boilerplate Activity Stream Client for any Cloud Foundry instance. Based on the work from Mathias Pettersson <mape@mape.me> on node-express-boilerplate",
+  "description" : "A Real-time boilerplate Activity Stream Engine with support for photo manipulations",
   "version" : "0.0.7",
   "author" : "Monica Wilkinson <ciberch@gmail.com>",
   "engines" : ["node"],
