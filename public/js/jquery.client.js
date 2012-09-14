@@ -68,7 +68,10 @@
         return false;
     }
 
-    var newActView = new ActivityCreateView();
+    var newActView = null;
+
+    if (App.userLoggedIn)
+        newActView = new ActivityCreateView();
 
     // set up the router here - remember the router is like a controller in Rails
     //var dashboardRouter = new DashboardRouter({filterView: filterView, colorView: colorView, carView: carListView});

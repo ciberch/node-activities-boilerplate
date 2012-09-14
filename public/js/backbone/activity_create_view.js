@@ -5,9 +5,9 @@ var ActivityCreateView = Backbone.View.extend({
 
         this.trimForServer = App.helper.trimForServer;
 
-        var streamName = this.$el.find('#streamName').val();
-        var verb = this.trimForServer(this.$el.find('#verb-show'));
-        var objectType = this.trimForServer(this.$el.find('#object-show'));
+        var streamName = App.desiredStream;
+        var verb = this.trimForServer(App.metadata.verbs[0]);
+        var objectType = this.trimForServer(App.metadata.objectTypes[0]);
 
         this.newAct(streamName, verb, objectType);
         this.render();

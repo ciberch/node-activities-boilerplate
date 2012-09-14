@@ -15,9 +15,11 @@ html
 			};
 		- if (locals.currentUser && locals.filters)
 			script(type="text/javascript")
+				App.userLoggedIn = #{(locals.currentUser.author !== null)};
 				App.desiredStream = "#{locals.desiredStream}";
 				App.currentUser = !{JSON.stringify(locals.currentUser)};
 				App.filters = !{JSON.stringify(locals.filters)};
 				App.included = !{JSON.stringify(locals.included)};
+				App.metadata = !{JSON.stringify(locals.metadata)};
 		script(src="/static/js/#{assetsCacheHashes.js||0}/client.js", type="text/javascript")
 		script(src="https://maps.googleapis.com/maps/api/js?sensor=true")
