@@ -455,7 +455,6 @@ app.post('/photos', loadUser, ingestPhoto, reducePhoto, reducePhoto, function(re
                             doc.photos = [];
                         }
                         var aoHash = {
-                            author: doc,
                             objectType : 'photo',
                             url: req.photosUploaded.original.url,
                             displayName : req.photosUploaded.original.metadata.filename,
@@ -486,7 +485,7 @@ app.post('/photos', loadUser, ingestPhoto, reducePhoto, reducePhoto, function(re
                                 } else {
                                     var act = new asmsDB.Activity({
                                         verb: 'post',
-                                        actor: doc,
+                                        actor: req.user,
                                         title: 'posted a photo',
                                         object: aoHash
                                     });
