@@ -278,7 +278,7 @@ function reducePhoto(req, res, next){
 function ingestPhoto(req, res, next){
     if (req.files.image) {
         im.identify(req.files.image.path, function(err, features){
-            if (features && features.width) {
+            if (features && features.width && features.format) {
                 var guid = Guid.create();
                 var fileId = guid + '/' + req.files.image.name;
                 var gs = asmsClient.streamLib.GridStore(asmsClient.streamLib.realMongoDB, fileId, "w", {
@@ -308,8 +308,10 @@ function ingestPhoto(req, res, next){
                     }
                 });
             } else {
-                if (err) throw err;
-                throw(new Error("Cannot get width for photo"));
+                if (err)
+                    next(err);
+                else
+                    next(new Error("Cannot get width for photo -- this may be a bad file"));
             }
         });
     } else {

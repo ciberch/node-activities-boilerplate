@@ -33,8 +33,12 @@ var ActivityCreateView = Backbone.View.extend({
         if(!actData.object.image) {
             var actView = this;
             $('#new_photo').ajaxForm(function(data) {
-                actView.model.set('object', data.object);
-                actView.render();
+                if (data && data.object && data.object.objectType == "photo") {
+                    actView.model.set('object', data.object);
+                    actView.render();
+                } else {
+                    alert("File rejected. Please check its a valid image.")
+                }
             });
         }
 
