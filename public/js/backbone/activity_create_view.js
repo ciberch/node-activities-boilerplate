@@ -95,6 +95,6 @@ var ActivityCreateView = Backbone.View.extend({
             console.dir(file);
             $('#title').val(file.name);
         }
-        this.$el.find("#upload-file").show();
+        this.$el.find("#new_photo").submit();
     }
 });

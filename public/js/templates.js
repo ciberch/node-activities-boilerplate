@@ -918,11 +918,11 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</span></a><ul');
 buf.push(attrs({ "class": ('dropdown-menu') }, {}));
 buf.push('>');
-// iterate locals.verbs
+// iterate metadata.verbs
 ;(function(){
-  if ('number' == typeof locals.verbs.length) {
-    for (var $index = 0, $$l = locals.verbs.length; $index < $$l; $index++) {
-      var verb = locals.verbs[$index];
+  if ('number' == typeof metadata.verbs.length) {
+    for (var $index = 0, $$l = metadata.verbs.length; $index < $$l; $index++) {
+      var verb = metadata.verbs[$index];
 
 buf.push('<li><a');
 buf.push(attrs({ 'href':("#"), 'data-type-show':("verb-show"), "class": ('type-select') }, {"href":true,"data-type-show":true}));
@@ -932,8 +932,8 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</a></li>');
     }
   } else {
-    for (var $index in locals.verbs) {
-      var verb = locals.verbs[$index];
+    for (var $index in metadata.verbs) {
+      var verb = metadata.verbs[$index];
 
 buf.push('<li><a');
 buf.push(attrs({ 'href':("#"), 'data-type-show':("verb-show"), "class": ('type-select') }, {"href":true,"data-type-show":true}));
@@ -957,11 +957,11 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</span></a><ul');
 buf.push(attrs({ "class": ('dropdown-menu') }, {}));
 buf.push('>');
-// iterate locals.objectTypes
+// iterate metadata.objectTypes
 ;(function(){
-  if ('number' == typeof locals.objectTypes.length) {
-    for (var $index = 0, $$l = locals.objectTypes.length; $index < $$l; $index++) {
-      var objectType = locals.objectTypes[$index];
+  if ('number' == typeof metadata.objectTypes.length) {
+    for (var $index = 0, $$l = metadata.objectTypes.length; $index < $$l; $index++) {
+      var objectType = metadata.objectTypes[$index];
 
 buf.push('<li><a');
 buf.push(attrs({ 'href':("#"), 'data-type-show':("object-show"), "class": ('type-select') }, {"href":true,"data-type-show":true}));
@@ -971,8 +971,8 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</a></li>');
     }
   } else {
-    for (var $index in locals.objectTypes) {
-      var objectType = locals.objectTypes[$index];
+    for (var $index in metadata.objectTypes) {
+      var objectType = metadata.objectTypes[$index];
 
 buf.push('<li><a');
 buf.push(attrs({ 'href':("#"), 'data-type-show':("object-show"), "class": ('type-select') }, {"href":true,"data-type-show":true}));
@@ -1222,35 +1222,55 @@ buf.push(attrs({  }, {}));
 buf.push('/><form');
 buf.push(attrs({ 'id':('form_filters') }, {}));
 buf.push('><label><strong>Verbs</strong></label><p>The verb describes the type of action the actor performs on the object.</p>');
-if (locals.usedVerbs)
+if (filters.usedVerbs)
 {
-// iterate locals.usedVerbs
+// iterate filters.usedVerbs
 ;(function(){
-  if ('number' == typeof locals.usedVerbs.length) {
-    for (var $index = 0, $$l = locals.usedVerbs.length; $index < $$l; $index++) {
-      var verb = locals.usedVerbs[$index];
+  if ('number' == typeof filters.usedVerbs.length) {
+    for (var $index = 0, $$l = filters.usedVerbs.length; $index < $$l; $index++) {
+      var verb = filters.usedVerbs[$index];
 
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
 var __val__ = verb
 buf.push(escape(null == __val__ ? "" : __val__));
+ if (included.verbs.indexOf(verb) > -1)
+{
 buf.push('<input');
 buf.push(attrs({ 'type':("checkbox"), 'name':("verb"), 'value':(verb), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
-buf.push('/></label>');
+buf.push('/>');
+}
+ else
+{
+buf.push('<input');
+buf.push(attrs({ 'type':("checkbox"), 'name':("verb"), 'value':(verb), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true}));
+buf.push('/>');
+}
+buf.push('</label>');
     }
   } else {
-    for (var $index in locals.usedVerbs) {
-      var verb = locals.usedVerbs[$index];
+    for (var $index in filters.usedVerbs) {
+      var verb = filters.usedVerbs[$index];
 
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
 var __val__ = verb
 buf.push(escape(null == __val__ ? "" : __val__));
+ if (included.verbs.indexOf(verb) > -1)
+{
 buf.push('<input');
 buf.push(attrs({ 'type':("checkbox"), 'name':("verb"), 'value':(verb), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
-buf.push('/></label>');
+buf.push('/>');
+}
+ else
+{
+buf.push('<input');
+buf.push(attrs({ 'type':("checkbox"), 'name':("verb"), 'value':(verb), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true}));
+buf.push('/>');
+}
+buf.push('</label>');
    }
   }
 }).call(this);
@@ -1259,35 +1279,55 @@ buf.push('/></label>');
 buf.push('<hr');
 buf.push(attrs({  }, {}));
 buf.push('/><label><strong>Object Types</strong></label>');
-if (locals.usedObjectTypes)
+if (filters.usedObjectTypes)
 {
-// iterate locals.usedObjectTypes
+// iterate filters.usedObjectTypes
 ;(function(){
-  if ('number' == typeof locals.usedObjectTypes.length) {
-    for (var $index = 0, $$l = locals.usedObjectTypes.length; $index < $$l; $index++) {
-      var objType = locals.usedObjectTypes[$index];
+  if ('number' == typeof filters.usedObjectTypes.length) {
+    for (var $index = 0, $$l = filters.usedObjectTypes.length; $index < $$l; $index++) {
+      var objType = filters.usedObjectTypes[$index];
 
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
 var __val__ = objType
 buf.push(escape(null == __val__ ? "" : __val__));
+ if (included.objectTypes.indexOf(objType) > -1)
+{
 buf.push('<input');
 buf.push(attrs({ 'type':("checkbox"), 'name':("objectType"), 'value':(objType), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
-buf.push('/></label>');
+buf.push('/>');
+}
+ else
+{
+buf.push('<input');
+buf.push(attrs({ 'type':("checkbox"), 'name':("objectType"), 'value':(objType), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true}));
+buf.push('/>');
+}
+buf.push('</label>');
     }
   } else {
-    for (var $index in locals.usedObjectTypes) {
-      var objType = locals.usedObjectTypes[$index];
+    for (var $index in filters.usedObjectTypes) {
+      var objType = filters.usedObjectTypes[$index];
 
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
 var __val__ = objType
 buf.push(escape(null == __val__ ? "" : __val__));
+ if (included.objectTypes.indexOf(objType) > -1)
+{
 buf.push('<input');
 buf.push(attrs({ 'type':("checkbox"), 'name':("objectType"), 'value':(objType), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
-buf.push('/></label>');
+buf.push('/>');
+}
+ else
+{
+buf.push('<input');
+buf.push(attrs({ 'type':("checkbox"), 'name':("objectType"), 'value':(objType), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true}));
+buf.push('/>');
+}
+buf.push('</label>');
    }
   }
 }).call(this);
@@ -1296,35 +1336,55 @@ buf.push('/></label>');
 buf.push('<hr');
 buf.push(attrs({  }, {}));
 buf.push('/><label><strong>Actor Object Types</strong></label>');
-if (locals.usedActorObjectTypes)
+if (filters.usedActorObjectTypes)
 {
-// iterate locals.usedActorObjectTypes
+// iterate filters.usedActorObjectTypes
 ;(function(){
-  if ('number' == typeof locals.usedActorObjectTypes.length) {
-    for (var $index = 0, $$l = locals.usedActorObjectTypes.length; $index < $$l; $index++) {
-      var objType = locals.usedActorObjectTypes[$index];
+  if ('number' == typeof filters.usedActorObjectTypes.length) {
+    for (var $index = 0, $$l = filters.usedActorObjectTypes.length; $index < $$l; $index++) {
+      var objType = filters.usedActorObjectTypes[$index];
 
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
 var __val__ = objType
 buf.push(escape(null == __val__ ? "" : __val__));
+ if (included.actorObjectTypes.indexOf(objType) > -1)
+{
 buf.push('<input');
 buf.push(attrs({ 'type':("checkbox"), 'name':("actorType"), 'value':(objType), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
-buf.push('/></label>');
+buf.push('/>');
+}
+ else
+{
+buf.push('<input');
+buf.push(attrs({ 'type':("checkbox"), 'name':("actorType"), 'value':(objType), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true}));
+buf.push('/>');
+}
+buf.push('</label>');
     }
   } else {
-    for (var $index in locals.usedActorObjectTypes) {
-      var objType = locals.usedActorObjectTypes[$index];
+    for (var $index in filters.usedActorObjectTypes) {
+      var objType = filters.usedActorObjectTypes[$index];
 
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
 var __val__ = objType
 buf.push(escape(null == __val__ ? "" : __val__));
+ if (included.actorObjectTypes.indexOf(objType) > -1)
+{
 buf.push('<input');
 buf.push(attrs({ 'type':("checkbox"), 'name':("actorType"), 'value':(objType), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
-buf.push('/></label>');
+buf.push('/>');
+}
+ else
+{
+buf.push('<input');
+buf.push(attrs({ 'type':("checkbox"), 'name':("actorType"), 'value':(objType), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true}));
+buf.push('/>');
+}
+buf.push('</label>');
    }
   }
 }).call(this);
@@ -1332,36 +1392,34 @@ buf.push('/></label>');
 buf.push('<hr');
 buf.push(attrs({  }, {}));
 buf.push('/><label><strong>Distinct Objects</strong></label>');
-if (locals.usedObjects)
+if (filters.usedObjects)
 {
-// iterate locals.usedObjects
+// iterate filters.usedObjects
 ;(function(){
-  if ('number' == typeof locals.usedObjects.length) {
-    for (var $index = 0, $$l = locals.usedObjects.length; $index < $$l; $index++) {
-      var obj = locals.usedObjects[$index];
+  if ('number' == typeof filters.usedObjects.length) {
+    for (var $index = 0, $$l = filters.usedObjects.length; $index < $$l; $index++) {
+      var obj = filters.usedObjects[$index];
 
- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
-var __val__ = id
+var __val__ = obj
 buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('<input');
-buf.push(attrs({ 'type':("checkbox"), 'name':("object"), 'value':(id), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
+buf.push(attrs({ 'type':("checkbox"), 'name':("object"), 'value':(obj), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
 buf.push('/></label>');
     }
   } else {
-    for (var $index in locals.usedObjects) {
-      var obj = locals.usedObjects[$index];
+    for (var $index in filters.usedObjects) {
+      var obj = filters.usedObjects[$index];
 
- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
-var __val__ = id
+var __val__ = obj
 buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('<input');
-buf.push(attrs({ 'type':("checkbox"), 'name':("object"), 'value':(id), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
+buf.push(attrs({ 'type':("checkbox"), 'name':("object"), 'value':(obj), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
 buf.push('/></label>');
    }
   }
@@ -1372,36 +1430,34 @@ buf.push('/></label>');
 buf.push('<hr');
 buf.push(attrs({  }, {}));
 buf.push('/><label><strong>Distinct Actors</strong></label>');
-if (locals.usedActors)
+if (filters.usedActors)
 {
-// iterate locals.usedActors
+// iterate filters.usedActors
 ;(function(){
-  if ('number' == typeof locals.usedActors.length) {
-    for (var $index = 0, $$l = locals.usedActors.length; $index < $$l; $index++) {
-      var obj = locals.usedActors[$index];
+  if ('number' == typeof filters.usedActors.length) {
+    for (var $index = 0, $$l = filters.usedActors.length; $index < $$l; $index++) {
+      var obj = filters.usedActors[$index];
 
- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
-var __val__ = id
+var __val__ = obj
 buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('<input');
-buf.push(attrs({ 'type':("checkbox"), 'name':("actor"), 'value':(id), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
+buf.push(attrs({ 'type':("checkbox"), 'name':("actor"), 'value':(obj), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
 buf.push('/></label>');
     }
   } else {
-    for (var $index in locals.usedActors) {
-      var obj = locals.usedActors[$index];
+    for (var $index in filters.usedActors) {
+      var obj = filters.usedActors[$index];
 
- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
-var __val__ = id
+var __val__ = obj
 buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('<input');
-buf.push(attrs({ 'type':("checkbox"), 'name':("actor"), 'value':(id), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
+buf.push(attrs({ 'type':("checkbox"), 'name':("actor"), 'value':(obj), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
 buf.push('/></label>');
    }
   }
@@ -1532,8 +1588,9 @@ buf.push(attrs({ "class": ('modal-footer') }, {}));
 buf.push('><button');
 buf.push(attrs({ 'data-dismiss':("modal"), 'aria-hidden':("true"), "class": ('btn') }, {"data-dismiss":true,"aria-hidden":true}));
 buf.push('>OK</button></div></div>');
- var chosenVerb = locals.verbs[0];
- var chosenObject = locals.objectTypes[0];
+ var metadata = locals.metadata;
+ var chosenVerb = metadata.verbs[0];
+ var chosenObject = metadata.objectTypes[0];
  if(session.auth)
 {
 buf.push('<div');
@@ -1566,11 +1623,11 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</span></a><ul');
 buf.push(attrs({ "class": ('dropdown-menu') }, {}));
 buf.push('>');
-// iterate locals.verbs
+// iterate metadata.verbs
 ;(function(){
-  if ('number' == typeof locals.verbs.length) {
-    for (var $index = 0, $$l = locals.verbs.length; $index < $$l; $index++) {
-      var verb = locals.verbs[$index];
+  if ('number' == typeof metadata.verbs.length) {
+    for (var $index = 0, $$l = metadata.verbs.length; $index < $$l; $index++) {
+      var verb = metadata.verbs[$index];
 
 buf.push('<li><a');
 buf.push(attrs({ 'href':("#"), 'data-type-show':("verb-show"), "class": ('type-select') }, {"href":true,"data-type-show":true}));
@@ -1580,8 +1637,8 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</a></li>');
     }
   } else {
-    for (var $index in locals.verbs) {
-      var verb = locals.verbs[$index];
+    for (var $index in metadata.verbs) {
+      var verb = metadata.verbs[$index];
 
 buf.push('<li><a');
 buf.push(attrs({ 'href':("#"), 'data-type-show':("verb-show"), "class": ('type-select') }, {"href":true,"data-type-show":true}));
@@ -1605,11 +1662,11 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</span></a><ul');
 buf.push(attrs({ "class": ('dropdown-menu') }, {}));
 buf.push('>');
-// iterate locals.objectTypes
+// iterate metadata.objectTypes
 ;(function(){
-  if ('number' == typeof locals.objectTypes.length) {
-    for (var $index = 0, $$l = locals.objectTypes.length; $index < $$l; $index++) {
-      var objectType = locals.objectTypes[$index];
+  if ('number' == typeof metadata.objectTypes.length) {
+    for (var $index = 0, $$l = metadata.objectTypes.length; $index < $$l; $index++) {
+      var objectType = metadata.objectTypes[$index];
 
 buf.push('<li><a');
 buf.push(attrs({ 'href':("#"), 'data-type-show':("object-show"), "class": ('type-select') }, {"href":true,"data-type-show":true}));
@@ -1619,8 +1676,8 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</a></li>');
     }
   } else {
-    for (var $index in locals.objectTypes) {
-      var objectType = locals.objectTypes[$index];
+    for (var $index in metadata.objectTypes) {
+      var objectType = metadata.objectTypes[$index];
 
 buf.push('<li><a');
 buf.push(attrs({ 'href':("#"), 'data-type-show':("object-show"), "class": ('type-select') }, {"href":true,"data-type-show":true}));
@@ -1698,40 +1755,64 @@ buf.push('><div');
 buf.push(attrs({ 'id':('filters'), "class": ('span4') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('well') + ' ' + ('second-hero') }, {}));
-buf.push('><h3>Filters</h3><hr');
+buf.push('>');
+ var included = locals.included
+ var filters = locals.filters
+{
+buf.push('<h3>Filters</h3><hr');
 buf.push(attrs({  }, {}));
 buf.push('/><form');
 buf.push(attrs({ 'id':('form_filters') }, {}));
 buf.push('><label><strong>Verbs</strong></label><p>The verb describes the type of action the actor performs on the object.</p>');
-if (locals.usedVerbs)
+if (filters.usedVerbs)
 {
-// iterate locals.usedVerbs
+// iterate filters.usedVerbs
 ;(function(){
-  if ('number' == typeof locals.usedVerbs.length) {
-    for (var $index = 0, $$l = locals.usedVerbs.length; $index < $$l; $index++) {
-      var verb = locals.usedVerbs[$index];
+  if ('number' == typeof filters.usedVerbs.length) {
+    for (var $index = 0, $$l = filters.usedVerbs.length; $index < $$l; $index++) {
+      var verb = filters.usedVerbs[$index];
 
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
 var __val__ = verb
 buf.push(escape(null == __val__ ? "" : __val__));
+ if (included.verbs.indexOf(verb) > -1)
+{
 buf.push('<input');
 buf.push(attrs({ 'type':("checkbox"), 'name':("verb"), 'value':(verb), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
-buf.push('/></label>');
+buf.push('/>');
+}
+ else
+{
+buf.push('<input');
+buf.push(attrs({ 'type':("checkbox"), 'name':("verb"), 'value':(verb), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true}));
+buf.push('/>');
+}
+buf.push('</label>');
     }
   } else {
-    for (var $index in locals.usedVerbs) {
-      var verb = locals.usedVerbs[$index];
+    for (var $index in filters.usedVerbs) {
+      var verb = filters.usedVerbs[$index];
 
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
 var __val__ = verb
 buf.push(escape(null == __val__ ? "" : __val__));
+ if (included.verbs.indexOf(verb) > -1)
+{
 buf.push('<input');
 buf.push(attrs({ 'type':("checkbox"), 'name':("verb"), 'value':(verb), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
-buf.push('/></label>');
+buf.push('/>');
+}
+ else
+{
+buf.push('<input');
+buf.push(attrs({ 'type':("checkbox"), 'name':("verb"), 'value':(verb), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true}));
+buf.push('/>');
+}
+buf.push('</label>');
    }
   }
 }).call(this);
@@ -1740,35 +1821,55 @@ buf.push('/></label>');
 buf.push('<hr');
 buf.push(attrs({  }, {}));
 buf.push('/><label><strong>Object Types</strong></label>');
-if (locals.usedObjectTypes)
+if (filters.usedObjectTypes)
 {
-// iterate locals.usedObjectTypes
+// iterate filters.usedObjectTypes
 ;(function(){
-  if ('number' == typeof locals.usedObjectTypes.length) {
-    for (var $index = 0, $$l = locals.usedObjectTypes.length; $index < $$l; $index++) {
-      var objType = locals.usedObjectTypes[$index];
+  if ('number' == typeof filters.usedObjectTypes.length) {
+    for (var $index = 0, $$l = filters.usedObjectTypes.length; $index < $$l; $index++) {
+      var objType = filters.usedObjectTypes[$index];
 
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
 var __val__ = objType
 buf.push(escape(null == __val__ ? "" : __val__));
+ if (included.objectTypes.indexOf(objType) > -1)
+{
 buf.push('<input');
 buf.push(attrs({ 'type':("checkbox"), 'name':("objectType"), 'value':(objType), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
-buf.push('/></label>');
+buf.push('/>');
+}
+ else
+{
+buf.push('<input');
+buf.push(attrs({ 'type':("checkbox"), 'name':("objectType"), 'value':(objType), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true}));
+buf.push('/>');
+}
+buf.push('</label>');
     }
   } else {
-    for (var $index in locals.usedObjectTypes) {
-      var objType = locals.usedObjectTypes[$index];
+    for (var $index in filters.usedObjectTypes) {
+      var objType = filters.usedObjectTypes[$index];
 
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
 var __val__ = objType
 buf.push(escape(null == __val__ ? "" : __val__));
+ if (included.objectTypes.indexOf(objType) > -1)
+{
 buf.push('<input');
 buf.push(attrs({ 'type':("checkbox"), 'name':("objectType"), 'value':(objType), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
-buf.push('/></label>');
+buf.push('/>');
+}
+ else
+{
+buf.push('<input');
+buf.push(attrs({ 'type':("checkbox"), 'name':("objectType"), 'value':(objType), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true}));
+buf.push('/>');
+}
+buf.push('</label>');
    }
   }
 }).call(this);
@@ -1777,35 +1878,55 @@ buf.push('/></label>');
 buf.push('<hr');
 buf.push(attrs({  }, {}));
 buf.push('/><label><strong>Actor Object Types</strong></label>');
-if (locals.usedActorObjectTypes)
+if (filters.usedActorObjectTypes)
 {
-// iterate locals.usedActorObjectTypes
+// iterate filters.usedActorObjectTypes
 ;(function(){
-  if ('number' == typeof locals.usedActorObjectTypes.length) {
-    for (var $index = 0, $$l = locals.usedActorObjectTypes.length; $index < $$l; $index++) {
-      var objType = locals.usedActorObjectTypes[$index];
+  if ('number' == typeof filters.usedActorObjectTypes.length) {
+    for (var $index = 0, $$l = filters.usedActorObjectTypes.length; $index < $$l; $index++) {
+      var objType = filters.usedActorObjectTypes[$index];
 
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
 var __val__ = objType
 buf.push(escape(null == __val__ ? "" : __val__));
+ if (included.actorObjectTypes.indexOf(objType) > -1)
+{
 buf.push('<input');
 buf.push(attrs({ 'type':("checkbox"), 'name':("actorType"), 'value':(objType), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
-buf.push('/></label>');
+buf.push('/>');
+}
+ else
+{
+buf.push('<input');
+buf.push(attrs({ 'type':("checkbox"), 'name':("actorType"), 'value':(objType), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true}));
+buf.push('/>');
+}
+buf.push('</label>');
     }
   } else {
-    for (var $index in locals.usedActorObjectTypes) {
-      var objType = locals.usedActorObjectTypes[$index];
+    for (var $index in filters.usedActorObjectTypes) {
+      var objType = filters.usedActorObjectTypes[$index];
 
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
 var __val__ = objType
 buf.push(escape(null == __val__ ? "" : __val__));
+ if (included.actorObjectTypes.indexOf(objType) > -1)
+{
 buf.push('<input');
 buf.push(attrs({ 'type':("checkbox"), 'name':("actorType"), 'value':(objType), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
-buf.push('/></label>');
+buf.push('/>');
+}
+ else
+{
+buf.push('<input');
+buf.push(attrs({ 'type':("checkbox"), 'name':("actorType"), 'value':(objType), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true}));
+buf.push('/>');
+}
+buf.push('</label>');
    }
   }
 }).call(this);
@@ -1813,36 +1934,34 @@ buf.push('/></label>');
 buf.push('<hr');
 buf.push(attrs({  }, {}));
 buf.push('/><label><strong>Distinct Objects</strong></label>');
-if (locals.usedObjects)
+if (filters.usedObjects)
 {
-// iterate locals.usedObjects
+// iterate filters.usedObjects
 ;(function(){
-  if ('number' == typeof locals.usedObjects.length) {
-    for (var $index = 0, $$l = locals.usedObjects.length; $index < $$l; $index++) {
-      var obj = locals.usedObjects[$index];
+  if ('number' == typeof filters.usedObjects.length) {
+    for (var $index = 0, $$l = filters.usedObjects.length; $index < $$l; $index++) {
+      var obj = filters.usedObjects[$index];
 
- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
-var __val__ = id
+var __val__ = obj
 buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('<input');
-buf.push(attrs({ 'type':("checkbox"), 'name':("object"), 'value':(id), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
+buf.push(attrs({ 'type':("checkbox"), 'name':("object"), 'value':(obj), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
 buf.push('/></label>');
     }
   } else {
-    for (var $index in locals.usedObjects) {
-      var obj = locals.usedObjects[$index];
+    for (var $index in filters.usedObjects) {
+      var obj = filters.usedObjects[$index];
 
- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
-var __val__ = id
+var __val__ = obj
 buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('<input');
-buf.push(attrs({ 'type':("checkbox"), 'name':("object"), 'value':(id), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
+buf.push(attrs({ 'type':("checkbox"), 'name':("object"), 'value':(obj), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
 buf.push('/></label>');
    }
   }
@@ -1853,43 +1972,43 @@ buf.push('/></label>');
 buf.push('<hr');
 buf.push(attrs({  }, {}));
 buf.push('/><label><strong>Distinct Actors</strong></label>');
-if (locals.usedActors)
+if (filters.usedActors)
 {
-// iterate locals.usedActors
+// iterate filters.usedActors
 ;(function(){
-  if ('number' == typeof locals.usedActors.length) {
-    for (var $index = 0, $$l = locals.usedActors.length; $index < $$l; $index++) {
-      var obj = locals.usedActors[$index];
+  if ('number' == typeof filters.usedActors.length) {
+    for (var $index = 0, $$l = filters.usedActors.length; $index < $$l; $index++) {
+      var obj = filters.usedActors[$index];
 
- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
-var __val__ = id
+var __val__ = obj
 buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('<input');
-buf.push(attrs({ 'type':("checkbox"), 'name':("actor"), 'value':(id), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
+buf.push(attrs({ 'type':("checkbox"), 'name':("actor"), 'value':(obj), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
 buf.push('/></label>');
     }
   } else {
-    for (var $index in locals.usedActors) {
-      var obj = locals.usedActors[$index];
+    for (var $index in filters.usedActors) {
+      var obj = filters.usedActors[$index];
 
- var id = (obj.objectType ? obj.objectType : '(none)') + " " + (obj.displayName ? obj.displayName : obj.title)
 buf.push('<label');
 buf.push(attrs({ "class": ('checkbox') }, {}));
 buf.push('>');
-var __val__ = id
+var __val__ = obj
 buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('<input');
-buf.push(attrs({ 'type':("checkbox"), 'name':("actor"), 'value':(id), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
+buf.push(attrs({ 'type':("checkbox"), 'name':("actor"), 'value':(obj), 'checked':(true), "class": ('filter-checkbox') }, {"type":true,"name":true,"value":true,"checked":true}));
 buf.push('/></label>');
    }
   }
 }).call(this);
 
 }
-buf.push('</form></div></div><div');
+buf.push('</form>');
+}
+buf.push('</div></div><div');
 buf.push(attrs({ 'id':('stream'), "class": ('span8') }, {}));
 buf.push('><h3>Activity Stream</h3><div');
 buf.push(attrs({ "class": ('wello') }, {}));
@@ -2562,7 +2681,14 @@ buf.push('></script><script');
 buf.push(attrs({ 'src':("/js/helper.js"), 'type':("text/javascript") }, {"src":true,"type":true}));
 buf.push('></script><script');
 buf.push(attrs({ 'type':("text/javascript") }, {"type":true}));
-buf.push('>var App = {\n helper : new AppHelper()\n}</script><script');
+buf.push('>var App = {\n helper : new AppHelper()\n};</script>');
+ if (locals.currentUser && locals.filters)
+{
+buf.push('<script');
+buf.push(attrs({ 'type':("text/javascript") }, {"type":true}));
+buf.push('>App.userLoggedIn = ' + escape((interp = (locals.currentUser.author !== null)) == null ? '' : interp) + ';\nApp.desiredStream = "' + escape((interp = locals.desiredStream) == null ? '' : interp) + '";\nApp.currentUser = ' + ((interp = JSON.stringify(locals.currentUser)) == null ? '' : interp) + ';\nApp.filters = ' + ((interp = JSON.stringify(locals.filters)) == null ? '' : interp) + ';\nApp.included = ' + ((interp = JSON.stringify(locals.included)) == null ? '' : interp) + ';\nApp.metadata = ' + ((interp = JSON.stringify(locals.metadata)) == null ? '' : interp) + ';</script>');
+}
+buf.push('<script');
 buf.push(attrs({ 'src':("/static/js/" + (assetsCacheHashes.js||0) + "/client.js"), 'type':("text/javascript") }, {"src":true,"type":true}));
 buf.push('></script><script');
 buf.push(attrs({ 'src':("https://maps.googleapis.com/maps/api/js?sensor=true") }, {"src":true}));
@@ -2734,13 +2860,7 @@ buf.push('><input');
 buf.push(attrs({ 'id':('input-file-input'), 'type':("file"), 'name':("image"), 'accept':("image/*"), 'required':("required") }, {"type":true,"name":true,"accept":true,"required":true}));
 buf.push('/></div><div');
 buf.push(attrs({ "class": ('clearfix') }, {}));
-buf.push('></div><hr');
-buf.push(attrs({  }, {}));
-buf.push('/><h4>Step 2: Upload to Cloud<i');
-buf.push(attrs({ "class": ('icon-upload') }, {}));
-buf.push('></i></h4><input');
-buf.push(attrs({ 'id':('upload-file'), 'type':("submit"), 'value':("Upload File"), "class": ('btn') + ' ' + ('btn-warning') }, {"type":true,"value":true}));
-buf.push('/></div></div></form></div>');
+buf.push('></div></div></div></form></div>');
 }
  }
 buf.push('<div');
@@ -2749,7 +2869,7 @@ buf.push('><div');
 buf.push(attrs({ "class": ('row') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span6') }, {}));
-buf.push('><h4>Step 3: Complete details</h4></div></div><div');
+buf.push('><h4>Step 2: Complete details</h4></div></div><div');
 buf.push(attrs({ "class": ('row') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span6') }, {}));
