@@ -22,8 +22,9 @@ var ActivityView = Backbone.View.extend({
        if (!likes) {
            likes = {};
        }
-       likes[this.user] = true;
+       likes[App.currentUser] = true;
        this.model.set("likes", likes);
+       console.log("In likes");
 
        var likes_count = _.keys(likes).length;
        this.model.set("likes_count", likes_count)
@@ -52,16 +53,19 @@ var ActivityStreamView = Backbone.View.extend({
     initialize: function(){
         _.bindAll(this, 'render', 'appendItem', 'changeStreamFilter');
         this.collection = new ActivityList();
+        var data = App.streams[App.desiredStream];
+        if (data && data.items) {
+            this.collection.reset(data.items);
+            this.render();
+        }
         this.collection.bind('add', this.appendItem); // collection event binder
         this.maxSize = 20;
     },
     render: function(){
-        this.$el.slideToggle();
         this.$el.empty();
         _(this.collection.models).each(function(item){ // in case collection is not empty
             this.appendItem(item);
         }, this);
-        this.$el.slideToggle();
     },
 
     appendItem: function(item){

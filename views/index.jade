@@ -41,8 +41,4 @@ include nav_bar
 										a(href="/streams/#{stream.name}")=stream.name
 					-}
 				ul.unstyled#main_stream
-					- var activities = locals.streams[desiredStream].items
-					-if (activities && activities.length) {
-						include activity
-					-}
 

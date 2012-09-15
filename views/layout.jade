@@ -21,5 +21,6 @@ html
 				App.filters = !{JSON.stringify(locals.filters)};
 				App.included = !{JSON.stringify(locals.included)};
 				App.metadata = !{JSON.stringify(locals.metadata)};
+				App.streams =  !{JSON.stringify(locals.streams)};
 		script(src="/static/js/#{assetsCacheHashes.js||0}/client.js", type="text/javascript")
 		script(src="https://maps.googleapis.com/maps/api/js?sensor=true")
