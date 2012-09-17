@@ -15,7 +15,7 @@ html
 			};
 		- if (locals.currentUser && locals.filters)
 			script(type="text/javascript")
-				App.userLoggedIn = #{(locals.currentUser.author !== null)};
+				App.userLoggedIn = #{(locals.session.auth !== undefined)};
 				App.desiredStream = "#{locals.desiredStream}";
 				App.currentUser = !{JSON.stringify(locals.currentUser)};
 				App.filters = !{JSON.stringify(locals.filters)};
