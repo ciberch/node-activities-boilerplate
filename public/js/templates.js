@@ -141,16 +141,18 @@ var attrs = jade.attrs, escape = jade.escape, rethrow = jade.rethrow;
 var buf = [];
 with (locals || {}) {
 var interp;
+ if (App.userLoggedIn)
+{
 buf.push('<div');
 buf.push(attrs({ "class": ('row') + ' ' + ('actions') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span2') }, {}));
+buf.push(attrs({ "class": ('span1') }, {}));
 buf.push('><small><a');
 buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-warning') + ' ' + ('like-button') }, {"href":true}));
 buf.push('><i');
 buf.push(attrs({ "class": ('icon-ok') + ' ' + ('icon-white') }, {}));
 buf.push('></i><small>&nbsp; Like</small></a></small></div><div');
-buf.push(attrs({ "class": ('span5') }, {}));
+buf.push(attrs({ "class": ('span6') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('row') }, {}));
 buf.push('><div');
@@ -165,10 +167,12 @@ buf.push('><small><a');
 buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-success') + ' ' + ('comment-button') }, {"href":true}));
 buf.push('><i');
 buf.push(attrs({ "class": ('icon-pencil') + ' ' + ('icon-white') }, {}));
-buf.push('></i><small>&nbsp; Post</small></a></small></div></div></div></div><div');
+buf.push('></i><small>&nbsp; Post</small></a></small></div></div></div></div>');
+}
+buf.push('<div');
 buf.push(attrs({ "class": ('row') + ' ' + ('action_results') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span2') }, {}));
+buf.push(attrs({ "class": ('span1') }, {}));
 buf.push('>');
 if (act.likes_count && act.likes_count > 0) {
 {
@@ -178,15 +182,21 @@ buf.push('>' + escape((interp = act.likes_count) == null ? '' : interp) + '</sma
 buf.push(attrs({ "class": ('rest') }, {}));
 buf.push('>&nbsp; liked this</small>');
 }
+} else {
+{
+buf.push('<small>No likes yet.</small>');
+}
 }
 buf.push('</div>');
 if (act.comments) {
 {
 buf.push('<div');
-buf.push(attrs({ "class": ('span4') }, {}));
-buf.push('><ul>');
+buf.push(attrs({ "class": ('span6') }, {}));
+buf.push('><ul');
+buf.push(attrs({ "class": ('unstyled') }, {}));
+buf.push('>');
 for(var i=0; i < act.comments.length; i++) {
- var comment = comments[i];
+ var comment = act.comments[i];
 {
 buf.push('<li><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('comment') }, {}));
@@ -194,6 +204,7 @@ buf.push('><div');
 buf.push(attrs({ "class": ('span1') + ' ' + ('actor') }, {}));
 buf.push('>');
  var actor = comment.actor;
+{
  var actUrl = actor.url? actor.url: '#';
 if (actor.image && actor.image.url) {
 {
@@ -208,8 +219,9 @@ buf.push('/></a>');
 buf.push('<h2>:-)</h2>');
 }
 }
+}
 buf.push('</div><div');
-buf.push(attrs({ "class": ('span6') + ' ' + ('action') }, {}));
+buf.push(attrs({ "class": ('span5') + ' ' + ('action') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('title') }, {}));
 buf.push('><div');
@@ -224,6 +236,7 @@ buf.push('</div></div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('activity_object') }, {}));
 buf.push('>');
  var object = comment.object;
+{
  var objUrl = object.url ? object.url : '#';
 buf.push('<div');
 buf.push(attrs({ "class": ('span6') }, {}));
@@ -239,6 +252,9 @@ buf.push(attrs({ 'src':(object.image.url), "class": ('img-rounded') + ' ' + ('av
 buf.push('/></a>');
 }
 }
+buf.push('<br');
+buf.push(attrs({  }, {}));
+buf.push('/>');
 if (object.displayName) {
 {
 buf.push('<strong');
@@ -268,12 +284,15 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</div>');
 }
 }
-buf.push('</blockquote></div></div><div');
+buf.push('</blockquote></div>');
+}
+buf.push('</div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('details') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('>');
  var timedItem = comment;
+{
 buf.push('<div');
 buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
 buf.push('><div');
@@ -294,6 +313,7 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</span><img');
 buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
 buf.push('/></a></div>');
+}
 }
 }
 buf.push('</div></div></div></div></li>');
@@ -374,6 +394,9 @@ buf.push(attrs({ 'src':(object.image.url), "class": ('img-rounded') + ' ' + ('av
 buf.push('/></a>');
 }
 }
+buf.push('<br');
+buf.push(attrs({  }, {}));
+buf.push('/>');
 if (object.displayName) {
 {
 buf.push('<strong');
@@ -431,16 +454,19 @@ buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"
 buf.push('/></a></div>');
 }
 }
-buf.push('</div></div></div></div><div');
+buf.push('</div></div></div></div>');
+ if (App.userLoggedIn)
+{
+buf.push('<div');
 buf.push(attrs({ "class": ('row') + ' ' + ('actions') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span2') }, {}));
+buf.push(attrs({ "class": ('span1') }, {}));
 buf.push('><small><a');
 buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-warning') + ' ' + ('like-button') }, {"href":true}));
 buf.push('><i');
 buf.push(attrs({ "class": ('icon-ok') + ' ' + ('icon-white') }, {}));
 buf.push('></i><small>&nbsp; Like</small></a></small></div><div');
-buf.push(attrs({ "class": ('span5') }, {}));
+buf.push(attrs({ "class": ('span6') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('row') }, {}));
 buf.push('><div');
@@ -455,10 +481,12 @@ buf.push('><small><a');
 buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-success') + ' ' + ('comment-button') }, {"href":true}));
 buf.push('><i');
 buf.push(attrs({ "class": ('icon-pencil') + ' ' + ('icon-white') }, {}));
-buf.push('></i><small>&nbsp; Post</small></a></small></div></div></div></div><div');
+buf.push('></i><small>&nbsp; Post</small></a></small></div></div></div></div>');
+}
+buf.push('<div');
 buf.push(attrs({ "class": ('row') + ' ' + ('action_results') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span2') }, {}));
+buf.push(attrs({ "class": ('span1') }, {}));
 buf.push('>');
 if (act.likes_count && act.likes_count > 0) {
 {
@@ -468,15 +496,21 @@ buf.push('>' + escape((interp = act.likes_count) == null ? '' : interp) + '</sma
 buf.push(attrs({ "class": ('rest') }, {}));
 buf.push('>&nbsp; liked this</small>');
 }
+} else {
+{
+buf.push('<small>No likes yet.</small>');
+}
 }
 buf.push('</div>');
 if (act.comments) {
 {
 buf.push('<div');
-buf.push(attrs({ "class": ('span4') }, {}));
-buf.push('><ul>');
+buf.push(attrs({ "class": ('span6') }, {}));
+buf.push('><ul');
+buf.push(attrs({ "class": ('unstyled') }, {}));
+buf.push('>');
 for(var i=0; i < act.comments.length; i++) {
- var comment = comments[i];
+ var comment = act.comments[i];
 {
 buf.push('<li><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('comment') }, {}));
@@ -484,6 +518,7 @@ buf.push('><div');
 buf.push(attrs({ "class": ('span1') + ' ' + ('actor') }, {}));
 buf.push('>');
  var actor = comment.actor;
+{
  var actUrl = actor.url? actor.url: '#';
 if (actor.image && actor.image.url) {
 {
@@ -498,8 +533,9 @@ buf.push('/></a>');
 buf.push('<h2>:-)</h2>');
 }
 }
+}
 buf.push('</div><div');
-buf.push(attrs({ "class": ('span6') + ' ' + ('action') }, {}));
+buf.push(attrs({ "class": ('span5') + ' ' + ('action') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('title') }, {}));
 buf.push('><div');
@@ -514,6 +550,7 @@ buf.push('</div></div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('activity_object') }, {}));
 buf.push('>');
  var object = comment.object;
+{
  var objUrl = object.url ? object.url : '#';
 buf.push('<div');
 buf.push(attrs({ "class": ('span6') }, {}));
@@ -529,6 +566,9 @@ buf.push(attrs({ 'src':(object.image.url), "class": ('img-rounded') + ' ' + ('av
 buf.push('/></a>');
 }
 }
+buf.push('<br');
+buf.push(attrs({  }, {}));
+buf.push('/>');
 if (object.displayName) {
 {
 buf.push('<strong');
@@ -558,12 +598,15 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</div>');
 }
 }
-buf.push('</blockquote></div></div><div');
+buf.push('</blockquote></div>');
+}
+buf.push('</div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('details') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('>');
  var timedItem = comment;
+{
 buf.push('<div');
 buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
 buf.push('><div');
@@ -584,6 +627,7 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</span><img');
 buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
 buf.push('/></a></div>');
+}
 }
 }
 buf.push('</div></div></div></div></li>');
@@ -658,6 +702,9 @@ buf.push(attrs({ 'src':(object.image.url), "class": ('img-rounded') + ' ' + ('av
 buf.push('/></a>');
 }
 }
+buf.push('<br');
+buf.push(attrs({  }, {}));
+buf.push('/>');
 if (object.displayName) {
 {
 buf.push('<strong');
@@ -715,16 +762,19 @@ buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"
 buf.push('/></a></div>');
 }
 }
-buf.push('</div></div></div></div><div');
+buf.push('</div></div></div></div>');
+ if (App.userLoggedIn)
+{
+buf.push('<div');
 buf.push(attrs({ "class": ('row') + ' ' + ('actions') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span2') }, {}));
+buf.push(attrs({ "class": ('span1') }, {}));
 buf.push('><small><a');
 buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-warning') + ' ' + ('like-button') }, {"href":true}));
 buf.push('><i');
 buf.push(attrs({ "class": ('icon-ok') + ' ' + ('icon-white') }, {}));
 buf.push('></i><small>&nbsp; Like</small></a></small></div><div');
-buf.push(attrs({ "class": ('span5') }, {}));
+buf.push(attrs({ "class": ('span6') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('row') }, {}));
 buf.push('><div');
@@ -739,10 +789,12 @@ buf.push('><small><a');
 buf.push(attrs({ 'href':("#"), "class": ('btn') + ' ' + ('btn-mini') + ' ' + ('btn-success') + ' ' + ('comment-button') }, {"href":true}));
 buf.push('><i');
 buf.push(attrs({ "class": ('icon-pencil') + ' ' + ('icon-white') }, {}));
-buf.push('></i><small>&nbsp; Post</small></a></small></div></div></div></div><div');
+buf.push('></i><small>&nbsp; Post</small></a></small></div></div></div></div>');
+}
+buf.push('<div');
 buf.push(attrs({ "class": ('row') + ' ' + ('action_results') }, {}));
 buf.push('><div');
-buf.push(attrs({ "class": ('span2') }, {}));
+buf.push(attrs({ "class": ('span1') }, {}));
 buf.push('>');
 if (act.likes_count && act.likes_count > 0) {
 {
@@ -752,15 +804,21 @@ buf.push('>' + escape((interp = act.likes_count) == null ? '' : interp) + '</sma
 buf.push(attrs({ "class": ('rest') }, {}));
 buf.push('>&nbsp; liked this</small>');
 }
+} else {
+{
+buf.push('<small>No likes yet.</small>');
+}
 }
 buf.push('</div>');
 if (act.comments) {
 {
 buf.push('<div');
-buf.push(attrs({ "class": ('span4') }, {}));
-buf.push('><ul>');
+buf.push(attrs({ "class": ('span6') }, {}));
+buf.push('><ul');
+buf.push(attrs({ "class": ('unstyled') }, {}));
+buf.push('>');
 for(var i=0; i < act.comments.length; i++) {
- var comment = comments[i];
+ var comment = act.comments[i];
 {
 buf.push('<li><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('comment') }, {}));
@@ -768,6 +826,7 @@ buf.push('><div');
 buf.push(attrs({ "class": ('span1') + ' ' + ('actor') }, {}));
 buf.push('>');
  var actor = comment.actor;
+{
  var actUrl = actor.url? actor.url: '#';
 if (actor.image && actor.image.url) {
 {
@@ -782,8 +841,9 @@ buf.push('/></a>');
 buf.push('<h2>:-)</h2>');
 }
 }
+}
 buf.push('</div><div');
-buf.push(attrs({ "class": ('span6') + ' ' + ('action') }, {}));
+buf.push(attrs({ "class": ('span5') + ' ' + ('action') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('title') }, {}));
 buf.push('><div');
@@ -798,6 +858,7 @@ buf.push('</div></div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('activity_object') }, {}));
 buf.push('>');
  var object = comment.object;
+{
  var objUrl = object.url ? object.url : '#';
 buf.push('<div');
 buf.push(attrs({ "class": ('span6') }, {}));
@@ -813,6 +874,9 @@ buf.push(attrs({ 'src':(object.image.url), "class": ('img-rounded') + ' ' + ('av
 buf.push('/></a>');
 }
 }
+buf.push('<br');
+buf.push(attrs({  }, {}));
+buf.push('/>');
 if (object.displayName) {
 {
 buf.push('<strong');
@@ -842,12 +906,15 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</div>');
 }
 }
-buf.push('</blockquote></div></div><div');
+buf.push('</blockquote></div>');
+}
+buf.push('</div><div');
 buf.push(attrs({ "class": ('row') + ' ' + ('details') }, {}));
 buf.push('><div');
 buf.push(attrs({ "class": ('span5') }, {}));
 buf.push('>');
  var timedItem = comment;
+{
 buf.push('<div');
 buf.push(attrs({ "class": ('span3') + ' ' + ('timestamp') }, {}));
 buf.push('><div');
@@ -868,6 +935,7 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</span><img');
 buf.push(attrs({ 'src':(timedItem.provider.icon.url), "class": ('service') }, {"src":true}));
 buf.push('/></a></div>');
+}
 }
 }
 buf.push('</div></div></div></div></li>');
@@ -1060,6 +1128,9 @@ buf.push(attrs({ 'src':(object.image.url), "class": ('img-rounded') + ' ' + ('av
 buf.push('/></a>');
 }
 }
+buf.push('<br');
+buf.push(attrs({  }, {}));
+buf.push('/>');
 if (object.displayName) {
 {
 buf.push('<strong');
@@ -2115,7 +2186,7 @@ buf.push('>var App = {\n helper : new AppHelper()\n};</script>');
 {
 buf.push('<script');
 buf.push(attrs({ 'type':("text/javascript") }, {"type":true}));
-buf.push('>App.userLoggedIn = ' + escape((interp = (locals.currentUser.author !== null)) == null ? '' : interp) + ';\nApp.desiredStream = "' + escape((interp = locals.desiredStream) == null ? '' : interp) + '";\nApp.currentUser = ' + ((interp = JSON.stringify(locals.currentUser)) == null ? '' : interp) + ';\nApp.filters = ' + ((interp = JSON.stringify(locals.filters)) == null ? '' : interp) + ';\nApp.included = ' + ((interp = JSON.stringify(locals.included)) == null ? '' : interp) + ';\nApp.metadata = ' + ((interp = JSON.stringify(locals.metadata)) == null ? '' : interp) + ';\nApp.streams =  ' + ((interp = JSON.stringify(locals.streams)) == null ? '' : interp) + ';</script>');
+buf.push('>App.userLoggedIn = ' + escape((interp = (locals.session.auth !== undefined)) == null ? '' : interp) + ';\nApp.desiredStream = "' + escape((interp = locals.desiredStream) == null ? '' : interp) + '";\nApp.currentUser = ' + ((interp = JSON.stringify(locals.currentUser)) == null ? '' : interp) + ';\nApp.filters = ' + ((interp = JSON.stringify(locals.filters)) == null ? '' : interp) + ';\nApp.included = ' + ((interp = JSON.stringify(locals.included)) == null ? '' : interp) + ';\nApp.metadata = ' + ((interp = JSON.stringify(locals.metadata)) == null ? '' : interp) + ';\nApp.streams =  ' + ((interp = JSON.stringify(locals.streams)) == null ? '' : interp) + ';</script>');
 }
 buf.push('<script');
 buf.push(attrs({ 'src':("/static/js/" + (assetsCacheHashes.js||0) + "/client.js"), 'type':("text/javascript") }, {"src":true,"type":true}));
