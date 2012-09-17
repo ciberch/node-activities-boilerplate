@@ -26,7 +26,7 @@
     App.socketIoClient.on('message', function(json) {
         var doc = JSON.parse(json);
         if (doc) {
-           streamView.collection.add(new Activity(doc));
+           streamView.collection.unshift(new Activity(doc));
         }
    	});
 

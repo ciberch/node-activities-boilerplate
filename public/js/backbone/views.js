@@ -39,7 +39,7 @@ var ActivityView = Backbone.View.extend({
        }
        comments.push({actor : App.currentUser, object: { objectType : 'comment', content: content}, published : Date.new});
        var comments_count = comments.length;
-       this.model.set("comments_count", comments_count)
+       this.model.set("comments_count", comments_count);
        this.model.save();
        return this;
    }
@@ -51,24 +51,23 @@ var ActivityStreamView = Backbone.View.extend({
     el: '#main_stream', // el attaches to existing element
 
     initialize: function(){
-        _.bindAll(this, 'render', 'appendItem', 'changeStreamFilter');
+        _.bindAll(this, 'render', 'prependItem', 'changeStreamFilter');
         this.collection = new ActivityList();
         var data = App.streams[App.desiredStream];
         if (data && data.items) {
-            this.collection.reset(data.items);
+            this.collection.reset(data.items.reverse());
             this.render();
         }
-        this.collection.bind('add', this.appendItem); // collection event binder
-        this.maxSize = 20;
+        this.collection.bind('unshift', this.prependItem); // collection event binder
+        this.maxSize = 50;
     },
     render: function(){
         this.$el.empty();
         _(this.collection.models).each(function(item){ // in case collection is not empty
-            this.appendItem(item);
+            this.prependItem(item);
         }, this);
     },
-
-    appendItem: function(item){
+    prependItem: function(item){
       var itemView = new ActivityView({ model: item });
 
       this.$el.prepend(itemView.render().el);
