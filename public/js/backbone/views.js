@@ -58,7 +58,7 @@ var ActivityStreamView = Backbone.View.extend({
             this.collection.reset(data.items.reverse());
             this.render();
         }
-        this.collection.bind('unshift', this.prependItem); // collection event binder
+        this.collection.bind('add', this.prependItem); // collection event binder
         this.maxSize = 50;
     },
     render: function(){
