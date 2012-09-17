@@ -5,9 +5,9 @@ var ActivityCreateView = Backbone.View.extend({
 
         this.trimForServer = App.helper.trimForServer;
 
-        var streamName = this.$el.find('#streamName').val();
-        var verb = this.trimForServer(this.$el.find('#verb-show'));
-        var objectType = this.trimForServer(this.$el.find('#object-show'));
+        var streamName = App.desiredStream;
+        var verb = this.trimForServer(App.metadata.verbs[0]);
+        var objectType = this.trimForServer(App.metadata.objectTypes[0]);
 
         this.newAct(streamName, verb, objectType);
         this.render();
@@ -33,8 +33,12 @@ var ActivityCreateView = Backbone.View.extend({
         if(!actData.object.image) {
             var actView = this;
             $('#new_photo').ajaxForm(function(data) {
-                actView.model.set('object', data.object);
-                actView.render();
+                if (data && data.object && data.object.objectType == "photo") {
+                    actView.model.set('object', data.object);
+                    actView.render();
+                } else {
+                    alert("File rejected. Please check its a valid image.")
+                }
             });
         }
 
@@ -95,6 +99,6 @@ var ActivityCreateView = Backbone.View.extend({
             console.dir(file);
             $('#title').val(file.name);
         }
-        this.$el.find("#upload-file").show();
+        this.$el.find("#new_photo").submit();
     }
 });

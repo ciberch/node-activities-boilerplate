@@ -1,6 +1,6 @@
 {
   "name" : "node-activities-boilerplate",
-  "description" : "A boilerplate Activity Stream Client for any Cloud Foundry instance. Based on the work from Mathias Pettersson <mape@mape.me> on node-express-boilerplate",
+  "description" : "A Real-time boilerplate Activity Stream Engine with support for photo manipulations",
   "version" : "0.0.7",
   "author" : "Monica Wilkinson <ciberch@gmail.com>",
   "engines" : ["node"],
@@ -20,7 +20,7 @@
     "airbrake" : ">=0.2.0",
     "everyauth" : "0.2.x",
     "cloudfoundry" : ">=0.1.0",
-    "activity-streams-mongoose": "0.1.1",
+    "activity-streams-mongoose": "0.1.2",
 	  "hiredis": "",
 	  "underscore": "",
 	  "mongoose-auth" : ">= 0.0.12",
@@ -28,7 +28,8 @@
 	  "imagemagick" : "",
 	  "mongoose": "3.x",
 	  "mocha" : "1.4.1",
-	  "should" : "1.1.0"
+	  "should" : "1.1.0",
+	  "clientjade" : ""
 
   }
 }

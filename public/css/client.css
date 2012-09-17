@@ -22,7 +22,7 @@ img.service {
 	text-align: right;
 }
 
-.activity .avatar {
+.activity .actor .avatar {
 	width: 48px;
 	float: left;
 	display: inline;
@@ -82,7 +82,7 @@ body {
 	height: 400px;
 	width: 600px;
 }
-.avatar-small.avatar{
+.actor .avatar-small{
 	width: 60px;
 }
 
@@ -99,6 +99,10 @@ body {
 	float: left;
 	display: inline;
 	margin-right: 10px;
+}
+
+.activity_object img.avatar {
+
 }
 
 .large-text, .large-text span {
@@ -123,6 +127,10 @@ body {
 /*}*/
 #input-file-input{
 	cursor: pointer;
+}
+
+.actions .like-button{
+	margin-top:50px;
 }
 
 

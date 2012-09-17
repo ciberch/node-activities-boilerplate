@@ -2,8 +2,9 @@ include nav_bar
 
 .container
 	include start-modal
-	- var chosenVerb = locals.verbs[0];
-	- var chosenObject = locals.objectTypes[0];
+	- var metadata = locals.metadata;
+	- var chosenVerb = metadata.verbs[0];
+	- var chosenObject = metadata.objectTypes[0];
 	- if(session.auth)
 		include activity_create
 	- else
@@ -23,6 +24,7 @@ include nav_bar
 		.span4#filters
 			.well.second-hero
 				- var included = locals.included
+				- var filters = locals.filters
 					include filters
 		.span8#stream
 			h3 Activity Stream
@@ -39,8 +41,4 @@ include nav_bar
 										a(href="/streams/#{stream.name}")=stream.name
 					-}
 				ul.unstyled#main_stream
-					- var activities = locals.streams[desiredStream].items
-					-if (activities && activities.length) {
-						include activity
-					-}
 

@@ -20,16 +20,25 @@
 		, 'transports': ['xhr-polling']
 	});
 	App.socketIoClient.on('connect', function () {
-		$$('#connected').addClass('on').find('strong').text('Online');
+        $$('#connected').addClass('on').find('strong').text('Online');
 	});
 
+    App.socketIoClient.on('message', function(json) {
+        var doc = JSON.parse(json);
+        if (doc) {
+           streamView.collection.unshift(new Activity(doc));
+        }
+   	});
 
-	var image = $.trim($('#image').val());
-	var service = $.trim($('#service').val());
+   App.socketIoClient.on('disconnect', function() {
+        $$('#connected').removeClass('on').find('strong').text('Offline');
+    });
 
-    var $ul = $('#main_stream');
     App.map = null;
+
     var streamView = new ActivityStreamView();
+    var filterView = new ActivityFilterView();
+    filterView.streamView = streamView;
 
     var defaultSync = Backbone.sync;
 
@@ -39,48 +48,36 @@
             if (method === "create") {
                 var act = model.toJSON();
                 App.socketIoClient.emit("create-activity", act);
+                return true;
             } else if (method === "save") {
                 var act = model.toJSON();
                 App.socketIoClient.emit("save-activity", act);
                 alert("Saving activity");
+                return true;
             }
-            return true;
-        } else {
-            alert("Doing a different kind of operation " + model.urlRoot);
-            defaultSync(method, model, options);
+
+        } else if (model.urlRoot === "/streams") {
+            if (method == "read") {
+               console.log("Attempting to read the stream");
+                defaultSync(method, model, options);
+                return true;
+           }
         }
+        alert("Doing a different kind of operation " + model.url + " and method" + method);
+        defaultSync(method, model, options);
+        return false;
     }
 
-    var newActView = new ActivityCreateView();
+    var newActView = null;
+
+    if (App.userLoggedIn)
+        newActView = new ActivityCreateView();
 
     // set up the router here - remember the router is like a controller in Rails
     //var dashboardRouter = new DashboardRouter({filterView: filterView, colorView: colorView, carView: carListView});
 
     // the required Backbone way to start up the router
     //Backbone.history.start({pushState: true});
-
-	App.socketIoClient.on('message', function(json) {
-		var doc = JSON.parse(json);
-        if (doc) {
-            streamView.collection.add(new Activity(doc));
-        }
-	});
-
-    App.socketIoClient.on('disconnect', function() {
-   		$$('#connected').removeClass('on').find('strong').text('Offline');
-   	});
-
-    $(document).ready(function(){
-
-        $(".filter-checkbox").on("click", function(){
-            if (this.checked == false) {
-                $("#main_stream ." + this.name + "-" +this.value).hide();
-            } else {
-                $("#main_stream ." + this.name + "-" +this.value).show();
-            }
-        });
-
-    });
 
 
 

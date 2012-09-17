@@ -8,10 +8,20 @@ html
 	body!=body
 		script(src="/js/jquery.min.js", type="text/javascript")
 		script(src="/js/underscore-min.js", type="text/javascript")
+		script(src="/templates.js", type="text/javascript")
 		script(src="/js/helper.js", type="text/javascript")
 		script(type="text/javascript")
 			var App = {
 				helper : new AppHelper()
-			}
+			};
+		- if (locals.currentUser && locals.filters)
+			script(type="text/javascript")
+				App.userLoggedIn = #{(locals.session.auth !== undefined)};
+				App.desiredStream = "#{locals.desiredStream}";
+				App.currentUser = !{JSON.stringify(locals.currentUser)};
+				App.filters = !{JSON.stringify(locals.filters)};
+				App.included = !{JSON.stringify(locals.included)};
+				App.metadata = !{JSON.stringify(locals.metadata)};
+				App.streams =  !{JSON.stringify(locals.streams)};
 		script(src="/static/js/#{assetsCacheHashes.js||0}/client.js", type="text/javascript")
 		script(src="https://maps.googleapis.com/maps/api/js?sensor=true")
