@@ -4,6 +4,24 @@ var cf = require('cloudfoundry');
 var _ = require('underscore')._;
 var Guid = require('guid');
 
+var jadeClientTemplates = '';
+var jadeCreationTime = new Date();
+var fs = require('fs');
+var compile = require('clientjade/lib/compile');
+console.log("Compiling your Jade Views");
+fs.readdir("./views", function(err, files){
+    console.log("Matched " + files.length + " jade files")
+    var fullFiles = _.map(files, function(file){return "./views/" + file});
+    var opts = {
+      files: fullFiles,
+      compress: true
+    }
+    compile(opts, function(err, result) {
+        jadeClientTemplates = result;
+    });
+});
+
+
 process.title = siteConf.uri.replace(/http:\/\/(www)?/, '');
 
 var airbrake;
@@ -50,7 +68,6 @@ var assetsSettings = {
 		, 'dataType': 'javascript'
 		, 'files': [
 			'http://' + siteConf.internal_host+ ':' + siteConf.internal_port + '/socket.io/socket.io.js' // special case since the socket.io module serves its own js
-			, 'templates.js'
             , 'bootstrap.js'
             , 'backbone/backbone-0.9.2.js'
             , 'backbone/models.js'
@@ -104,6 +121,7 @@ var assetsMiddleware = assetManager(assetsSettings);
 
 // Settings
 app.configure(function() {
+  app.set('view options', { layout: false });
 	app.set('view engine', 'jade');
 	app.set('views', __dirname+'/views');
 });
@@ -387,6 +405,7 @@ function getStream(req, res, next) {
         }
         req.streams[req.dStream].items = activities;
         var data = {
+            layout: "layout",
             currentUser: req.user,
             streams : req.streams,
             desiredStream : req.dStream,
@@ -541,6 +560,15 @@ app.get('/photos/:guid/:fileId', function(req, res) {
             });
         }
     });
+});
+
+app.get('/templates.js', function(req, res){
+    res.header("Last-Modified", jadeCreationTime);
+    res.header("If-Modified-Since", jadeCreationTime);
+    res.header("Date", jadeCreationTime);
+    res.header("Cache-Control", "public,max-age=31536000");
+    res.header('Content-Type', 'text/javascript');
+    res.send(jadeClientTemplates);
 });
 
 // Initiate this after all other routing is done, otherwise wildcard will go crazy.
