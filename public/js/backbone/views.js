@@ -53,45 +53,14 @@ var ActivityStreamView = Backbone.View.extend({
         }, this);
     },
     prependItem: function(item){
-        if (item.get('inReplyTo')){
-            console.log("Reply elem is " + item.get('title'));
-            var elem =  this.collection.get(item.get('inReplyTo'));
-            if (elem) {
-                if (item.get("verb") === "like") {
-                  var likes = elem.get("likes");
-                  if (!likes) {
-                      likes = {};
-                  }
-                  likes[item.get("actor")._id] = true;
-                  elem.set("likes", likes);
-                  console.log("In likes");
+        var itemView = new ActivityView({ model: item });
 
-                  var likes_count = _.keys(likes).length;
-                  elem.set("likes_count", likes_count);
-                } else if(item.get("object").objectType === "comment"){
-                    var comments = elem.get("comments");
-                    console.log("Getting a comment reply");
-                    if (!comments){
-											 comments = [];
-									 }
-                    var data = item.toJSON();
-                    var date = Date.parse(item.get('published'));
-                    data.userFriendlyDate = App.helper.fuzzy(date);
-                    data.inReplyTo = null;
-                    comments.push(data);
-                    var comments_count = comments.length;
-                    elem.set("comments_count", comments_count);
-                }
-            }
-        } else {
-            var itemView = new ActivityView({ model: item });
+        this.$el.prepend(itemView.render().el);
 
-            this.$el.prepend(itemView.render().el);
-
-            if (this.el.children.count > this.maxSize) {
-              this.el.children.last.remove();
-            }
+        if (this.el.children.count > this.maxSize) {
+          this.el.children.last.remove();
         }
+
     },
     changeStreamFilter : function(name, val, show){
         var className = "." + name + "-" + val;
@@ -134,8 +103,6 @@ var ActivityFilterView = Backbone.View.extend({
     render:  function(){
     },
     filterClick : function(event){
-        console.log("filter click");
-        console.dir(event.target);
         this.streamView.changeStreamFilter(event.target.name, event.target.value, event.target.checked);
     }
 });

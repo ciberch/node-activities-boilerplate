@@ -26,7 +26,7 @@
     App.socketIoClient.on('message', function(json) {
         var doc = JSON.parse(json);
         if (doc) {
-           streamView.collection.unshift(new Activity(doc));
+           App.streamView.collection.addOrInsertChild(new Activity(doc));
         }
    	});
 
@@ -36,9 +36,9 @@
 
     App.map = null;
 
-    var streamView = new ActivityStreamView();
-    var filterView = new ActivityFilterView();
-    filterView.streamView = streamView;
+    App.streamView = new ActivityStreamView();
+    App.filterView = new ActivityFilterView();
+    App.filterView.streamView = App.streamView;
 
     var defaultSync = Backbone.sync;
 
