@@ -75,6 +75,8 @@ var ActivityStreamView = Backbone.View.extend({
 											 comments = [];
 									 }
                     var data = item.toJSON();
+                    var date = Date.parse(item.get('published'));
+                    data.userFriendlyDate = App.helper.fuzzy(date);
                     data.inReplyTo = null;
                     comments.push(data);
                     var comments_count = comments.length;

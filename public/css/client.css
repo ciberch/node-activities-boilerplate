@@ -29,6 +29,10 @@ img.service {
 	margin-right: 10px;
 }
 
+.comment .actor .avatar {
+	width: 32px;
+}
+
 .activity {
 	margin-bottom: 15px;
 }

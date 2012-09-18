@@ -18,8 +18,7 @@
 .row.action_results
 	.span1
 		-if (act.likes_count && act.likes_count > 0) {
-			small#like_count
-				#{act.likes_count}
+			small#like_count=act.likes_count
 			small.rest
 				| &nbsp; liked this
 		-} else {
@@ -35,7 +34,7 @@
 							.span1.actor
 								- var actor = comment.actor;
 									include activity_stream_actor
-							.span5.action
+							.span5.action(style="margin-left:-10px")
 								.row.title
 									.span5
 										strong=actor.displayName
