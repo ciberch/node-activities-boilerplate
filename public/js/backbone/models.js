@@ -1,5 +1,6 @@
 var Activity = Backbone.Model.extend({
     url : "/activities",
+    idAttribute: "_id",
     // From activity-streams-mongoose/lib/activityMongoose.js
     defaults: {
         verb: 'post',

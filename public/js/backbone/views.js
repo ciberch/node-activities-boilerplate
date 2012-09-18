@@ -18,29 +18,14 @@ var ActivityView = Backbone.View.extend({
      return this; // for chainable calls, like .render().el
    },
    like : function() {
-       var likes = this.model.get("likes");
-       if (!likes) {
-           likes = {};
-       }
-       likes[App.currentUser] = true;
-       this.model.set("likes", likes);
-       console.log("In likes");
-
-       var likes_count = _.keys(likes).length;
-       this.model.set("likes_count", likes_count)
-       this.model.save();
+       var act = new Activity({'verb':'like', 'inReplyTo' : this.model.id, published : Date.new, object: this.model.get("object")});
+       act.save();
        return this;
    },
    comment: function() {
        var content = this.$el.find(".comment-area").val();
-       var comments = this.model.get("comments");
-       if (!comments){
-           comments = [];
-       }
-       comments.push({actor : App.currentUser, object: { objectType : 'comment', content: content}, published : Date.new});
-       var comments_count = comments.length;
-       this.model.set("comments_count", comments_count);
-       this.model.save();
+       var act = new Activity({'verb':'post', 'inReplyTo' : this.model.id, object: { objectType : 'comment', content: content}, published : Date.new});
+       act.save();
        return this;
    }
 
@@ -68,13 +53,41 @@ var ActivityStreamView = Backbone.View.extend({
         }, this);
     },
     prependItem: function(item){
-      var itemView = new ActivityView({ model: item });
+        if (item.get('inReplyTo')){
+            console.log("Reply elem is " + item.get('title'));
+            var elem =  this.collection.get(item.get('inReplyTo'));
+            if (elem) {
+                if (item.get("verb") === "like") {
+                  var likes = elem.get("likes");
+                  if (!likes) {
+                      likes = {};
+                  }
+                  likes[doc.actor._id] = true;
+                  elem.set("likes", likes);
+                  console.log("In likes");
 
-      this.$el.prepend(itemView.render().el);
+                  var likes_count = _.keys(likes).length;
+                  elem.set("likes_count", likes_count);
+                } else if(item.get("object").objectType === "comment"){
+                    var comments = elem.get("comments");
+                    console.log("Getting a comment reply");
+                    if (!comments){
+											 comments = [];
+									 }
+                    comments.push(item.toJSON());
+                    var comments_count = comments.length;
+                    elem.set("comments_count", comments_count);
+                }
+            }
+        } else {
+            var itemView = new ActivityView({ model: item });
 
-      if (this.el.children.count > this.maxSize) {
-          this.el.children.last.remove();
-      }
+            this.$el.prepend(itemView.render().el);
+
+            if (this.el.children.count > this.maxSize) {
+              this.el.children.last.remove();
+            }
+        }
     },
     changeStreamFilter : function(name, val, show){
         var className = "." + name + "-" + val;

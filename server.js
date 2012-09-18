@@ -80,7 +80,7 @@ var assetsSettings = {
 		, 'debug': true
 		, 'postManipulate': {
 			'^': [
-                assetHandler.uglifyJsOptimize,
+                //assetHandler.uglifyJsOptimize,
 				function insertSocketIoPort(file, path, index, isLast, callback) {
 					callback(file.replace(/.#socketIoPort#./, siteConf.port));
 				}
@@ -371,11 +371,11 @@ function processMongoQuery(req, res, next){
     var streamQuery = {"$and" : [{streams: streamName}, {streams: {"$nin" : ["personal"]}}]};
 
     req.included = {};
-    req.included.verbs = getQueryArray(req.query.verb, ['post']);
+    req.included.verbs = getQueryArray(req.query.verb, ['post', 'like']);
     if (req.included.verbs.length > 0)
         streamQuery["$and"].push({verb: {"$in": req.included.verbs}});
 
-    req.included.objectTypes = getQueryArray(req.query.objectType, ['none', 'photo', 'application', 'article', 'person', 'place', 'service', 'instance']);
+    req.included.objectTypes = getQueryArray(req.query.objectType, ['none', 'photo', 'application', 'article', 'person', 'place', 'service', 'instance', 'comment']);
     if (req.included.objectTypes.length > 0)
         streamQuery["$and"].push({"object.objectType": {"$in": req.included.objectTypes}});
 

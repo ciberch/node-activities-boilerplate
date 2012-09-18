@@ -47,12 +47,11 @@
         if (model.url === "/activities") {
             if (method === "create") {
                 var act = model.toJSON();
-                App.socketIoClient.emit("create-activity", act);
-                return true;
-            } else if (method === "save") {
+                    App.socketIoClient.emit("create-activity", act);
+                    return true;
+            } else if (method === "update") {
                 var act = model.toJSON();
                 App.socketIoClient.emit("save-activity", act);
-                alert("Saving activity");
                 return true;
             }
 
