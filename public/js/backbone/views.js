@@ -62,7 +62,7 @@ var ActivityStreamView = Backbone.View.extend({
                   if (!likes) {
                       likes = {};
                   }
-                  likes[doc.actor._id] = true;
+                  likes[item.get("actor")._id] = true;
                   elem.set("likes", likes);
                   console.log("In likes");
 
@@ -74,7 +74,9 @@ var ActivityStreamView = Backbone.View.extend({
                     if (!comments){
 											 comments = [];
 									 }
-                    comments.push(item.toJSON());
+                    var data = item.toJSON();
+                    data.inReplyTo = null;
+                    comments.push(data);
                     var comments_count = comments.length;
                     elem.set("comments_count", comments_count);
                 }

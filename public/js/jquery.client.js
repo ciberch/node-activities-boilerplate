@@ -47,10 +47,15 @@
         if (model.url === "/activities") {
             if (method === "create") {
                 var act = model.toJSON();
+                    console.dir(act);
+                    delete(act.likes);
+                    delete(act.comments);
                     App.socketIoClient.emit("create-activity", act);
                     return true;
             } else if (method === "update") {
                 var act = model.toJSON();
+                delete(act.likes);
+                delete(act.comments);
                 App.socketIoClient.emit("save-activity", act);
                 return true;
             }
