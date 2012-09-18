@@ -1,31 +1,6 @@
-- if (App.userLoggedIn)
-	.row.actions
-		.span1
-			small
-				a.btn.btn-mini.btn-warning.like-button(href="#")
-					i.icon-ok.icon-white
-					small &nbsp; Like
-		.span6
-			.row
-				.span5.right
-					textarea.span4.comment-area()
-			.row
-				.span2.offset3.right#comment-post
-					small
-						a.btn.btn-mini.btn-success.comment-button(href="#")
-							i.icon-pencil.icon-white
-							small &nbsp; Post
 .row.action_results
-	.span1
-		-if (act.likes_count && act.likes_count > 0) {
-			small#like_count=act.likes_count
-			small.rest
-				| &nbsp; liked this
-		-} else {
-			small No likes yet.
-		-}
 	-if (act.comments) {
-		.span6
+		.span6.offset1
 			ul.unstyled
 				-for(var i=0; i < act.comments.length; i++) {
 				- var comment = act.comments[i];
@@ -34,13 +9,14 @@
 							.span1.actor
 								- var actor = comment.actor;
 									include activity_stream_actor
-							.span5.action(style="margin-left:-10px")
+							.span5.action.next-to-mini
 								.row.title
 									.span5
 										strong=actor.displayName
 										&nbsp;
 										=comment.title
 								.row.activity_object
+									- var parent = null;
 									- var object = comment.object;
 										include activity_object
 								.row.details
@@ -49,4 +25,18 @@
 											include activity_details
 
 				- }
+				- if (App.userLoggedIn)
+					li
+						.row.comment
+							.span1.actor
+								- var actor = App.currentUser;
+								include activity_stream_actor
+							.span5.next-to-mini
+								textarea.span4.comment-area()
+						.row
+							.span2.offset4#comment-post
+								small
+									a.btn.btn-mini.btn-success.comment-button(href="#")
+										i.icon-pencil.icon-white
+										small &nbsp; Post
 - }

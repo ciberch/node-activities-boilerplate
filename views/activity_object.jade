@@ -1,18 +1,34 @@
 - var objUrl = object.url ? object.url : '#';
+- var name = '';
+- var shortName = '';
+- if (object) {
+	- if (object.displayName && object.displayName.length > 1)
+		- name = object.displayName;
+	- else if(object.title)
+		- name = object.title;
+	- shortName = name.substr(0, 10);
+- }
+- var likes_count = 0;
+- if (parent && parent.likes_count && parent.likes_count > 0) {
+	- likes_count = parent.likes_count;
+- }
 .span6
 	br
 	blockquote
 		-if (object.image && object.image.url) {
 			a(href="#{objUrl}")
 				img.img-rounded.avatar(src= object.image.url)
-			br
+			.clearfix
 		-}
-		-if (object.displayName) {
-			a(href="#{objUrl}")
-				strong.activity-displayName=object.displayName
-		-} else if (object.title) {
-			strong.activity-title=object.title
-		-}
+		-if(parent) {
+			span.actions
+				a.btn.btn-inverse.like-button(href="#", title=name)
+					i.icon-heart.icon-white
+					span#like_count=" " + likes_count
+					span.object-name=shortName
+		- }
+
+		.clearfix
 		-if (object.content) {
 			.activity-content=object.content
 		-}

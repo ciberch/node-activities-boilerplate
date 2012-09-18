@@ -15,6 +15,7 @@ each act in activities
 						&nbsp;
 						=act.title
 				.row.activity_object
+					- var parent = act;
 					- var object = act.object;
 					include activity_object
 				.row.details

@@ -49,6 +49,14 @@ img.service {
 
 }
 
+.next-to-mini {
+	margin-left:-10px
+}
+
+.next-to-mini textarea {
+	margin-top: 15px;
+}
+
 #details {
 	border-left: dotted 3px gray;
 	padding-left: 20px;
@@ -134,7 +142,14 @@ body {
 }
 
 .actions .like-button{
-	margin-top:50px;
+	text-align: left;
+	opacity: .70;
+	width: 200px;
+	z-index: 2;
+}
+
+.object-name {
+	margin-left: 30px;
 }
 
 
