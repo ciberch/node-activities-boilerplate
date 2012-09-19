@@ -194,38 +194,14 @@
       }
     },
     "everyauth": {
-      "version": "0.2.32",
+      "version": "0.3.0",
       "dependencies": {
         "oauth": {
           "version": "0.9.8",
           "from": "https://github.com/ciaranj/node-oauth/tarball/master"
         },
-        "restler": {
-          "version": "2.0.1"
-        },
         "request": {
-          "version": "2.11.1",
-          "dependencies": {
-            "form-data": {
-              "version": "0.0.3",
-              "dependencies": {
-                "combined-stream": {
-                  "version": "0.0.3",
-                  "dependencies": {
-                    "delayed-stream": {
-                      "version": "0.0.5"
-                    }
-                  }
-                },
-                "async": {
-                  "version": "0.1.9"
-                }
-              }
-            },
-            "mime": {
-              "version": "1.2.7"
-            }
-          }
+          "version": "2.9.203"
         },
         "openid": {
           "version": "0.4.2"

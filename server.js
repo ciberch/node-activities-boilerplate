@@ -384,9 +384,9 @@ function processMongoQuery(req, res, next){
         streamQuery["$and"].push({"actor.objectType": {"$in": req.included.actorObjectTypes}});
 
 
-    console.log("Processing streamQuery $and");
-    for (var i=0; i < streamQuery['$and'].length; i++)
-        console.dir(streamQuery['$and'][i]);
+//    console.log("Processing streamQuery $and");
+//    for (var i=0; i < streamQuery['$and'].length; i++)
+//        console.dir(streamQuery['$and'][i]);
 
     req.streamQuery = streamQuery;
     req.session.streamQuery = streamQuery;
