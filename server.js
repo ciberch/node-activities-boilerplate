@@ -553,7 +553,15 @@ app.get('/photos/:guid/:fileId', function(req, res) {
                         res.status(500);
                         res.json({error: err});
                     } else {
-                        res.writeHead('200', {'Content-Type': gs.content_type});
+                        var ts = gs.uploadDate;
+                        console.log("File was modified on " + ts);
+                        res.writeHead('200', {
+                            "If-Modified-Since": ts,
+                            "Last-Modified" : ts,
+                            "Date" : ts,
+                            'Content-Type': gs.contentType,
+                            "Cache-Control": "public,max-age=31536000"
+                        });
                         res.end(data, 'binary');
                     }
                 });
