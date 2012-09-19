@@ -1,42 +1,49 @@
+- var actComments = act.comments ? act.comments : [];
+.row.comments-title
+	.span6.offset1
+		strong.inline=actComments.length + " Comments "
+		- var i = 0;
+		- if (actComments.length > 2) {
+			- i = actComments.length - 2;
+				a.timestamp(href="#")="(View " + i +" More)"
+		- }
 .row.action_results
-	-if (act.comments) {
-		.span6.offset1
-			ul.unstyled
-				-for(var i=0; i < act.comments.length; i++) {
-				- var comment = act.comments[i];
-					li
-						.row.comment
-							.span1.actor
-								- var actor = comment.actor;
-									include activity_stream_actor
-							.span5.action.next-to-mini
-								.row.title
-									.span5
-										strong=actor.displayName
-										&nbsp;
-										=comment.title
-								.row.activity_object
-									- var parent = null;
-									- var object = comment.object;
-										include activity_object
-								.row.details
-									.span5
-										- var timedItem = comment;
-											include activity_details
-
-				- }
-				- if (App.userLoggedIn)
-					li
-						.row.comment
-							.span1.actor
-								- var actor = App.currentUser;
+	.span6.offset1
+		ul.unstyled
+			- for(;i < actComments.length; i++) {
+			- var comment = actComments[i];
+				li
+					.row.comment
+						.span1.actor
+							- var actor = comment.actor;
 								include activity_stream_actor
-							.span5.next-to-mini
-								textarea.span4.comment-area()
-						.row
-							.span2.offset4#comment-post
-								small
-									a.btn.btn-mini.btn-success.comment-button(href="#")
-										i.icon-pencil.icon-white
-										small &nbsp; Post
-- }
+						.span5.action.next-to-mini
+							.row.title
+								.span5
+									strong=actor.displayName
+									&nbsp;
+									=comment.title
+							.row.activity_object
+								- var parent = null;
+								- var object = comment.object;
+									include activity_object
+							.row.details
+								.span5
+									- var timedItem = comment;
+										include activity_details
+
+			- }
+			- if (App.userLoggedIn)
+				li
+					.row.comment
+						.span1.actor
+							- var actor = App.currentUser;
+							include activity_stream_actor
+						.span5.next-to-mini
+							textarea.span4.comment-area()
+					.row
+						.span2.offset4#comment-post
+							small
+								a.btn.btn-mini.btn-success.comment-button(href="#")
+									i.icon-pencil.icon-white
+									small &nbsp; Post

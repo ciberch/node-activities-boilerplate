@@ -152,5 +152,13 @@ body {
 	margin-left: 30px;
 }
 
+.comments-title {
+	margin-bottom: 15px;
+}
+
+.comments-title strong {
+	font-size: 12pt;
+}
+
 
 
