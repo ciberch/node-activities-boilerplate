@@ -67,9 +67,7 @@
                 return true;
            }
         }
-        alert("Doing a different kind of operation " + model.url + " and method" + method);
-        defaultSync(method, model, options);
-        return false;
+        return defaultSync(method, model, options);
     }
 
     var newActView = null;
