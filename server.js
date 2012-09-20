@@ -472,7 +472,7 @@ app.post('/photos', loadUser, ingestPhoto, reducePhoto, reducePhoto, function(re
                     if (err) {
                         next(err);
                     } else {
-                        if (_.isUndefined(doc.photos)) {
+                        if (!doc.photos) {
                             doc.photos = [];
                         }
                         var aoHash = {
