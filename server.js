@@ -449,6 +449,23 @@ app.get('/streams/:streamName', loadUser, processMongoQuery, getDistinctStreams,
     }
 });
 
+app.post('/activities', loadUser, function(req, res, next){
+
+    var actHash = req.body;
+    console.log("New activity is");
+    console.dir(actHash);
+
+    if (actHash) {
+        actHash.provider = asmsClient.default.provider;
+        if (actHash.streams && actHash.streams.length == 1 && actHash.streams[0] != req.session.desiredStream) {
+            req.session.desiredStream = actHash.streams[0];
+        }
+        asmsClient.helpers.publishActivity(req.session.desiredStream, req.session.user, actHash);
+        res.json()
+    }
+
+});
+
 app.get('/me', loadUser, function(req, res) {
     res.json(asmsClient.helpers.getCurrentUserObject(req.session));
     //res.json(req.session.user);

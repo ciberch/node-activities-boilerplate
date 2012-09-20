@@ -1,0 +1,26 @@
+{
+  "streams":["general"],
+  "object":{
+    "thumbnail":{
+      "height":65.01818181818182,
+      "width":60,
+      "url":"http://moni-air.local:8080/photos/55e95a85-f584-debe-1f8a-a142def78194/twitter-stream-xs.png"
+    },
+    "fullImage":{
+      "height":596,
+      "width":550,
+      "url":"http://moni-air.local:8080/photos/a3176997-fa8e-442d-fcb3-be03f9fd3529/twitter-stream.png"
+    },
+    "image":{
+      "height":277.4109090909091,
+      "width":256,
+      "url":"http://moni-air.local:8080/photos/f31a8fd7-b5e3-646f-f3a3-be14b4e97539/twitter-stream-sm.png"
+    },
+    "title":"twitter-stream.png",
+    "displayName":"twitter-stream.png",
+    "url":"http://moni-air.local:8080/photos/a3176997-fa8e-442d-fcb3-be03f9fd3529/twitter-stream.png",
+    "objectType":"photo"
+  },
+  "icon":null,
+  "verb":"post"
+}
