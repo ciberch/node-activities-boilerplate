@@ -85,8 +85,13 @@ var ActivityCreateView = Backbone.View.extend({
 
         if (this.model.isValid()) {
             if (this.model.save()) {
-                this.newAct(streamName, verb, obj.objectType);
-                this.render();
+                if (streamName === App.desiredStream) {
+                    this.newAct(streamName, verb, obj.objectType);
+                    this.render();
+                } else {
+                    // change the streams
+                    window.location.href = "/streams/" + streamName;
+                }
             }
         }
 

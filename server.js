@@ -341,7 +341,7 @@ function ingestPhoto(req, res, next){
 };
 
 function getDistinctStreams(req, res, next){
-    req.dStream = (req.params.streamName && req.params.streamName !== '')  ? req.params.streamName : "firehose";
+    req.dStream = (req.params.streamName && req.params.streamName !== '')  ? req.params.streamName : asmsClient.default.stream;
     req.session.desiredStream = req.dStream;
     req.streams = {}
     asmsClient.asmsDB.Activity.distinct('streams', {}, function(err, docs) {
@@ -370,7 +370,7 @@ function getQueryArray(data, defaultVal){
 }
 
 function processMongoQuery(req, res, next){
-    var streamName = req.params.streamName ? req.params.streamName : "firehose";
+    var streamName = req.params.streamName ? req.params.streamName : asmsClient.default.stream;
     var streamQuery = {"$and" : [{streams: streamName}, {streams: {"$nin" : ["personal"]}}]};
 
     req.included = {};
@@ -475,7 +475,7 @@ app.post('/photos', loadUser, ingestPhoto, reducePhoto, reducePhoto, function(re
                     if (err) {
                         next(err);
                     } else {
-                        if (_.isUndefined(doc.photos)) {
+                        if (!doc.photos) {
                             doc.photos = [];
                         }
                         var aoHash = {
@@ -600,6 +600,6 @@ var startAct = new asmsClient.asmsDB.Activity({
     title: "started"
 });
 
-startAct.publish('firehose');
+startAct.publish(asmsClient.default.stream);
 
 
