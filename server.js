@@ -238,6 +238,9 @@ function loadUser(req, res, next) {
     if (!req.session.uid) {
         req.session.uid = Guid.create();
     }
+    if (req.query["token"]) {
+
+    }
     req.user = app.asmsClient.helpers.getCurrentUserObject(req.session);
     next();
 }
