@@ -1,18 +1,6 @@
 --- 
 applications: 
-  .: 
-    name: asms
-    url: ${name}.${target-base}
-    framework: 
-      name: node
-      info: 
-        mem: 128M
-        description: Node.js Application
-        exec: 
-    mem: 128M
-    instances: 1
-    services:
-      mongo-asms:
-        type: mongodb
-      redis-asms:
-        type: :redis
+  - name: asms
+    command: node server.js
+    buildpack: https://github.com/cloudfoundry/heroku-buildpack-nodejs.git
+
