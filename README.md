@@ -57,7 +57,7 @@ sudo gem install cf
 * Deploy the app to Cloud Foundry
 
 ``` bash
-  cf push --nostart
+  cf push --no-start
 ```
 
 ## Get keys for all social networks and services
