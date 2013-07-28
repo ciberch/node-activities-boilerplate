@@ -40,16 +40,29 @@ var settings = {
 	, 'debug': cf.cloud
 };
 
+console.log("ENV for new CF is");
+console.dir(process.env);
+
 if (cf.cloud) {
-	settings.uri = 'http://' + cf.app.name + '.cloudfoundry.com';
+	settings.uri = 'http://' + cf.app.name + '.cfapps.io';
     settings.internal_host = cf.host;
     settings.internal_port = cf.port;
 	settings.port = 80; // CloudFoundry uses process.env.VMC_APP_PORT
 
 	settings.airbrakeApiKey = process.env.airbrake_api_key; // Error logging, Get free API key from https://airbrakeapp.com/account/new/Free
 
+    var redisCloud = 'rediscloud-n/a', redisConfig;
+
     if (cf.redis['redis-asms'] != null) {
-        var redisConfig = cf.redis['redis-asms'].credentials;
+        redisConfig = cf.redis['redis-asms'].credentials;
+
+    } else if (cf.services[redisCloud] && cf.services[redisCloud].length == 1) {
+        console.log("Using Redis Cloud");
+        svc = cf.services[redisCloud][0];
+        redisConfig = svc['credentials'];
+    }
+
+    if (redisConfig) {
         settings.redisOptions.port = redisConfig.port;
         settings.redisOptions.host = redisConfig.hostname;
         settings.redisOptions.pass = redisConfig.password;
@@ -57,15 +70,15 @@ if (cf.cloud) {
         console.dir(settings.redisOptions);
     }
 
-    var mongolab = 'mongolab_dev-2.0';
+    var mongolab = 'mongolab-n/a'; // Cloud Foundry v2.0
 
     if (cf.mongodb['mongo-asms']) {
         var cfg = cf.mongodb['mongo-asms'].credentials;
         settings.mongoUrl = ["mongodb://", cfg.username, ":", cfg.password, "@", cfg.hostname, ":", cfg.port,"/" + cfg.db].join('');
     } else if (cf.services[mongolab] && cf.services[mongolab].length == 1) {
-        console.log("Using MongoLab Dev version");
+        console.log("Using MongoLab");
         var svc = cf.services[mongolab][0];
-        settings.mongoUrl = svc['credentials']['MONGOLAB_URI'];
+        settings.mongoUrl = svc['credentials']['uri'];
     } else {
         console.log("Could not find a MongoDB :(")
         console.dir(cf.services);

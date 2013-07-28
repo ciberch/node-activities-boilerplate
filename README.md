@@ -1,5 +1,9 @@
 # node-activities-boilerplate
 
+### Latest News
+
+These instructions have been updated to work with CloudFoundry v2
+
 Copyright (c) 2012 VMware, Inc
 
 `node-activities-boilerplate` is a fork of [node-express-boilerplate](https://github.com/mape/node-express-boilerplate) which is a simple express boilerplate app which does SSO using `Facebook`, `Twitter` and `GitHub`
@@ -47,15 +51,13 @@ node server.js
 * Install vmc if you have not already done so
 
 ``` bash
-sudo gem install vmc --pre
+sudo gem install cf
 ```
-
-* Edit manifest.yml to have a unique name for your app. Replace "asms" with a name you want
 
 * Deploy the app to Cloud Foundry
 
 ``` bash
-  vmc push --nostart
+  cf push --nostart
 ```
 
 ## Get keys for all social networks and services
@@ -65,31 +67,31 @@ sudo gem install vmc --pre
 
 ### Build your Twitter App at
 - https://dev.twitter.com/apps/new
-- Use callback url http://your-app-name.cloudfoundry.com/auth/twitter/callback
+- Use callback url http://your-app-name.cfapps.io/auth/twitter/callback
 
 ### Build Github App at
 - https://github.com/settings/applications/new
-- Use callback http://your-app-name.cloudfoundry.com/auth/github/callback
+- Use callback http://your-app-name.cfapps.io/auth/github/callback
 
 * Run this command with your keys
 
 ``` bash
 export APP_NAME=<your_name>
-vmc env-add $APP_NAME airbrake_api_key=your_key
-vmc env-add $APP_NAME github_client_id=github_id
-vmc env-add $APP_NAME github_client_secret=github_secret
-vmc env-add $APP_NAME facebook_app_id=fb_id
-vmc env-add $APP_NAME facebook_app_secret=fb_secret
-vmc env-add $APP_NAME NODE_ENV=production
-vmc env-add $APP_NAME twitter_consumer_key=twitter_key
-vmc env-add $APP_NAME twitter_consumer_secret=twitter_secret
-vmc env-add $APP_NAME TMP=tmp
+cf set-env $APP_NAME airbrake_api_key=your_key
+cf set-env $APP_NAME github_client_id=github_id
+cf set-env $APP_NAME github_client_secret=github_secret
+cf set-env $APP_NAME facebook_app_id=fb_id
+cf set-env $APP_NAME facebook_app_secret=fb_secret
+cf set-env $APP_NAME NODE_ENV=production
+cf set-env $APP_NAME twitter_consumer_key=twitter_key
+cf set-env $APP_NAME twitter_consumer_secret=twitter_secret
+cf set-env $APP_NAME TMP=tmp
 ```
 
 ## Finally
 
 ``` bash
-  vmc start
+  cf start
 ```
 
 ## License
